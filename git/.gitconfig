@@ -1,0 +1,43 @@
+[user]
+	name = Joe Karlsson
+	email = joe.carlson@callmejoe.net
+   	github = joekarlsson1
+
+[color]
+   	branch = auto
+	diff = auto
+   	status = auto
+   	ui = auto
+
+[color "branch"]
+   	current = red reverse
+   	local = blue
+   	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[help]
+    autocorrect = 1
+
+[push]
+    default = matching
+
+[branch]
+    autosetupmerge = true
+
+[advice]
+    statusHints = false
+[core]
+	autocrlf = false
+	safecrlf = true
+
+	

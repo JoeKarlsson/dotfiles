@@ -8,7 +8,7 @@ This dotfiles have my installation instruction for Arch Linux and the configurat
 Fetch dotfiles from github:
 
 ```
-git clone https://github.com/cristianpb/dotfiles ~/.dotfiles
+git clone https://github.com/joekarlsson/dotfiles ~/.dotfiles
 cd ~/.dotfiles || exit
 ```
 
@@ -26,3 +26,5 @@ do
     ( stow "$d"  )
 done
 ```
+
+iTerm is a great alternative to macOS Terminal.app. The profile is a JSON export of my profile settings; to import Preferences -> General -> Load preferences from a custom folder or URL.
