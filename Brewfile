@@ -1,0 +1,42 @@
+tap "caryll/tap"
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
+
+brew 'ffmpeg'
+brew 'git'
+brew 'go'
+brew 'zsh-autosuggestions'
+brew 'zsh-completions'
+brew 'zsh-syntax-highlighting'
+brew "autoconf"
+brew "automake"
+brew "bat"
+brew "coreutils"
+brew "gettext"
+brew "git"
+brew "highlight"
+brew "mongodb"
+brew "node"
+brew "openssl"
+brew "python"
+brew "python@2"
+brew "readline"
+brew "sqlite"
+brew "stow"
+brew "tig"
+brew "tmux"
+brew "vim"
+brew "watchman"
+brew "wget"
+brew "zplug"
+brew "zsh"
+
+tap 'caskroom/cask'
+
+cask 'qlcolorcode'
+cask 'qlmarkdown'
+cask 'quicklook-csv'
+cask 'quicklook-json'

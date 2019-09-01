@@ -317,12 +317,7 @@ alias mongodb-stop="launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.mongod
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 ulimit -n 2000
-[ -s "/Users/a6002304/.nvm/nvm.sh" ] && . "/Users/a6002304/.nvm/nvm.sh" # This loads nvm
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-
-# added by travis gem
-[ -f /Users/a6002304/.travis/travis.sh ] && source /Users/a6002304/.travis/travis.sh
-
 PATH=${PATH}:/usr/local/bin
 PATH=${PATH}:/usr/bin
 PATH=${PATH}:/bin
@@ -338,5 +333,4 @@ export PATH="/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/s
 export PATH="$PATH:/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/php/bin:/usr/local/php5/bin"
 export PATH=${PATH}
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
-
 export PATH=$HOME/.binctl:$PATH
