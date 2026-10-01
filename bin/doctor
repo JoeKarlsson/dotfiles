@@ -1,0 +1,142 @@
+#!/bin/bash
+# Checks that this machine matches the dotfiles repo. Read-only; exits 1 if
+# anything needs attention. Run it after pulling, after brew changes, or
+# whenever something feels off.
+set -uo pipefail
+
+DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+# Tool checks run through an interactive zsh so they see the real PATH
+# (mise shims etc.), not whatever shell happened to launch this script.
+zi() { /bin/zsh -i -c "$1" 2>/dev/null </dev/null; }
+command -v brew >/dev/null || export PATH="/opt/homebrew/bin:$PATH"
+fails=0; warns=0
+ok()   { printf "  \033[32mok\033[0m    %s\n" "$1"; }
+warn() { printf "  \033[33mwarn\033[0m  %s\n" "$1"; warns=$((warns+1)); }
+fail() { printf "  \033[31mFAIL\033[0m  %s\n" "$1"; fails=$((fails+1)); }
+
+echo "chezmoi"
+if ! command -v chezmoi >/dev/null; then
+    fail "chezmoi not installed (run install.sh)"
+else
+    src=$(chezmoi source-path 2>/dev/null)
+    [ "$src" = "$DOTFILES_DIR/home" ] && ok "source dir is ${DOTFILES_DIR/#$HOME/~}" \
+        || fail "chezmoi source is '${src:-unset}', not $DOTFILES_DIR/home (run install.sh)"
+    machine=$(chezmoi execute-template '{{ .machine }}' 2>/dev/null)
+    [ -n "$machine" ] && ok "machine type: $machine" || fail "no machine type in chezmoi config (run: chezmoi init --prompt)"
+    # Anything listed here differs from the repo. Most often an app (Claude
+    # Code, VS Code) saved over one of its symlinks with a plain file.
+    drift=$(chezmoi status --exclude scripts 2>&1)
+    if [ -z "$drift" ]; then ok "every managed file matches the repo"
+    else
+        while IFS= read -r l; do fail "drift: ~/${l:3} (chezmoi diff ~/${l:3})"; done <<<"$drift"
+        echo "        keep the local version: chezmoi add <file> && chezmoi apply <file>"
+        echo "        discard it:             chezmoi apply <file>"
+    fi
+fi
+
+echo "Repo"
+# Fetch with a 10s limit: GitHub SSH goes through the 1Password agent, which
+# waits indefinitely while 1Password is locked or asking for approval.
+git -C "$DOTFILES_DIR" fetch -q origin 2>/dev/null </dev/null & fpid=$!
+for _ in $(seq 20); do kill -0 $fpid 2>/dev/null || break; sleep 0.5; done
+if kill -0 $fpid 2>/dev/null; then
+    kill $fpid 2>/dev/null; warn "fetch timed out after 10s (1Password locked or waiting for approval?); ahead/behind below may be stale"
+elif ! wait $fpid; then
+    warn "could not fetch origin; ahead/behind below may be stale"
+fi
+dirty=$(git -C "$DOTFILES_DIR" status --porcelain | wc -l | tr -d ' ')
+[ "$dirty" = 0 ] && ok "no uncommitted changes" || fail "$dirty uncommitted change(s): commit them before they drift"
+read -r behind ahead < <(git -C "$DOTFILES_DIR" rev-list --left-right --count origin/main...main 2>/dev/null || echo "? ?")
+[ "$behind" = 0 ] && ok "up to date with origin/main" || fail "$behind commit(s) on origin/main not pulled"
+[ "$ahead" = 0 ] && ok "nothing unpushed" || warn "$ahead commit(s) not pushed"
+
+echo "Homebrew (Brewfile vs installed)"
+BF="$HOME/.Brewfile"   # rendered by chezmoi from home/dot_Brewfile.tmpl
+installed_f=$(brew list --formula -1 2>/dev/null)
+missing=""
+for f in $(brew bundle list --formula --file "$BF" 2>/dev/null); do
+    grep -qx "${f##*/}" <<<"$installed_f" || missing+=" $f"
+done
+[ -z "$missing" ] && ok "every Brewfile formula installed" || fail "not installed:$missing"
+extra=""
+for f in $(brew leaves 2>/dev/null); do
+    grep -qE "^brew \"([^\"]*/)?${f##*/}\"" "$BF" || extra+=" $f"
+done
+[ -z "$extra" ] && ok "every installed formula is in the Brewfile" || warn "installed but not in Brewfile:$extra"
+if command -v code >/dev/null; then
+    exts=$(code --list-extensions 2>/dev/null | tr 'A-Z' 'a-z')
+    vmissing=""
+    for e in $(brew bundle list --vscode --file "$BF" 2>/dev/null | tr 'A-Z' 'a-z'); do
+        grep -qx "$e" <<<"$exts" || vmissing+=" $e"
+    done
+    [ -z "$vmissing" ] && ok "every Brewfile VS Code extension installed" || warn "VS Code extensions not installed:$vmissing"
+fi
+if command -v mas >/dev/null; then
+    mas_have=$(mas list 2>/dev/null | awk '{print $1}')
+    mas_want=$(grep -oE '^mas .*id: *[0-9]+' "$BF" | grep -oE '[0-9]+$')
+    mmissing=""; for id in $mas_want; do grep -qx "$id" <<<"$mas_have" || mmissing+=" $(grep -E "id: *$id\b" "$BF" | cut -d'"' -f2)"; done
+    [ -z "$mmissing" ] && ok "every Brewfile App Store app installed" || warn "App Store apps not installed:$mmissing"
+    mextra=""; for id in $mas_have; do grep -qx "$id" <<<"$mas_want" || mextra+=" $(mas list | awk -v i="$id" '$1==i{$1="";sub(/ *\(.*/,"");print}' | xargs)"; done
+    [ -z "$mextra" ] && ok "every App Store app is in the Brewfile" || warn "App Store apps not in the Brewfile ($machine section?):$mextra"
+fi
+outdated=$(brew outdated --formula -q 2>/dev/null | wc -l | tr -d ' ')
+[ "$outdated" = 0 ] && ok "no outdated formulae" || warn "$outdated outdated formula(e): brew upgrade"
+
+echo "Tools"
+for t in git delta fzf fd zoxide mise rg jq gh; do
+    zi "command -v $t" >/dev/null && ok "$t" || fail "$t not on PATH"
+done
+gv=$(zi "git --version" | awk '{print $3}')
+[ "$(printf '%s\n2.38\n' "$gv" | sort -V | head -1)" = 2.38 ] && ok "git $gv (config needs >= 2.38)" || fail "git $gv is older than 2.38 (rebase.updateRefs etc.)"
+gp=$(zi "command -v git")
+[ "$gp" = /opt/homebrew/bin/git ] && ok "git is Homebrew's" || warn "git is $gp, not Homebrew's"
+if zi "mise doctor" >/dev/null; then ok "mise doctor"; else warn "mise doctor reported problems: run it"; fi
+node_path=$(zi "command -v node")
+[[ "$node_path" == *mise* ]] && ok "node from mise" || fail "node is ${node_path:-missing}, expected mise shim"
+
+echo "SSH"
+[ -s "$HOME/.config/chezmoi/key.txt" ] && ok "chezmoi age key (decrypts ~/.ssh/config.homelab)" || fail "~/.config/chezmoi/key.txt missing: homelab ssh hosts not deployed (1Password: \"chezmoi age key\")"
+[ -d "$HOME/.ssh/sockets" ] && ok "~/.ssh/sockets (multiplexing)" || fail "~/.ssh/sockets missing: cgu multiplexing silently off"
+OP_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+[ -S "$OP_SOCK" ] && ok "1Password SSH agent socket" || warn "1Password SSH agent not running"
+first_host=$(grep -m1 -E '^Host ' "$HOME/.ssh/config" | awk '{print $2}')
+[ "$first_host" != "*" ] && ok "Host * is not first (per-host options win)" || fail "Host * is first in ssh config: it overrides every host below it"
+
+echo "Claude Code MCP servers"
+# Every stdio server's command must exist: an absolute path that's executable,
+# or a bare name your shell can resolve. (A hardcoded ~/.nvm path broke the
+# docx server on 2026-09-29 when nvm was removed.)
+while IFS=$'\t' read -r src name cmd; do
+    [ -z "$cmd" ] && continue
+    if [[ "$cmd" == /* ]]; then
+        [ -x "$cmd" ] && ok "$name ($src)" || fail "$name ($src): $cmd does not exist"
+    else
+        zi "command -v $cmd" >/dev/null && ok "$name ($src)" || fail "$name ($src): '$cmd' not on PATH"
+    fi
+done < <(/usr/bin/python3 - <<'PY'
+import json, os
+home = os.path.expanduser("~")
+for src, path in (("~/.claude/mcp.json", f"{home}/.claude/mcp.json"), ("~/.claude.json", f"{home}/.claude.json")):
+    try: d = json.load(open(path))
+    except Exception: continue
+    scopes = [(src, d.get("mcpServers") or {})]
+    for proj, pc in (d.get("projects") or {}).items():   # project-scoped servers
+        scopes.append((f"{src} {os.path.basename(proj)}", (pc or {}).get("mcpServers") or {}))
+    for label, servers in scopes:
+        for name, cfg in servers.items():
+            if isinstance(cfg, dict) and cfg.get("command"):
+                print(f"{label}\t{name}\t{cfg['command']}")
+PY
+)
+
+echo "Shell"
+for i in 1 2 3; do /bin/zsh -i -c exit >/dev/null 2>&1; done
+start=$(/usr/bin/python3 -c 'import time;print(time.time())')
+for i in 1 2 3 4 5; do /bin/zsh -i -c exit >/dev/null 2>&1; done
+end=$(/usr/bin/python3 -c 'import time;print(time.time())')
+ms=$(/usr/bin/python3 -c "print(round(($end-$start)/5*1000))")
+[ "$ms" -lt 100 ] && ok "zsh -i startup ${ms}ms" || warn "zsh -i startup ${ms}ms (was ~40ms on 2026-09-29)"
+
+echo
+if [ $fails -gt 0 ]; then echo "$fails failure(s), $warns warning(s)"; exit 1; fi
+echo "All good ($warns warning(s))"

@@ -1,0 +1,19 @@
+# Templated: paths here are target paths (relative to ~), not source names.
+{{- if ne .chezmoi.os "darwin" }}
+# Linux (claude-dev): only shared, OS-neutral config. Provision owns ~/.bashrc
+# and ~/.ssh/config there; zsh, 1Password, Homebrew and VS Code are Mac-only.
+.zshrc
+.zprofile
+.ssh
+.Brewfile
+.claude/settings.json
+.claude/mcp.json
+.config/atuin
+.config/mise
+.config/topgrade.toml
+Library
+{{- end }}
+{{- if eq .machine "personal" }}
+# docx MCP server is only set up on the work Mac
+.claude/mcp.json
+{{- end }}

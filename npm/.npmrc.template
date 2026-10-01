@@ -1,0 +1,6 @@
+# npm configuration
+# After cloning, copy this to ~/.npmrc and add your auth token:
+#   //registry.npmjs.org/:_authToken=YOUR_TOKEN_HERE
+progress=false
+init-author-name=Joe
+init-author-email=joekarlsson1@gmail.com

@@ -1,0 +1,10 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Installs anything in ~/.Brewfile that's missing. Re-runs whenever the
+# rendered Brewfile changes: {{ includeTemplate "dot_Brewfile.tmpl" . | sha256sum }}
+# --no-upgrade: upgrades are topgrade's job, not chezmoi apply's.
+set -uo pipefail
+export PATH="/opt/homebrew/bin:$PATH" HOMEBREW_NO_AUTO_UPDATE=1
+command -v brew >/dev/null || { echo "brew bundle: Homebrew not installed, skipping"; exit 0; }
+brew bundle --file="$HOME/.Brewfile" --no-upgrade || echo "brew bundle: some entries failed (non-fatal); run bin/doctor"
+{{ end -}}

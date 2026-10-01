@@ -1,0 +1,14 @@
+#!/bin/bash
+# Colima and `docker context` also write this file (currentContext, auths), so
+# only merge in the keys we own instead of replacing it.
+# cliPluginsExtraDirs: lets `docker compose` / `docker buildx` find brew's plugins.
+set -euo pipefail
+DIRS='["/opt/homebrew/lib/docker/cli-plugins"]'
+in=$(cat); [ -n "$in" ] || in='{}'
+# Already set: pass the file through byte for byte, so docker's own formatting
+# doesn't show up as drift in `chezmoi status`.
+if printf '%s' "$in" | /opt/homebrew/bin/jq -e --argjson d "$DIRS" '.cliPluginsExtraDirs == $d' >/dev/null; then
+  printf '%s' "$in"
+else
+  printf '%s' "$in" | /opt/homebrew/bin/jq --tab --argjson d "$DIRS" '.cliPluginsExtraDirs = $d'
+fi

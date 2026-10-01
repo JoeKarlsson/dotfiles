@@ -1,0 +1,116 @@
+[user]
+	name = Joe Karlsson
+	email = joekarlsson1@gmail.com
+	github = joekarlsson1
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICe+dbi9GpSZ1A1bvcZ+pru3xhYKhG91efjlNDYDH7Jp
+
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	ui = auto
+
+[color "branch"]
+	current = red reverse
+	local = blue
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[help]
+	autocorrect = prompt
+
+[push]
+	default = current
+	autoSetupRemote = true
+	followTags = true
+
+[branch]
+	autosetupmerge = true
+	sort = -committerdate
+
+[advice]
+	statusHints = false
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[core]
+	autocrlf = false
+	safecrlf = true
+	excludesfile = ~/.gitignore_global
+
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+	mnemonicPrefix = true
+	renames = true
+
+[merge]
+	conflictStyle = zdiff3
+
+[rerere]
+	enabled = true
+
+[rebase]
+	autosquash = true
+	autostash = true
+	updateRefs = true
+
+{{ if lookPath "delta" -}}
+# delta: side-by-side, syntax-highlighted diffs (brew "git-delta")
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+{{- end }}
+
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+[column]
+	ui = auto
+[tag]
+	sort = version:refname
+{{- if eq .chezmoi.os "darwin" }}
+	gpgsign = true
+{{- end }}
+[fetch]
+	prune = true
+	all = true
+[commit]
+	verbose = true
+{{- if eq .chezmoi.os "darwin" }}
+	gpgsign = true
+# Signing goes through 1Password, which only exists on the Macs.
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	allowedSignersFile = ~/.ssh/allowed_signers
+{{- end }}
+
+# Machine-specific settings (untracked): git maintenance repo list, and on
+# claude-dev the provision's identity/safe.directory. Included last so it wins.
+[include]
+	path = ~/.gitconfig.local

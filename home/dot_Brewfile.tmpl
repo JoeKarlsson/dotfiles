@@ -1,0 +1,206 @@
+# Brewfile - Joe Karlsson's Mac Setup
+# Install with: brew bundle --file=~/dotfiles/Brewfile
+# Updated: 2026-09-29 (pruned unused tools; `brew bundle check` to verify)
+
+# Taps
+
+# =============================================================================
+# Core Development Tools
+# =============================================================================
+brew "git"
+brew "bash"                  # Modern bash (macOS ships 3.2)
+brew "gh"                    # GitHub CLI
+brew "go"
+brew "node"                  # Fallback only; dev Node comes from mise
+brew "mise"                  # Runtime version manager (replaces nvm)
+
+# Python: runtime only, for ansible/yt-dlp/streamrip and homelab scripts (no Python dev)
+brew "python@3.14"
+
+# =============================================================================
+# Infrastructure / Homelab
+# =============================================================================
+brew "ansible"
+brew "sshpass"               # SSH password auth (for homelab devices)
+brew "mkcert"                # Local SSL certs
+brew "nss"                   # Network Security Services (for mkcert)
+brew "opentofu"              # Homelab IaC (opentofu/services/*)
+brew "shellcheck"            # Lint for homelab/provision shell scripts
+brew "syncthing"
+
+# =============================================================================
+# Cloud / DevOps
+# =============================================================================
+brew "azure-cli"
+brew "colima"                # Container runtime; start by hand with `colima start` (ssh/config Includes its ssh_config)
+brew "docker"                # CLI only, talks to colima (no Docker Desktop)
+brew "docker-buildx"         # CLI plugins, found via ~/.docker/config.json cliPluginsExtraDirs
+brew "docker-compose"
+
+# =============================================================================
+# Databases
+# =============================================================================
+brew "libpq", link: true     # psql / pg_dump client (no local server)
+
+# =============================================================================
+# Media Tools
+# =============================================================================
+brew "ffmpeg"
+brew "yt-dlp"                # Pulls in deno as its JS runtime
+brew "gallery-dl"
+brew "exiftool"
+
+# =============================================================================
+# Document / Text Processing
+# =============================================================================
+brew "pandoc"
+brew "vale"                  # Prose linter
+brew "poppler"               # PDF tools (pdftotext, pdftoppm)
+brew "whisper.cpp"           # Local speech-to-text
+
+# =============================================================================
+# CLI Utilities
+# =============================================================================
+brew "tree"
+brew "git-delta"             # Git pager: side-by-side, syntax-highlighted diffs
+brew "fzf"                   # Fuzzy finder (Ctrl-T files, Alt-C dirs)
+brew "atuin"                 # Ctrl-R history (SQLite, local only)
+brew "fd"                    # Fast find, fzf backend
+brew "ripgrep"               # rg: fast recursive grep
+brew "jq"                    # JSON on the command line (bin/doctor checks for it)
+brew "rtk"                   # Token-saving CLI proxy; Claude Code's Bash hook calls it
+brew "starship"              # Prompt
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "zoxide"                # Smarter cd (z / zi), replaces the omz z plugin
+brew "pv"                    # Pipe viewer (progress bars)
+brew "hyperfine"             # Command benchmarking
+brew "b2-tools"              # Backblaze B2
+brew "chezmoi"               # Dotfiles manager (this repo)
+brew "age"                   # Key for chezmoi's encrypted_* files (age-keygen)
+brew "mas"                   # Mac App Store CLI
+brew "mole"
+brew "topgrade"             # Upgrade brew, App Store, npm, mise, etc. in one run
+
+# =============================================================================
+# Casks (GUI Applications)
+# =============================================================================
+cask "1password-cli"
+cask "handy"                 # Local dictation (daily driver)
+cask "visual-studio-code"
+cask "pearcleaner"           # App uninstaller + orphaned-file finder
+cask "knockknock"            # Objective-See: lists persistent login/launch items
+# cask "nrlquaker-winbox"    # MikroTik Winbox - uncomment if still needed
+
+# =============================================================================
+# Mac App Store (needs an App Store sign-in; `mas list` shows installed IDs)
+# =============================================================================
+mas "Home Assistant", id: 1099568401
+mas "Magnet", id: 441258766
+mas "Xnip", id: 1221250572
+{{- if eq .machine "work" }}
+
+# Work Mac only (CData)
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "LanguageTool", id: 1534275760
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft OneNote", id: 784801555
+mas "Microsoft Outlook", id: 985367838
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft To Do", id: 1274495053
+mas "Microsoft Word", id: 462054704
+mas "OneDrive", id: 823766827
+mas "Windows App", id: 1295203466
+{{- end }}
+{{- if eq .machine "personal" }}
+
+# Personal Macs only: homelab, media and misc CLI tools
+brew "age"                   # File encryption
+brew "asciinema"             # Terminal recordings
+brew "ast-grep"              # Structural code search
+brew "bitwarden-cli"
+brew "coreutils"             # GNU versions (gdate, gsort, ...)
+brew "duckdb"
+brew "gifsicle"
+brew "gphoto2"
+brew "ncdu"                  # Disk usage browser
+brew "opencode"              # Local coding agent (local Ollama)
+brew "postgresql@17"
+brew "rsync"                 # Modern rsync (macOS ships 2.6.9)
+brew "samba"
+brew "streamrip"             # Music downloads
+brew "tesseract"             # OCR
+brew "unar"
+brew "wget"
+
+# Personal Macs only (fill from a personal Mac: `mas list`)
+mas "Brother P-touch Editor", id: 1453365242
+mas "Canva", id: 897446215
+mas "Hidden Bar", id: 1452453066
+mas "Jump Desktop", id: 524141863
+mas "Microsoft Remote Desktop", id: 1295203466
+mas "Pages (Creator Studio)", id: 361309726
+mas "The Unarchiver", id: 425424353
+{{- end }}
+
+# =============================================================================
+# VS Code Extensions
+# =============================================================================
+
+# Core editing
+vscode "esbenp.prettier-vscode"
+vscode "dbaeumer.vscode-eslint"
+vscode "editorconfig.editorconfig"
+vscode "davidanson.vscode-markdownlint"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "chrischinchilla.vale-vscode"
+
+# Git
+vscode "github.vscode-pull-request-github"
+vscode "github.vscode-github-actions"
+
+# Languages & frameworks
+vscode "golang.go"
+vscode "tamasfe.even-better-toml"
+vscode "redhat.vscode-yaml"
+
+# JavaScript / web
+vscode "christian-kohler.npm-intellisense"
+vscode "wix.vscode-import-cost"
+vscode "t7yang.hyper-javascript-snippets"
+vscode "formulahendry.auto-close-tag"
+vscode "formulahendry.auto-rename-tag"
+vscode "pranaygp.vscode-css-peek"
+vscode "mohd-akram.vscode-html-format"
+vscode "whtouche.vscode-js-console-utils"
+
+# Remote & containers
+vscode "parallelsdesktop.parallels-desktop"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode-remote.vscode-remote-extensionpack"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-repositories"
+vscode "ms-vscode.remote-server"
+vscode "github.codespaces"
+vscode "github.remotehub"
+
+# Docker & Azure
+vscode "ms-azuretools.vscode-containers"
+
+# UI & misc
+vscode "vscode-icons-team.vscode-icons"
+vscode "aaron-bond.better-comments"
+vscode "oderwat.indent-rainbow"
+vscode "mechatroner.rainbow-csv"
+vscode "ms-vscode.makefile-tools"
+vscode "mtxr.sqltools"
+vscode "yzhang.markdown-all-in-one"
+vscode "nicollasr.vscode-streamdeck"
+vscode "ms-vsliveshare.vsliveshare"
+vscode "juehangqin.vscode-mcp-server"
+
+# Go tools
+go "golang.org/x/tools/gopls"
+go "honnef.co/go/tools/cmd/staticcheck"
