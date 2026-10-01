@@ -1,0 +1,232 @@
+# ========================================
+# Shell core (plain zsh, no framework; plugins come from Homebrew)
+# ========================================
+setopt INTERACTIVE_COMMENTS AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT
+unsetopt nomatch
+
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=10000
+setopt APPEND_HISTORY SHARE_HISTORY EXTENDED_HISTORY HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_VERIFY
+
+# Completion: full rebuild of the dump at most once a day, cached otherwise
+autoload -Uz compinit
+() {
+  setopt local_options extended_glob
+  local dump=${ZDOTDIR:-$HOME}/.zcompdump
+  if [[ -f $dump && -z $dump(#qN.mh+24) ]]; then compinit -C -d $dump; else compinit -d $dump; fi
+  [[ $dump.zwc -nt $dump ]] || zcompile $dump   # compiled dump loads faster
+}
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path ~/.cache/zsh
+
+# Keys: emacs mode, Up/Down search history by what's already typed
+bindkey -e
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search   '^[OA' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search '^[OB' down-line-or-beginning-search
+bindkey '^[[1;5C' forward-word '^[[1;5D' backward-word   # Ctrl-Left/Right
+bindkey '^[[1;3C' forward-word '^[[1;3D' backward-word   # Opt-Left/Right
+bindkey '^[[H' beginning-of-line '^[[F' end-of-line '^[[3~' delete-char
+# Auto-quote URLs pasted into the command line
+autoload -Uz bracketed-paste-magic url-quote-magic
+zle -N bracketed-paste bracketed-paste-magic
+zle -N self-insert url-quote-magic
+
+# Terminal tab title: current dir at the prompt, the command while it runs
+_title_precmd()  { print -Pn '\e]0;%~\a' }
+_title_preexec() { print -Pn '\e]0;%~: '; print -rn -- "${1[(w)1]}"; print -n '\a' }
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _title_precmd
+add-zsh-hook preexec _title_preexec
+
+eval "$(starship init zsh)"
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# ========================================
+# Environment
+# ========================================
+export EDITOR="code --wait"
+
+# ========================================
+# PATH (homebrew is set in .zprofile via brew shellenv)
+# ========================================
+export PATH="$HOME/.local/bin:$PATH"
+
+# ========================================
+# Navigation
+# ========================================
+alias dev="cd ~/Documents/dev"
+alias cq="cd ~/Documents/dev/cloudquery"
+alias docs="cd ~/Documents"
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ~="cd ~"
+alias f='open -a Finder ./'
+
+# ========================================
+# Better Defaults
+# ========================================
+alias ll='ls -FGlAhp'
+
+# Human-only niceties. Claude Code (CLAUDECODE=1) snapshots this file into the
+# shell it runs commands in, where these break things: `cp -i` blocks on an
+# invisible overwrite prompt, the cd hook buries output, and a helper named `c`
+# collides with the alias.
+if [[ -z $CLAUDECODE ]]; then
+  alias cp='cp -iv'
+  alias mv='mv -iv'
+  alias mkdir='mkdir -pv'
+  alias less='less -FSRXc'
+  cd() { builtin cd "$@"; [[ -o interactive ]] && ll; }
+  alias c='clear'
+  alias h="history"
+fi
+
+alias v=vim
+alias vi=vim
+
+# ========================================
+# Git
+# ========================================
+alias g="git"
+alias gs="git status"
+alias gcm="git commit -m"
+alias gco="git checkout"
+alias ga="git add"
+
+# ========================================
+# macOS Utilities
+# ========================================
+alias stfu="osascript -e 'set volume output muted true'"
+alias pumpitup="osascript -e 'set volume 10'"
+alias caff="caffeinate -dis"
+alias bell='echo "\a"'
+
+alias unhidelibrary="chflags nohidden ~/Library"
+alias showdotfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidedotfiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+
+alias ip="curl ipinfo.io/ip"
+alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+
+alias pubkey="cat ~/.ssh/id_ed25519.pub | pbcopy && echo '=> Public key copied to pasteboard.'"
+alias currentdate='date "+%Y.%m.%d"'
+alias path='echo -e ${PATH//:/\\n}'
+
+# ========================================
+# File & Folder Management
+# ========================================
+mcd() { mkdir -p "$1" && cd "$1"; }
+zipf() { zip -r "$1".zip "$1"; }
+
+cdf() {
+    local currFolderPath
+    currFolderPath=$( /usr/bin/osascript <<EOT
+        tell application "Finder"
+            try
+                set currFolder to (folder of the front window as alias)
+            on error
+                set currFolder to (path to desktop folder as alias)
+            end try
+            POSIX path of currFolder
+        end tell
+EOT
+    )
+    echo "cd to \"$currFolderPath\""
+    cd "$currFolderPath"
+}
+
+# ========================================
+# Dev Tools
+# ========================================
+# Fixed: these need to be functions, not aliases (to accept arguments)
+sha256() { shasum -a 256 "$1"; }
+tailf() { less +F "$1"; }
+server() { python3 -m http.server "${1:-8000}"; }
+
+alias e="code ."
+alias ql="qlmanage -p"
+
+# Tree shortcuts
+alias ll1="tree --dirsfirst -ChFL 1"
+alias ll2="tree --dirsfirst -ChFL 2"
+alias ll3="tree --dirsfirst -ChFL 3"
+
+# ========================================
+# Node / npm / pnpm
+# ========================================
+alias pn=pnpm
+alias npmst="npm start"
+alias npmt="npm test"
+alias npmrm="rm -rf node_modules && npm install"
+
+# ========================================
+# yt-dlp
+# ========================================
+alias ytdl='yt-dlp'
+alias ydlmp4='yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"'
+alias ydlmkv='yt-dlp -f "bestvideo[ext=mkv]+bestaudio[ext=mka]/best[ext=mkv]/best"'
+
+# Full quality download with archive tracking, metadata, and organized output
+alias ytdlp='yt-dlp --format "(bestvideo[vcodec^=av01][height>=4320][fps>30]/bestvideo[vcodec^=vp9.2][height>=4320][fps>30]/bestvideo[vcodec^=vp9][height>=4320][fps>30]/bestvideo[vcodec^=avc1][height>=4320][fps>30]/bestvideo[height>=4320][fps>30]/bestvideo[vcodec^=av01][height>=4320]/bestvideo[vcodec^=vp9.2][height>=4320]/bestvideo[vcodec^=vp9][height>=4320]/bestvideo[vcodec^=avc1][height>=4320]/bestvideo[height>=4320]/bestvideo[vcodec^=av01][height>=2880][fps>30]/bestvideo[vcodec^=vp9.2][height>=2880][fps>30]/bestvideo[vcodec^=vp9][height>=2880][fps>30]/bestvideo[vcodec^=avc1][height>=2880][fps>30]/bestvideo[height>=2880][fps>30]/bestvideo[vcodec^=av01][height>=2880]/bestvideo[vcodec^=vp9.2][height>=2880]/bestvideo[vcodec^=vp9][height>=2880]/bestvideo[vcodec^=avc1][height>=2880]/bestvideo[height>=2880]/bestvideo[vcodec^=av01][height>=2160][fps>30]/bestvideo[vcodec^=vp9.2][height>=2160][fps>30]/bestvideo[vcodec^=vp9][height>=2160][fps>30]/bestvideo[vcodec^=avc1][height>=2160][fps>30]/bestvideo[height>=2160][fps>30]/bestvideo[vcodec^=av01][height>=2160]/bestvideo[vcodec^=vp9.2][height>=2160]/bestvideo[vcodec^=vp9][height>=2160]/bestvideo[vcodec^=avc1][height>=2160]/bestvideo[height>=2160]/bestvideo[vcodec^=av01][height>=1440][fps>30]/bestvideo[vcodec^=vp9.2][height>=1440][fps>30]/bestvideo[vcodec^=vp9][height>=1440][fps>30]/bestvideo[vcodec^=avc1][height>=1440][fps>30]/bestvideo[height>=1440][fps>30]/bestvideo[vcodec^=av01][height>=1440]/bestvideo[vcodec^=vp9.2][height>=1440]/bestvideo[vcodec^=vp9][height>=1440]/bestvideo[vcodec^=avc1][height>=1440]/bestvideo[height>=1440]/bestvideo[vcodec^=av01][height>=1080][fps>30]/bestvideo[vcodec^=vp9.2][height>=1080][fps>30]/bestvideo[vcodec^=vp9][height>=1080][fps>30]/bestvideo[vcodec^=avc1][height>=1080][fps>30]/bestvideo[height>=1080][fps>30]/bestvideo[vcodec^=av01][height>=1080]/bestvideo[vcodec^=vp9.2][height>=1080]/bestvideo[vcodec^=vp9][height>=1080]/bestvideo[vcodec^=avc1][height>=1080]/bestvideo[height>=1080]/bestvideo[vcodec^=av01][height>=720][fps>30]/bestvideo[vcodec^=vp9.2][height>=720][fps>30]/bestvideo[vcodec^=vp9][height>=720][fps>30]/bestvideo[vcodec^=avc1][height>=720][fps>30]/bestvideo[height>=720][fps>30]/bestvideo[vcodec^=av01][height>=720]/bestvideo[vcodec^=vp9.2][height>=720]/bestvideo[vcodec^=vp9][height>=720]/bestvideo[vcodec^=avc1][height>=720]/bestvideo[height>=720]/bestvideo[vcodec^=av01][height>=480][fps>30]/bestvideo[vcodec^=vp9.2][height>=480][fps>30]/bestvideo[vcodec^=vp9][height>=480][fps>30]/bestvideo[vcodec^=avc1][height>=480][fps>30]/bestvideo[height>=480][fps>30]/bestvideo[vcodec^=av01][height>=480]/bestvideo[vcodec^=vp9.2][height>=480]/bestvideo[vcodec^=vp9][height>=480]/bestvideo[vcodec^=avc1][height>=480]/bestvideo[height>=480]/bestvideo[vcodec^=av01][height>=360][fps>30]/bestvideo[vcodec^=vp9.2][height>=360][fps>30]/bestvideo[vcodec^=vp9][height>=360][fps>30]/bestvideo[vcodec^=avc1][height>=360][fps>30]/bestvideo[height>=360][fps>30]/bestvideo[vcodec^=av01][height>=360]/bestvideo[vcodec^=vp9.2][height>=360]/bestvideo[vcodec^=vp9][height>=360]/bestvideo[vcodec^=avc1][height>=360]/bestvideo[height>=360]/bestvideo[vcodec^=avc1][height>=240][fps>30]/bestvideo[vcodec^=av01][height>=240][fps>30]/bestvideo[vcodec^=vp9.2][height>=240][fps>30]/bestvideo[vcodec^=vp9][height>=240][fps>30]/bestvideo[height>=240][fps>30]/bestvideo[vcodec^=avc1][height>=240]/bestvideo[vcodec^=av01][height>=240]/bestvideo[vcodec^=vp9.2][height>=240]/bestvideo[vcodec^=vp9][height>=240]/bestvideo[height>=240]/bestvideo[vcodec^=avc1][height>=144][fps>30]/bestvideo[vcodec^=av01][height>=144][fps>30]/bestvideo[vcodec^=vp9.2][height>=144][fps>30]/bestvideo[vcodec^=vp9][height>=144][fps>30]/bestvideo[height>=144][fps>30]/bestvideo[vcodec^=avc1][height>=144]/bestvideo[vcodec^=av01][height>=144]/bestvideo[vcodec^=vp9.2][height>=144]/bestvideo[vcodec^=vp9][height>=144]/bestvideo[height>=144]/bestvideo)+(bestaudio[acodec^=opus]/bestaudio)/best" --verbose --force-ipv4 --sleep-requests 1 --sleep-interval 5 --max-sleep-interval 30 --ignore-errors --no-continue --no-overwrites --download-archive ~/Movies/ytdlp/archive.log --add-metadata --parse-metadata "%(title)s:%(meta_title)s" --parse-metadata "%(uploader)s:%(meta_artist)s" --write-annotations --concurrent-fragments 5 -P ~/Movies/ytdlp --output "%(uploader)s/%(uploader)s - %(upload_date)s - %(title)s [%(id)s].%(ext)s"'
+
+# ========================================
+# Shell Integration & Settings
+# ========================================
+ulimit -n 2000
+
+# ========================================
+# mise (runtime versions: node; per-project via mise.toml / .nvmrc)
+# ========================================
+# Shims instead of `mise activate`: no hook before every prompt (~20ms each).
+# Shims still pick the per-directory version when they run; only [env]
+# sections in mise.toml are not applied. Use `mise x -- cmd` if one ever is.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+export PATH="$HOME/bin:$PATH"
+
+# Jump to cdata project
+alias cdata="cd ~/Documents/dev/cdata"
+
+# ========================================
+# fzf (Ctrl-T files, Alt-C dirs) + zoxide (z / zi) + atuin (Ctrl-R history)
+# zoxide goes after other cd wrappers; syntax-highlighting below must be last
+# ========================================
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+# Cache each tool's init script instead of spawning it on every startup.
+# Keyed on the resolved binary path (Cellar path includes the version), so a
+# brew upgrade regenerates it automatically.
+_cached_init() {  # _cached_init <name> <cmd> [args...]
+  local name=$1; shift
+  local bin=${commands[$1]:A} cache=~/.cache/zsh/init-$name.zsh
+  if [[ ! -s $cache || "$(<$cache.src)" != $bin ]] 2>/dev/null; then
+    mkdir -p ${cache:h} && "$@" >| $cache && print -r -- $bin >| $cache.src
+  fi
+  source $cache
+}
+_cached_init fzf fzf --zsh
+_cached_init zoxide zoxide init zsh
+# atuin after fzf so it owns Ctrl-R (fzf keeps Ctrl-T / Alt-C). Up arrow stays
+# the prefix search above; the AI feature stays off.
+_cached_init atuin atuin init zsh --disable-up-arrow --disable-ai
+# atuin's init points autosuggestions at `atuin search`, one process per
+# keystroke. zsh's own history lookup is instant, so use that instead.
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+
+# Must be last: it wraps every widget defined above
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

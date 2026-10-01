@@ -1,0 +1,27 @@
+{{- /* Macs are asked once at `chezmoi init` (re-ask: `chezmoi init --prompt`).
+       Linux is always "server" so provisioning never waits on a prompt. */ -}}
+{{- $machine := "server" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $machine = promptChoiceOnce . "machine" "Machine type" (list "work" "personal") "personal" -}}
+{{- end -}}
+# Plain files are symlinks into the source dir, so editing ~/.zshrc edits the
+# repo. Templates (.tmpl) are rendered copies: edit them with `chezmoi edit`.
+mode = "symlink"
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+# encrypted_* files (homelab ssh hosts) are age-encrypted to this key. The
+# identity is not in the repo: install.sh fetches it from 1Password.
+encryption = "age"
+[age]
+    identity = "~/.config/chezmoi/key.txt"
+    recipient = "age1tpfjnku6jnq6kl2pzkpvc0txtgmfy5yj258sedw00jnv8rky6ccq8r23ex"
+
+[data]
+    machine = {{ $machine | quote }}
+
+[diff]
+{{- if lookPath "delta" }}
+    pager = "delta"
+{{- else }}
+    pager = "less -R"
+{{- end }}

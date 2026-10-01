@@ -1,0 +1,196 @@
+{
+  "attribution": {
+    "sessionUrl": false
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(tofu apply*)",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(python *)",
+      "Bash(pip *)",
+      "Bash(pip3 *)",
+      "Bash(.venv/bin/python *)",
+      "Bash(source *)",
+      "Bash(export *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(rsync *)",
+      "Bash(curl *)",
+      "Bash(ping *)",
+      "Bash(dig *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(jq *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(cd *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(echo *)",
+      "Bash(printf *)",
+      "Bash(ps *)",
+      "Bash(open *)",
+      "Bash(pandoc *)",
+      "Bash(ffprobe *)",
+      "Bash(cp *)",
+      "Bash(mkdir *)",
+      "Bash(chmod *)",
+      "Bash(unzip *)",
+      "Bash(ditto *)",
+      "Bash(tar *)",
+      "Bash(zip *)",
+      "Bash(tofu *)",
+      "Bash(az *)",
+      "Bash(op read *)",
+      "Bash(op item get *)",
+      "Bash(op item list *)",
+      "Bash(op vault list *)",
+      "Bash(op vault get *)",
+      "Bash(op account get *)",
+      "Bash(op account list *)",
+      "Bash(op whoami *)",
+      "Bash(op document get *)",
+      "WebSearch",
+      "mcp__home-assistant__*",
+      "mcp__claude-in-chrome__*",
+      "mcp__claude_ai_Connect_AI_MCP__*",
+      "mcp__claude_ai_CData_Reports__*",
+      "mcp__claude_ai_Microsoft_Learn__*",
+      "mcp__claude_ai_Atlassian__*",
+      "mcp__claude_ai_CData_Engineering_Docs__*",
+      "mcp__claude_ai_Datadog__*",
+      "mcp__claude_ai_Canva__*",
+      "mcp__claude_ai_Core_MindTickle__*",
+      "Bash(brew *)",
+      "Bash(docker *)",
+      "Bash(make *)",
+      "Bash(bash *)",
+      "Bash(sh *)",
+      "Bash(./deploy.sh)",
+      "Bash(./*.sh)",
+      "WebFetch(domain:cdata.com)",
+      "WebFetch(domain:docs.cdata.com)",
+      "WebFetch(domain:cloud.cdata.com)",
+      "WebFetch(domain:docs.cloud.cdata.com)",
+      "WebFetch(domain:github.com)",
+      "Edit",
+      "Write",
+      "Bash(*)",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf ~/)",
+      "Bash(rm -rf ~/*)",
+      "Bash(rm -rf $HOME*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)"
+    ],
+    "additionalDirectories": [
+      "~"
+    ]
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"\nimport sys, json, os\ntry:\n    inp = json.load(sys.stdin)\n    path = inp.get('tool_input', {}).get('file_path', '') or inp.get('tool_input', {}).get('path', '')\n    onedrive = os.path.expanduser('~/Library/CloudStorage/OneDrive-')\n    if path and path.startswith(onedrive):\n        print('BLOCKED: Do not write to the OneDrive sync folder — it creates inode conflicts and corrupts files.')\n        print('Correct workflow:')\n        print('  SharePoint team sites: python3 scripts/sharepoint_auth.py upload <local> <sp-path>')\n        print('  Personal OneDrive: upload via browser at onedrive.com (IT app registration pending)')\n        print('  Edit target: work in /tmp/ or scratchpad, never in ~/Library/CloudStorage/OneDrive-*/')\n        sys.exit(1)\nexcept Exception:\n    pass\n\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v rtk >/dev/null || exit 0; rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/notify.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/worktree-hygiene.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  },
+  "tui": "fullscreen",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "voiceEnabled": true,
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true,
+    "ast-grep@ast-grep-marketplace": true,
+    "ai-commit-gen@claude-code-plugins-plus": true,
+    "docker-compose-generator@claude-code-plugins-plus": true,
+    "ansible-playbook-creator@claude-code-plugins-plus": true,
+    "backup-strategy-implementor@claude-code-plugins-plus": true,
+    "e2e-test-framework@claude-code-plugins-plus": true,
+    "secrets-manager-integrator@claude-code-plugins-plus": true,
+    "security-pro-pack@claude-code-plugins-plus": true,
+    "sql-query-optimizer@claude-code-plugins-plus": true,
+    "test-coverage-analyzer@claude-code-plugins-plus": true,
+    "throughput-analyzer@claude-code-plugins-plus": true,
+    "metrics-aggregator@claude-code-plugins-plus": true,
+    "superpowers@superpowers-marketplace": true
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  },
+  "preferredNotifChannel": "notifications_disabled",
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "This is Joe's personal homelab and he is its only operator. Every host on his private 192.168.x.x LAN (the Proxmox hosts, Home Assistant, the NAS, the Raspberry Pis, the UniFi gateway, the Hue bridge, and every LXC/VM) is his own equipment. /Users/joekarlsson/claude-skills is his infrastructure-as-code repo. Changes he asks for on these systems are authorized."
+    ],
+    "allow": [
+      "$defaults",
+      "OpenTofu in /Users/joekarlsson/claude-skills/opentofu/ locally, or in the drift mirror /opt/opentofu/ on a Proxmox host over ssh: tofu apply (including -auto-approve and -replace=...), tofu destroy (including -target and -auto-approve), tofu state rm/mv/import, and tofu taint/untaint are authorized, even when they create, replace or delete LXC containers, VMs or other resources the configuration manages.",
+      "Package upgrades on Joe's own hosts over ssh: apt-get/apt update, upgrade, full-upgrade, dist-upgrade and autoremove on his Proxmox hosts and Raspberry Pis (192.168.x.x).",
+      "IMMUTABLE_OVERRIDE=1 commands (pct exec / pct push writes into immutable LXCs) when the change is also captured in that service's opentofu/services/<name>/provision.sh.tpl or is runtime data that provision does not manage (for example app plugins and prefs, NVR config, Zigbee2MQTT configuration.yaml, media-repair data).",
+      "Restarting services, and API writes to Joe's self-hosted services on his 192.168.x.x LAN: media server and media stack APIs, plugin and settings form POSTs (except the Lyrion AutoRescan plugin), monitoring and alerting (uptime checks, Alertmanager silences, Healthchecks), Home Assistant REST/WebSocket, the Hue bridge CLIP v2 API, and lidarr-repair --apply.",
+      "git commit and git push straight to main in Joe's own repositories (claude-skills, dotfiles). He does not use pull requests for these repos."
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+# Ghostty config, ported from iTerm2 "Default" profile (2026-09-29)
+# Reload after editing: Cmd+Shift+,
+
+# --- Font (iTerm: MesloLGS-NF-Regular 13, bold + italic on) ---
+font-family = MesloLGS NF
+font-size = 13
+font-thicken = true
+
+# --- Colors ---
+# Old iTerm palette saved in config.ghostty.bak-iterm-colors
+theme = Monokai Remastered
+bold-is-bright = true
+
+background-opacity = 1
+minimum-contrast = 1
+
+# --- Cursor (iTerm: block, not blinking) ---
+cursor-style = block
+cursor-style-blink = false
+# no-cursor: keep the block cursor at the prompt
+# ssh-env/ssh-terminfo: install Ghostty's terminfo on hosts you SSH to,
+# falling back to xterm-256color where that fails
+shell-integration-features = no-cursor,ssh-env,ssh-terminfo
+
+# --- Behavior ---
+# iTerm: unlimited scrollback (Ghostty's limit is in bytes; this is ~1 GB)
+scrollback-limit = 1000000000
+# iTerm: new tabs/splits reuse the current directory
+window-inherit-working-directory = true
+# iTerm: no prompt on quit or closing a session
+confirm-close-surface = false
+quit-after-last-window-closed = true
+# iTerm: Option keys send normal characters (not Meta)
+macos-option-as-alt = false
+# iTerm: mouse reporting on, clipboard access allowed
+mouse-hide-while-typing = true
+clipboard-read = allow
+clipboard-write = allow
+clipboard-paste-protection = false
+copy-on-select = false
+
+# --- Window ---
+window-padding-x = 4
+window-padding-y = 2
+# Tabs live in the titlebar (always visible)
+macos-titlebar-style = tabs
+
+# --- Split focus: dim inactive panes harder (default 0.7) and brighten dividers
+unfocused-split-opacity = 0.5
+split-divider-color = #909090
+
+# --- Splits (iTerm-style: every split re-balances all panes evenly) ---
+# Cmd+D = split right, Cmd+Shift+D = split down, Cmd+W = close; each then equalizes
+keybind = cmd+d=new_split:right
+keybind = chain=equalize_splits
+keybind = cmd+shift+d=new_split:down
+keybind = chain=equalize_splits
+keybind = cmd+w=close_surface
+keybind = chain=equalize_splits
