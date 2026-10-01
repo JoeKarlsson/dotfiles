@@ -40,11 +40,12 @@ ok "chezmoi $(chezmoi --version | awk '{print $3}')"
 chezmoi init --source "$DOTFILES_DIR"
 
 # Age key for encrypted_* files (homelab ssh hosts). Kept out of the repo, in
-# 1Password as the document "chezmoi age key". Without it, everything else
-# still applies; drop the key in later and run `chezmoi apply`.
+# personal 1Password as the document "chezmoi age key". Without it, everything
+# else still applies; drop the key in later and run `chezmoi apply`.
 AGE_KEY="$HOME/.config/chezmoi/key.txt"
 if [ ! -s "$AGE_KEY" ] && command -v op &>/dev/null; then
-    op document get "chezmoi age key" --out-file "$AGE_KEY" 2>/dev/null \
+    op document get "chezmoi age key" --account my.1password.com \
+        --out-file "$AGE_KEY" 2>/dev/null \
         && chmod 600 "$AGE_KEY" && ok "age key from 1Password"
 fi
 if [ -s "$AGE_KEY" ]; then

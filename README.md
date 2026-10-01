@@ -35,8 +35,8 @@ source with `chezmoi edit ~/.gitconfig`, then `chezmoi apply`.
 **Encrypted files.** This repo is public, so homelab details (LAN hosts, users,
 ports) live in `encrypted_*.age` files, age-encrypted with chezmoi. Today that's
 just `~/.ssh/config.homelab`, which `~/.ssh/config` pulls in with `Include`.
-Each machine needs the key at `~/.config/chezmoi/key.txt`; it's in 1Password as
-the document "chezmoi age key", and `install.sh` fetches it with `op`. Edit with
+Each machine needs the key at `~/.config/chezmoi/key.txt`; it's in personal
+1Password as the document "chezmoi age key", and `install.sh` fetches it with `op`. Edit with
 `chezmoi edit ~/.ssh/config.homelab`. Without the key, `chezmoi apply
 --exclude encrypted` applies everything else.
 
