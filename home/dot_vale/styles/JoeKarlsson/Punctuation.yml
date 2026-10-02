@@ -1,7 +1,0 @@
-extends: existence
-message: "Em dash found. Use a comma, colon, or period instead."
-level: error
-scope: heading
-raw:
-  - '—'
-  - ' -- '
