@@ -5,6 +5,7 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
+      "Bash(tofu apply*)",
       "Bash(git *)",
       "Bash(gh *)",
       "Bash(npm *)",
@@ -48,6 +49,7 @@
       "Bash(ditto *)",
       "Bash(tar *)",
       "Bash(zip *)",
+      "Bash(tofu *)",
       "Bash(az *)",
       "Bash(op read *)",
       "Bash(op item get *)",
