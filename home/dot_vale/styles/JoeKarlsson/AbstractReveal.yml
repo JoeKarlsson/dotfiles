@@ -1,0 +1,14 @@
+# Abstract-noun reveals: a sentence that builds up to naming "the key thing"
+# instead of saying the concrete thing (Joe, 2026-10-02, social posts).
+extends: existence
+message: "Abstract reveal: '%s'. Say the concrete thing that happened instead of announcing what matters."
+level: error
+ignorecase: true
+nonword: true
+tokens:
+  - '\bthe (?:piece|part|thing|bit|trick|secret|key|ingredient|detail) that (?:makes|made) (?:it|this|that|everything|the whole thing) (?:work|click|possible)\b'
+  - '\bwhat (?:makes|made) (?:it|this|that) work\b'
+  - '\bthe (?:real )?key (?:is|was|here is)\b'
+  - '\bthe (?:real|big|actual) (?:unlock|win|story|lesson|insight)\b'
+  - "\\bhere'?s the (?:thing|deal|kicker|twist|key|secret)\\b"
+  - '\bthe (?:secret|trick) is\b'

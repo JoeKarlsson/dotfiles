@@ -1,0 +1,19 @@
+extends: existence
+message: "Video filler: '%s'. Cut it or lead with the actual point."
+level: warning
+ignorecase: true
+tokens:
+  - 'as I mentioned'
+  - 'as mentioned earlier'
+  - 'as I said earlier'
+  - 'earlier I mentioned'
+  - 'stay tuned'
+  - 'coming up'
+  - 'I want to walk you through'
+  - 'I want to show you'
+  - 'let me show you'
+  - 'in just a moment'
+  - 'quick reminder'
+  - 'real quick'
+  - 'before I forget'
+  - 'like I said'

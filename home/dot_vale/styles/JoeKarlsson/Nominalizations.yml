@@ -1,0 +1,27 @@
+extends: substitution
+message: "Use the verb form '%s' instead of the nominalization '%s'."
+level: warning
+ignorecase: true
+swap:
+  'make a decision': 'decide'
+  'make decisions': 'decide'
+  'make an assumption': 'assume'
+  'make assumptions': 'assume'
+  'provide an explanation': 'explain'
+  'provide a description': 'describe'
+  'provide a summary': 'summarize'
+  'conduct an investigation': 'investigate'
+  'reach a conclusion': 'conclude'
+  'reach conclusions': 'conclude'
+  'make a recommendation': 'recommend'
+  'make recommendations': 'recommend'
+  'take into consideration': 'consider'
+  'give consideration to': 'consider'
+  'perform an analysis': 'analyze'
+  'do an analysis': 'analyze'
+  'have an impact on': 'affect'
+  'make a statement': 'state'
+  'have a discussion': 'discuss'
+  'have a conversation': 'talk'
+  'make a commitment': 'commit'
+  'give a presentation': 'present'
