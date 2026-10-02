@@ -12,6 +12,9 @@
 .config/mise
 .config/topgrade.toml
 Library
+# Vale prose linter + /social drafts config: Mac-only (Vale is a Brewfile app)
+.vale
+social-drafts
 {{- end }}
 {{- if eq .machine "personal" }}
 # docx MCP server is only set up on the work Mac

@@ -1,0 +1,19 @@
+CData
+Connect AI
+BigQuery
+dbt
+MCP
+SCIM
+Okta
+Entra
+LangChain
+LangGraph
+Postiz
+Bluesky
+Plexamp
+Proxmox
+homelab
+OpenTofu
+chatbot
+chatbots
+Salesforce

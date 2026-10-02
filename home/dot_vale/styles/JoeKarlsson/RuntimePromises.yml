@@ -1,0 +1,18 @@
+extends: existence
+message: "Runtime promise: '%s'. Video length changes in edit — never commit to a duration."
+level: error
+ignorecase: true
+tokens:
+  - 'in the next \d+ minutes'
+  - 'in the next few minutes'
+  - 'in this \d+-minute video'
+  - 'in this video, I will'
+  - "in this video I'll"
+  - 'by the end of this video'
+  - 'we will cover'
+  - 'we will explore'
+  - "we'll cover"
+  - "we'll explore"
+  - 'this video covers'
+  - 'this video will'
+  - 'coming up in this video'

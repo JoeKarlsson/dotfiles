@@ -1,0 +1,26 @@
+extends: substitution
+message: "Contract to '%s' for conversational tone."
+level: warning
+ignorecase: true
+swap:
+  'do not': "don't"
+  'does not': "doesn't"
+  'did not': "didn't"
+  'cannot': "can't"
+  'can not': "can't"
+  'will not': "won't"
+  'would not': "wouldn't"
+  'could not': "couldn't"
+  'should not': "shouldn't"
+  'is not': "isn't"
+  'are not': "aren't"
+  'was not': "wasn't"
+  'were not': "weren't"
+  'have not': "haven't"
+  'has not': "hasn't"
+  'had not': "hadn't"
+  'that is': "that's"
+  'we are': "we're"
+  'they are': "they're"
+  'you are': "you're"
+  'I am': "I'm"

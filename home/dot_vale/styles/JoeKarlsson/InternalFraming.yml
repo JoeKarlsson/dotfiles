@@ -1,0 +1,19 @@
+extends: existence
+message: "Internal research framing: '%s'. Sounds like a content note, not a hook."
+level: error
+ignorecase: true
+tokens:
+  - 'no one talks about'
+  - 'nobody talks about'
+  - 'no one covers'
+  - 'nobody covers'
+  - 'most people miss'
+  - 'most videos miss'
+  - 'other videos'
+  - 'this is something other'
+  - "you won't find this"
+  - 'not enough people'
+  - 'underrated topic'
+  - 'underrated concept'
+  - 'hidden gem'
+  - 'secret that'
