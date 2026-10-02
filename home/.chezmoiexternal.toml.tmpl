@@ -1,0 +1,16 @@
+{{- /* Repos the Vale style symlinks in Library/Application Support/vale point
+       into. Cloned once and never pulled by chezmoi: they are working copies
+       you edit and push, so update them with git yourself. */ -}}
+{{- if eq .chezmoi.os "darwin" }}
+["Documents/dev/joe/vale-styles"]
+    type = "git-repo"
+    url = "https://github.com/JoeKarlsson/vale-styles.git"
+{{- /* Private: needs GitHub auth, so wait until `gh auth login` has run
+       (install.sh says so). Then `chezmoi apply` clones it. */ -}}
+{{- if stat (joinPath .chezmoi.homeDir ".config/gh/hosts.yml") }}
+
+["Documents/dev/cdata/skills"]
+    type = "git-repo"
+    url = "https://github.com/JoeKarlsson/cdata-skills.git"
+{{- end }}
+{{- end }}
