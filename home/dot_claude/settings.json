@@ -94,8 +94,7 @@
       "Bash(rm -rf ~/*)",
       "Bash(rm -rf $HOME*)",
       "Bash(git push --force*)",
-      "Bash(git push -f *)",
-    "Bash(tofu *)"
+      "Bash(git push -f *)"
     ],
     "additionalDirectories": [
       "~"
