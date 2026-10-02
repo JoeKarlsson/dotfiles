@@ -12,8 +12,8 @@
 .config/mise
 .config/topgrade.toml
 Library
-# Vale prose linter + /social drafts config: Mac-only (Vale is a Brewfile app)
-.vale
+# /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
+# folder is under Library, already ignored above)
 social-drafts
 {{- end }}
 {{- if eq .machine "personal" }}
