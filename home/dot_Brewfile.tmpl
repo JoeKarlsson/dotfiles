@@ -176,7 +176,9 @@ vscode "mohd-akram.vscode-html-format"
 vscode "whtouche.vscode-js-console-utils"
 
 # Remote & containers
-vscode "parallelsdesktop.parallels-desktop"
+{{- if eq .machine "work" }}
+vscode "parallelsdesktop.parallels-desktop"   # Work Mac only: no Parallels on personal Macs
+{{- end }}
 vscode "ms-vscode-remote.remote-ssh"
 vscode "ms-vscode-remote.remote-ssh-edit"
 vscode "ms-vscode-remote.vscode-remote-extensionpack"
