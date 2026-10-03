@@ -229,6 +229,8 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 # OpenRouter key lives in the macOS Keychain, never in this repo.
 # Store/rotate: security add-generic-password -U -a "$USER" -s openrouter-api-key -w '<key>'
 export OPENROUTER_API_KEY="$(security find-generic-password -a "$USER" -s openrouter-api-key -w 2>/dev/null)"
+# OpenCode -> LiteLLM (CT 261) virtual key "opencode", so its usage is tracked there.
+export LITELLM_OPENCODE_KEY="$(security find-generic-password -a "$USER" -s litellm-opencode-key -w 2>/dev/null)"
 
 # Must be last: it wraps every widget defined above
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
