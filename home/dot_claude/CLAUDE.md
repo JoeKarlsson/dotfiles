@@ -40,9 +40,3 @@ Every time:
 3. **If it's closed**, edit the XML, then run the docx skill's `validate.py --original`. After writing it back, wait for OneDrive to finish syncing before opening it.
 4. **Confirm in Word**: after opening, read the content back *from Word* (AppleScript: document text, comment count and text) and check that every change is present, including comments, replies, and hyperlinks.
 5. **Report**: say what you verified in Word. If you only checked the file on disk, say exactly that, and never call it done.
-
-## Machine-local
-
-Imported only where the file exists (rtk is installed on the personal Mac).
-
-@~/.claude/RTK.md
