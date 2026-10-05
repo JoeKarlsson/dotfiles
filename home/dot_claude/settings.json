@@ -113,15 +113,6 @@
             "command": "python3 -c \"\nimport sys, json, os\ntry:\n    inp = json.load(sys.stdin)\n    path = inp.get('tool_input', {}).get('file_path', '') or inp.get('tool_input', {}).get('path', '')\n    onedrive = os.path.expanduser('~/Library/CloudStorage/OneDrive-')\n    if path and path.startswith(onedrive):\n        print('BLOCKED: Do not write to the OneDrive sync folder — it creates inode conflicts and corrupts files.')\n        print('Correct workflow:')\n        print('  SharePoint team sites: python3 scripts/sharepoint_auth.py upload <local> <sp-path>')\n        print('  Personal OneDrive: upload via browser at onedrive.com (IT app registration pending)')\n        print('  Edit target: work in /tmp/ or scratchpad, never in ~/Library/CloudStorage/OneDrive-*/')\n        sys.exit(1)\nexcept Exception:\n    pass\n\""
           }
         ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "command -v rtk >/dev/null || exit 0; rtk hook claude"
-          }
-        ]
       }
     ],
     "Notification": [
