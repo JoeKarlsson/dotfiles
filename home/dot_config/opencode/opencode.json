@@ -86,7 +86,6 @@
             "context": 1000000,
             "output": 32768
           },
-          "reasoning": true,
           "interleaved": {
             "field": "reasoning_content"
           },
@@ -108,7 +107,6 @@
             "context": 1000000,
             "output": 32768
           },
-          "reasoning": true,
           "interleaved": {
             "field": "reasoning_content"
           },
@@ -169,5 +167,8 @@
       }
     }
   },
-  "small_model": "litellm/cloud-fast"
+  "small_model": "litellm/cloud-fast",
+  "plugins": [
+    "@bybrawe/opencode-goal@1.3.47"
+  ]
 }
