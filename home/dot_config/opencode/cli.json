@@ -11,6 +11,11 @@
     "indicators": "numbers"
   },
   "session": {
-    "tps": true
+    "tps": true,
+    "thinking": "show",
+    "scrollbar": true
+  },
+  "diffs": {
+    "source": "turn"
   }
 }
