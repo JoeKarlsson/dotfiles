@@ -12,7 +12,7 @@
   },
   "session": {
     "tps": true,
-    "thinking": "show",
+    "thinking": "hide",
     "scrollbar": true
   },
   "diffs": {
