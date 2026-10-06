@@ -19,6 +19,30 @@ If it truly cannot be run (destructive, needs a password, needs Joe), say exactl
 Never write "should work", "this will fix it", or "tests pass" unless you ran them in this session.
 Text-only edits (docs, comments, READMEs) need no run: re-read what you changed instead.
 
+## Evidence, not inference
+
+- A claim about behavior ("the scan fixes the path", "the move keeps the metadata") must come
+  from running it this session, with the output pasted. Reading docs, or one observation, is
+  not evidence.
+- For anything asynchronous (a scan, job, queue, deploy, cron), poll it to completion, then
+  verify the end result. "It started" is not "it worked".
+- Verify the effect a user would actually see, not an intermediate signal. If the claim is
+  "the video still plays", fetch the stream and show the bytes. If it is "the metadata
+  survives", dump the rows before and after.
+- Watch for confounds: identical fixtures, reused ids, cached state, a URL built wrong. If a
+  result could have another cause, say so and re-run it cleanly.
+- State what you are uncertain about, and what you did not test. Never present an inference
+  as a verified fact, and never report a task done while an open question would change the
+  answer.
+
+## Reversible by default
+
+- Anything that mutates state (moves, renames, deletes, database writes) defaults to a dry
+  run and applies only on an explicit go-ahead.
+- Record an audit log of every mutation (what, from, to, ids, a fingerprint) so it can be
+  checked and reversed.
+- Prove the mutation on a throwaway fixture first, then clean the fixture up and say you did.
+
 ## Solving problems
 
 - Read the current state (file, config, logs) before changing anything.
