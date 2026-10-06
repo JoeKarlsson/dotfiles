@@ -82,6 +82,12 @@
       "models": {
         "cloud-coder": {
           "name": "cloud-coder: DeepSeek V4.1 Flash (default)",
+          "cost": {
+            "input": 0.0495,
+            "output": 1.32,
+            "cache_read": 0.0165,
+            "cache_write": 0
+          },
           "limit": {
             "context": 1000000,
             "output": 32768
@@ -103,6 +109,12 @@
         },
         "cloud-coder-pro": {
           "name": "cloud-coder-pro: DeepSeek V4 Pro (hard problems)",
+          "cost": {
+            "input": 0.2088,
+            "output": 0.4176,
+            "cache_read": 0.0174,
+            "cache_write": 0
+          },
           "limit": {
             "context": 1000000,
             "output": 32768
@@ -124,6 +136,12 @@
         },
         "cloud-smart": {
           "name": "cloud-smart: Qwen 3.8 2.4T (OpenRouter)",
+          "cost": {
+            "input": 2,
+            "output": 6,
+            "cache_read": 0.25,
+            "cache_write": 0
+          },
           "limit": {
             "context": 1000000,
             "output": 32768
@@ -131,6 +149,12 @@
         },
         "cloud-fast": {
           "name": "cloud-fast: GLM 5.3 Flash (OpenRouter)",
+          "cost": {
+            "input": 0.15,
+            "output": 0.5,
+            "cache_read": 0.03,
+            "cache_write": 0
+          },
           "limit": {
             "context": 1000000,
             "output": 32768
