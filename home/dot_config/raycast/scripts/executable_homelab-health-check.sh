@@ -36,11 +36,12 @@ s = d["summary"]
 # Checks in planned downtime or suppressed by an upstream outage still carry their raw status; skip them like the summary does.
 bad = [c for c in d["checks"].values() if c.get("status") not in ("ok", "pass", "suppressed", "skipped")
        and not c.get("downtime") and not c.get("dependency_suppressed")]
-print(f"Score {d[\"health_score\"]}: {s[\"critical\"]} critical, {s[\"warnings\"]} warnings")
+score, crit, warn = d["health_score"], s["critical"], s["warnings"]
+print(f"Score {score}: {crit} critical, {warn} warnings")
 with open(sys.argv[2], "w") as f:
-    f.write(f"Health check {d[\"timestamp\"]}  score {d[\"health_score\"]}\n\n")
+    f.write("Health check %s  score %s\n\n" % (d["timestamp"], score))
     for c in sorted(bad, key=lambda c: c.get("status") != "critical"):
-        f.write(f"[{c.get(\"status\")}] {c.get(\"name\")}: {c.get(\"message\")}\n")
+        f.write("[%s] %s: %s\n" % (c.get("status"), c.get("name"), c.get("message")))
     if not bad:
         f.write("All checks passed.\n")
 print(len(bad))
