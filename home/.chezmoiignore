@@ -14,6 +14,7 @@
 # OpenCode runs only on the Mac (LiteLLM key comes from the macOS Keychain)
 .config/opencode
 Library
+.local/share/obsbot-autotrack
 # /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
 # folder is under Library, already ignored above)
 social-drafts
