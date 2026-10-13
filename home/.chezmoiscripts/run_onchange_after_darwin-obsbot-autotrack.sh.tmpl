@@ -1,0 +1,44 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Builds ~/.local/share/obsbot-autotrack/main.swift and runs it as a LaunchAgent:
+# turns on OBSBOT Tiny 3 Human Tracking (Single Mode) whenever the camera starts.
+# Re-runs when the source changes: {{ include "dot_local/share/obsbot-autotrack/main.swift" | sha256sum }}
+set -uo pipefail
+[ -d /Applications/OBSBOT_Center.app ] || { echo "obsbot-autotrack: OBSBOT Center not installed, skipping"; exit 0; }
+command -v swiftc >/dev/null || { echo "obsbot-autotrack: swiftc missing (xcode-select --install), skipping"; exit 0; }
+
+label=io.joekarlsson.obsbot-autotrack
+bin="$HOME/.local/bin/obsbot-autotrack"
+plist="$HOME/Library/LaunchAgents/$label.plist"
+mkdir -p "$HOME/.local/bin" "$HOME/Library/LaunchAgents"
+swiftc -O "$HOME/.local/share/obsbot-autotrack/main.swift" -o "$bin" || { echo "obsbot-autotrack: build failed"; exit 0; }
+
+# The watcher talks to OBSBOT Center over OSC, which is off by default. Center
+# rewrites global.ini on quit, so only flip it while Center is closed.
+ini="$HOME/Library/Application Support/OBSBOT_Center/global.ini"
+if [ -f "$ini" ] && grep -q '^OSC=false' "$ini"; then
+  if pgrep -xq OBSBOT_Main; then
+    echo "obsbot-autotrack: quit OBSBOT Center and re-run chezmoi apply to enable OSC (Settings > OSC also works)"
+  else
+    sed -i '' -e 's/^OSC=false/OSC=true/' -e 's/^OSCConnectMethod=.*/OSCConnectMethod=0/' -e 's/^OSCReceivePort=.*/OSCReceivePort=16284/' "$ini"
+  fi
+fi
+
+cat > "$plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$label</string>
+  <key>ProgramArguments</key><array><string>$bin</string></array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>$HOME/Library/Logs/obsbot-autotrack.log</string>
+  <key>StandardErrorPath</key><string>$HOME/Library/Logs/obsbot-autotrack.log</string>
+</dict>
+</plist>
+PLIST
+launchctl bootout "gui/$(id -u)/$label" 2>/dev/null
+launchctl bootstrap "gui/$(id -u)" "$plist" && echo "obsbot-autotrack: LaunchAgent loaded"
+{{ end -}}
