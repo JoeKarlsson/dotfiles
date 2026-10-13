@@ -68,6 +68,8 @@ alias cq="cd ~/Documents/dev/cloudquery"
 alias docs="cd ~/Documents"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
+alias cs="cd ~/claude-skills"
+alias skills="cd ~/claude-skills"
 
 alias ..='cd ../'
 alias ...='cd ../../'
