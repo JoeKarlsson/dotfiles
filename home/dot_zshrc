@@ -62,6 +62,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # ========================================
 # Navigation
 # ========================================
+alias home="cd ~"
 alias dev="cd ~/Documents/dev"
 alias cq="cd ~/Documents/dev/cloudquery"
 alias docs="cd ~/Documents"
