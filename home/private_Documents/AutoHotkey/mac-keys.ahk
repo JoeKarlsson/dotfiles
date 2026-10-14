@@ -39,6 +39,14 @@ SendCtrlShift(key, *) => Send("^+{" key "}")
 <!+3::Send "#{PrintScreen}"
 <!+4::Send "#+s"
 
+; Windows Terminal: Ghostty's pane keys. Ctrl+D / Ctrl+W must reach the shell
+; (EOF, delete word), so Terminal binds split/close to Ctrl+Alt+Shift instead.
+#HotIf WinActive("ahk_exe WindowsTerminal.exe")
+<!d::Send "^!+d"   ; split right
+<!+d::Send "^!+e"  ; split down
+<!w::Send "^!+w"   ; close pane
+#HotIf
+
 ; Cmd+[ / ]: back/forward in browsers, otherwise Ctrl+[ / ]
 #HotIf WinActive("ahk_exe chrome.exe") or WinActive("ahk_exe msedge.exe") or WinActive("ahk_exe firefox.exe") or WinActive("ahk_exe brave.exe") or WinActive("ahk_exe arc.exe")
 <![::Send "!{Left}"
