@@ -1,7 +1,8 @@
 # dotfiles
 
 My dotfiles, managed with [chezmoi](https://chezmoi.io). One repo for every
-machine: the work MacBook, personal MacBooks, and claude-dev (a Linux container).
+machine: the work MacBook, personal MacBooks, a Windows PC, and claude-dev (a
+Linux container).
 
 ## Machines
 
@@ -50,6 +51,31 @@ git clone git@github.com:JoeKarlsson/dotfiles.git ~/dotfiles
 Installs Homebrew and chezmoi if needed, asks work/personal, shows a diff
 before replacing any existing file, runs `brew bundle`, installs mise
 runtimes, and optionally applies macOS defaults.
+
+## Windows
+
+Windows is always machine **windows** (no prompt). It gets the OS-neutral
+config plus a few Windows-only pieces:
+
+- `~/.winget.json` (`home/dot_winget.json`): the Windows `~/.Brewfile`, a
+  `winget import` list (Git, chezmoi, Handy, AutoHotkey, PowerToys). A
+  chezmoi script installs anything missing whenever the file changes.
+- `~/Documents/AutoHotkey/mac-keys.ahk`: Mac-style shortcuts. Left Alt (the
+  key in the Cmd position) acts as Cmd: Cmd+C/V/Z/T/W/Q, Cmd+arrows for
+  line/document start and end, Cmd+Shift+3/4 screenshots. Only those
+  combinations change, so Ctrl and other apps' hotkeys (Handy's Ctrl+Space)
+  still work. A chezmoi script adds it to Startup and reloads it on change.
+- PowerShell profile: `~/.config/powershell/profile.ps1` (port of
+  `.zshrc`), loaded from `$PROFILE` by a chezmoi script that also sets the
+  execution policy to RemoteSigned for the current user.
+
+Windows has no symlinks without Developer Mode, so files are copies: edit with
+`chezmoi edit <file>`, then `chezmoi apply`.
+
+```powershell
+git clone https://github.com/JoeKarlsson/dotfiles.git ~/dotfiles
+powershell -ExecutionPolicy Bypass -File ~/dotfiles/install.ps1
+```
 
 ## Day to day
 

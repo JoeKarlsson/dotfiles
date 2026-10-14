@@ -1,0 +1,20 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Starts the Mac-style shortcuts at login and reloads them now. Re-runs
+# whenever the script changes: {{ include "private_Documents/AutoHotkey/mac-keys.ahk" | sha256sum }}
+$ahk = @(
+    "$env:LOCALAPPDATA\Programs\AutoHotkey\v2\AutoHotkey64.exe",
+    "$env:ProgramFiles\AutoHotkey\v2\AutoHotkey64.exe"
+) | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $ahk) { Write-Host "autohotkey: AutoHotkey v2 not installed, skipping"; exit 0 }
+
+$script = "$HOME\Documents\AutoHotkey\mac-keys.ahk"
+$link = (New-Object -ComObject WScript.Shell).CreateShortcut(
+    "$([Environment]::GetFolderPath('Startup'))\mac-keys.lnk")
+$link.TargetPath = $ahk
+$link.Arguments = "`"$script`""
+$link.Save()
+
+# #SingleInstance Force in the script replaces a running copy
+Start-Process $ahk -ArgumentList "`"$script`""
+Write-Host "autohotkey: mac-keys.ahk running and set to start at login"
+{{ end -}}
