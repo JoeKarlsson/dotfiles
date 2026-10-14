@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
-  "WinGetVersion": "1.0",
+  "WinGetVersion": "1.29.380",
   "Sources": [
     {
       "SourceDetails": {
@@ -15,7 +15,27 @@
         { "PackageIdentifier": "cjpais.Handy" },
         { "PackageIdentifier": "AutoHotkey.AutoHotkey" },
         { "PackageIdentifier": "Microsoft.PowerToys" },
-        { "PackageIdentifier": "jqlang.jq" }
+        { "PackageIdentifier": "jqlang.jq" },
+        { "PackageIdentifier": "Microsoft.VisualStudioCode" },
+        { "PackageIdentifier": "GitHub.cli" },
+        { "PackageIdentifier": "Starship.Starship" },
+        { "PackageIdentifier": "ajeetdsouza.zoxide" },
+        { "PackageIdentifier": "Atuinsh.Atuin" },
+        { "PackageIdentifier": "junegunn.fzf" },
+        { "PackageIdentifier": "sharkdp.fd" },
+        { "PackageIdentifier": "jdx.mise" },
+        { "PackageIdentifier": "AgileBits.1Password" },
+        { "PackageIdentifier": "AgileBits.1Password.CLI" },
+        { "PackageIdentifier": "Dropbox.Dropbox" },
+        { "PackageIdentifier": "Notion.Notion" },
+        { "PackageIdentifier": "VideoLAN.VLC" },
+        { "PackageIdentifier": "Valve.Steam" },
+        { "PackageIdentifier": "Parsec.Parsec" },
+        { "PackageIdentifier": "LizardByte.Sunshine" },
+        { "PackageIdentifier": "Elgato.StreamDeck" },
+        { "PackageIdentifier": "Elgato.ControlCenter" },
+        { "PackageIdentifier": "Microsoft.WindowsTerminal" },
+        { "PackageIdentifier": "Python.Python.3.13" }
       ]
     }
   ]

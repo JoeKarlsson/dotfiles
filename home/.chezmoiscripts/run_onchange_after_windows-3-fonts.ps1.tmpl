@@ -1,0 +1,17 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Installs MesloLGS NF (the font Ghostty and Windows Terminal use) for the
+# current user, no admin needed. Same files as the Mac's MesloLGS NF.
+$ErrorActionPreference = 'Stop'
+$fontDir = "$env:LOCALAPPDATA\Microsoft\Windows\Fonts"
+$regKey = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'
+New-Item -ItemType Directory -Force $fontDir | Out-Null
+foreach ($style in 'Regular', 'Bold', 'Italic', 'Bold Italic') {
+    $file = "MesloLGS NF $style.ttf"
+    $dest = Join-Path $fontDir $file
+    if (Test-Path $dest) { continue }
+    $url = 'https://github.com/romkatv/powerlevel10k-media/raw/master/' + [uri]::EscapeDataString($file)
+    Invoke-WebRequest $url -OutFile $dest -UseBasicParsing
+    New-ItemProperty -Path $regKey -Name "MesloLGS NF $style (TrueType)" -Value $dest -PropertyType String -Force | Out-Null
+    "Installed font $file"
+}
+{{ end -}}
