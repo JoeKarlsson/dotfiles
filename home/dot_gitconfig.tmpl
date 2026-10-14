@@ -51,6 +51,10 @@
 	autocrlf = false
 	safecrlf = true
 	excludesfile = ~/.gitignore_global
+{{- if eq .chezmoi.os "windows" }}
+	# Check out real symlinks (Git for Windows defaults to plain text files)
+	symlinks = true
+{{- end }}
 
 [filter "lfs"]
 	process = git-lfs filter-process
