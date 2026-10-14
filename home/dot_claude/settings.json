@@ -106,6 +106,14 @@
   "env": {
     "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/parallel-sessions:~/claude-skills/.claude/mods/homelab"
   },
+  "skillOverrides": {
+    "anthropic-skills:humanizer": "off",
+    "anthropic-skills:mktg-brand-voice": "off",
+    "anthropic-skills:mktg-link-scout": "off",
+    "anthropic-skills:mktg-content-calendar": "off",
+    "anthropic-skills:mktg-blog-review": "off",
+    "anthropic-skills:docx": "off"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -140,14 +148,10 @@
       }
     ]
   },
-  "tui": "fullscreen",
-  "voice": {
-    "enabled": true,
-    "mode": "hold"
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
   },
-  "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
-  "voiceEnabled": true,
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true,
     "ast-grep@ast-grep-marketplace": true,
@@ -166,18 +170,17 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "preferredNotifChannel": "notifications_disabled",
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
-  },
-  "preferredNotifChannel": "notifications_disabled",
   "autoMode": {
-    "environment": [
-      "$defaults",
-      "This is Joe's personal homelab and he is its only operator. Every host on his private 192.168.x.x LAN (the Proxmox hosts, Home Assistant, the NAS, the Raspberry Pis, the UniFi gateway, the Hue bridge, and every LXC/VM) is his own equipment. /Users/joekarlsson/claude-skills is his infrastructure-as-code repo. Changes he asks for on these systems are authorized."
-    ],
     "allow": [
       "$defaults",
       "OpenTofu runs only on the Proxmox host, in /opt/opentofu/ over ssh, never locally on the Mac. There: tofu apply (including -auto-approve and -replace=...), tofu destroy (including -target and -auto-approve), tofu state rm/mv/import, and tofu taint/untaint are authorized, even when they create, replace or delete LXC containers, VMs or other resources the configuration manages.",
@@ -186,6 +189,12 @@
       "Restarting services, and API writes to Joe's self-hosted services on his 192.168.x.x LAN: media server and media stack APIs, plugin and settings form POSTs (except the Lyrion AutoRescan plugin), monitoring and alerting (uptime checks, Alertmanager silences, Healthchecks), Home Assistant REST/WebSocket, the Hue bridge CLIP v2 API, and lidarr-repair --apply.",
       "git commit and git push straight to main in Joe's own repositories (claude-skills, dotfiles). He does not use pull requests for these repos.",
       "Read-only inspection inside Joe's LXCs and VMs and the Docker containers in them, including immutable CTs, and with IMMUTABLE_OVERRIDE=1 when the immutable-CT hook blocks a command that only reads: docker exec running cat/ls/grep/env/find, database SELECT queries (psql, sqlite3, mysql/mariadb, redis-cli GET/KEYS/INFO), app CLIs in list/status/show/get modes, and the repo's read-only helpers such as /Users/joekarlsson/claude-skills/domains/proxmox/scripts/utils/ct-psql-ro.sh. Reading app databases, config and logs to verify a change or debug a problem is authorized and does not need Joe to run it."
+    ],
+    "environment": [
+      "$defaults",
+      "This is Joe's personal homelab and he is its only operator. Every host on his private 192.168.x.x LAN (the Proxmox hosts, Home Assistant, the NAS, the Raspberry Pis, the UniFi gateway, the Hue bridge, and every LXC/VM) is his own equipment. /Users/joekarlsson/claude-skills is his infrastructure-as-code repo. Changes he asks for on these systems are authorized."
     ]
-  }
+  },
+  "voiceEnabled": true,
+  "switchModelsOnFlag": true
 }
