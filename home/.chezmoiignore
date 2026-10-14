@@ -4,7 +4,9 @@
 # and ~/.ssh/config there; zsh, 1Password, Homebrew and VS Code are Mac-only.
 .zshrc
 .zprofile
+{{- if ne .chezmoi.os "windows" }}
 .ssh
+{{- end }}
 .Brewfile
 .claude/settings.json
 .claude/mcp.json

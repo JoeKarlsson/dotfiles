@@ -1,4 +1,7 @@
+{{ if eq .chezmoi.os "darwin" -}}
 Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+
+{{ end -}}
 
 # ssh uses the FIRST value it finds for each option, so specific hosts go
 # above `Host *`. (With `Host *` on top, every `IdentityAgent none` below was
@@ -26,6 +29,10 @@ Host github.com
 # Defaults for everything else (must stay last)
 Host *
     AddKeysToAgent yes
-    UseKeychain yes
     IdentityFile ~/.ssh/id_ed25519
+{{- if eq .chezmoi.os "darwin" }}
+    UseKeychain yes
     IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+{{- end }}
+{{- /* Windows: Git Bash's ssh (what git and rsync use) can't reach 1Password's
+       named-pipe agent, so this machine uses its own on-disk id_ed25519. */}}
