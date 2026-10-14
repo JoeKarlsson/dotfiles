@@ -1,0 +1,5 @@
+{{ if ne .chezmoi.os "windows" -}}
+#!/bin/sh
+# Point the dotfiles repo at its own hooks (.githooks/pre-commit runs the Claude mods' tests).
+git -C "{{ .chezmoi.sourceDir }}/.." config core.hooksPath .githooks
+{{ end -}}

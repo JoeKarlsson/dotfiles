@@ -104,7 +104,7 @@
   },
   "model": "opus[1m]",
   "env": {
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/parallel-sessions:~/claude-skills/.claude/mods/homelab"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude-skills/.claude/mods/homelab"
   },
   "skillOverrides": {
     "anthropic-skills:humanizer": "off",

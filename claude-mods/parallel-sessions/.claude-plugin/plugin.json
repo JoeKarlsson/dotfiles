@@ -1,5 +1,0 @@
-{
-  "name": "parallel-sessions",
-  "version": "0.1.0",
-  "description": "Keeps parallel Claude sessions in one repo apart: no edits or path-less commits in a checkout another session shares"
-}
