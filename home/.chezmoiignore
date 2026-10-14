@@ -19,6 +19,21 @@ Library
 # folder is under Library, already ignored above)
 social-drafts
 {{- end }}
+{{- if eq .chezmoi.os "windows" }}
+# Windows: the docker modify script is bash + Homebrew jq, Raycast is Mac-only,
+# and the ~/.claude hook scripts are only wired up by the Mac settings.json.
+.docker
+.config/raycast
+.claude/notify.sh
+.claude/statusline.sh
+.claude/worktree-hygiene.sh
+{{- else }}
+# PowerShell profile (the zsh port) is Windows-only
+.config/powershell
+# winget package list and AutoHotkey Mac-style shortcuts are Windows-only
+.winget.json
+Documents/AutoHotkey
+{{- end }}
 {{- if eq .machine "personal" }}
 # docx MCP server is only set up on the work Mac
 .claude/mcp.json

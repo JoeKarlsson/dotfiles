@@ -1,12 +1,21 @@
 {{- /* Macs are asked once at `chezmoi init` (re-ask: `chezmoi init --prompt`).
-       Linux is always "server" so provisioning never waits on a prompt. */ -}}
+       Linux is always "server" so provisioning never waits on a prompt.
+       Windows is always "windows". */ -}}
 {{- $machine := "server" -}}
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $machine = promptChoiceOnce . "machine" "Machine type" (list "work" "personal") "personal" -}}
+{{- else if eq .chezmoi.os "windows" -}}
+{{-   $machine = "windows" -}}
 {{- end -}}
+{{- if eq .chezmoi.os "windows" }}
+# Windows can't create symlinks without Developer Mode, so files are copies:
+# edit them with `chezmoi edit`, not in ~.
+mode = "file"
+{{- else }}
 # Plain files are symlinks into the source dir, so editing ~/.zshrc edits the
 # repo. Templates (.tmpl) are rendered copies: edit them with `chezmoi edit`.
 mode = "symlink"
+{{- end }}
 sourceDir = {{ .chezmoi.workingTree | quote }}
 
 # encrypted_* files (homelab ssh hosts) are age-encrypted to this key. The
@@ -18,10 +27,17 @@ encryption = "age"
 
 [data]
     machine = {{ $machine | quote }}
+{{- if eq .chezmoi.os "windows" }}
+
+# .chezmoiscripts/*.ps1: the default execution policy (Restricted) would block them
+[interpreters.ps1]
+    command = "powershell"
+    args = ["-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File"]
+{{- end }}
 
 [diff]
 {{- if lookPath "delta" }}
     pager = "delta"
-{{- else }}
+{{- else if ne .chezmoi.os "windows" }}
     pager = "less -R"
 {{- end }}
