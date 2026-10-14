@@ -7,15 +7,9 @@
 {{- else if eq .chezmoi.os "windows" -}}
 {{-   $machine = "windows" -}}
 {{- end -}}
-{{- if eq .chezmoi.os "windows" }}
-# Windows can't create symlinks without Developer Mode, so files are copies:
-# edit them with `chezmoi edit`, not in ~.
-mode = "file"
-{{- else }}
 # Plain files are symlinks into the source dir, so editing ~/.zshrc edits the
 # repo. Templates (.tmpl) are rendered copies: edit them with `chezmoi edit`.
 mode = "symlink"
-{{- end }}
 sourceDir = {{ .chezmoi.workingTree | quote }}
 
 # encrypted_* files (homelab ssh hosts) are age-encrypted to this key. The
