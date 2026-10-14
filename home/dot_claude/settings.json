@@ -103,6 +103,9 @@
     ]
   },
   "model": "opus[1m]",
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/parallel-sessions:~/claude-skills/.claude/mods/homelab"
+  },
   "hooks": {
     "PreToolUse": [
       {
