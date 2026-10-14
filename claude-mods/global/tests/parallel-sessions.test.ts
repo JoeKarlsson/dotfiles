@@ -1,6 +1,7 @@
 import { expect, test } from 'claude-code/testing'
 
-import { inMain, parseWorktrees, pathlessCommit } from '../hooks/register'
+import { inMain, parseWorktrees } from '../hooks/git'
+import { pathlessCommit } from '../hooks/parallel-sessions'
 
 test('path-less commits are caught, commits with -- are not', async () => {
   expect(pathlessCommit('git commit -m "fix: X"')).toBe(null)

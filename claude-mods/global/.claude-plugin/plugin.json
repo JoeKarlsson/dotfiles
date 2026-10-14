@@ -1,0 +1,5 @@
+{
+  "name": "global",
+  "version": "0.1.0",
+  "description": "Joe's global guards: parallel sessions, commit message format, unpushed work, Word documents, blog post checks"
+}

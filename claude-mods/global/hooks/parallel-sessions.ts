@@ -1,4 +1,7 @@
-import type { EngineInterface, Register } from 'claude-code'
+import type { EngineInterface, On } from 'claude-code'
+
+import { checkout, inMain } from './git'
+import type { Checkout } from './git'
 
 // Global CLAUDE.md, "Parallel sessions: one worktree each": sessions in one
 // checkout share its index and working tree, so their edits collide and a plain
@@ -6,18 +9,7 @@ import type { EngineInterface, Register } from 'claude-code'
 // sits in a repo's main checkout, edits there and commits without `-- <paths>`
 // are refused. Every check fails open: a bug here must never block every edit.
 
-type Checkout = { main: string; worktrees: string[] }
 type Peer = { name: string; cwd: string; pid: number }
-
-export const within = (path: string, dir: string) => path === dir || path.startsWith(`${dir.replace(/\/$/, '')}/`)
-
-export const inMain = (path: string, co: Checkout) =>
-  within(path, co.main) && !co.worktrees.some(w => within(path, w))
-
-export function parseWorktrees(porcelain: string): Checkout | null {
-  const [main, ...worktrees] = [...porcelain.matchAll(/^worktree (.+)$/gm)].map(m => m[1] ?? '')
-  return main ? { main, worktrees } : null
-}
 
 // The directory a `git commit` runs in: its `-C <dir>`, else null for the session's cwd.
 // Returns undefined when the command makes no path-less commit.
@@ -30,14 +22,7 @@ export function pathlessCommit(command: string): string | null | undefined {
   return undefined
 }
 
-async function checkout($: EngineInterface, path: string): Promise<Checkout | null> {
-  let dir = path
-  while (dir.length > 1 && !(await $.fs.exists(dir))) dir = dir.replace(/\/[^/]*$/, '') || '/'
-  const out = await $.process.run(['git', '-C', dir, 'worktree', 'list', '--porcelain'])
-  return out.exitCode === 0 ? parseWorktrees(out.stdout) : null
-}
-
-async function peersIn($: EngineInterface, co: Checkout): Promise<Peer[]> {
+export async function peersIn($: EngineInterface, co: Checkout): Promise<Peer[]> {
   const dir = `${await $.env.get('HOME')}/.claude/sessions`
   const me = await $.session.id()
   const peers: Peer[] = []
@@ -87,29 +72,23 @@ async function commitDenial($: EngineInterface, command: string): Promise<string
   )
 }
 
-async function updateStatus($: EngineInterface) {
-  const cwd = await $.session.cwd()
+// The status line part: whom this session's checkout is shared with, if anyone.
+export async function sharedLabel($: EngineInterface, cwd: string): Promise<string | null> {
   const co = await checkout($, cwd)
   const peers = co && inMain(cwd, co) ? await peersIn($, co) : []
-  $.ui.status(peers.length ? `checkout shared with ${peers.map(p => p.name).join(', ')}: use a worktree` : undefined)
+  return peers.length ? `checkout shared with ${peers.map(p => p.name).join(', ')}: use a worktree` : null
 }
 
-export const register: Register = on => {
+export function registerParallelSessions(on: On) {
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
     const denial = await commitDenial($, e.command)
-    return denial ? { deny: `parallel-sessions: ${denial}` } : next(e)
+    return denial ? { deny: denial } : next(e)
   })
 
   on('tool.call', { tool: ['Edit', 'Write', 'NotebookEdit'] }, async ($, e, next) => {
     const path = e.tool === 'NotebookEdit' ? e.notebook_path : e.file_path
     const denial = path ? await editDenial($, path) : null
-    return denial ? { deny: `parallel-sessions: ${denial}` } : next(e)
+    return denial ? { deny: denial } : next(e)
   })
 
-  on('session.start', async ($, e, next) => {
-    const started = await next(e)
-    void updateStatus($)
-    $.clock.every(30_000, () => void updateStatus($))
-    return started
-  })
 }
