@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Installs anything in ~/.winget.json that's missing (the Windows ~/.Brewfile).
+# Re-runs whenever it changes: {{ include "dot_winget.json" | sha256sum }}
+# --no-upgrade: upgrades are `winget upgrade --all`'s job, not chezmoi apply's.
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    Write-Host "winget import: winget not installed, skipping"; exit 0
+}
+winget import -i "$HOME\.winget.json" --no-upgrade --accept-package-agreements --accept-source-agreements
+if ($LASTEXITCODE -ne 0) { Write-Host "winget import: some packages failed (non-fatal)" }
+exit 0
+{{ end -}}
