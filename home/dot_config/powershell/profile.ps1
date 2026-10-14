@@ -163,17 +163,22 @@ $env:FZF_DEFAULT_COMMAND = 'fd --type f --hidden --exclude .git'
 $env:FZF_CTRL_T_COMMAND = $env:FZF_DEFAULT_COMMAND
 $env:FZF_ALT_C_COMMAND = 'fd --type d --hidden --exclude .git'
 
-if (Get-Command starship -ErrorAction SilentlyContinue) {
-    # Tab title: current dir at the prompt (zsh: _title_precmd)
-    function Invoke-Starship-PreCommand {
-        $host.UI.RawUI.WindowTitle = $PWD.Path.Replace($HOME, '~')
+# Tab title: current dir at the prompt (zsh: _title_precmd). OSC 9;9 tells
+# Windows Terminal the cwd, so new splits open there (Ghostty's
+# window-inherit-working-directory).
+function Update-TerminalLocation {
+    $host.UI.RawUI.WindowTitle = $PWD.Path.Replace($HOME, '~')
+    if ($PWD.Provider.Name -eq 'FileSystem') {
+        $host.UI.Write("$([char]27)]9;9;`"$($PWD.ProviderPath)`"$([char]27)\")
     }
+}
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+    function Invoke-Starship-PreCommand { Update-TerminalLocation }
     Invoke-Expression (& starship init powershell --print-full-init | Out-String)
 } else {
     function prompt {
-        $dir = $PWD.Path.Replace($HOME, '~')
-        $host.UI.RawUI.WindowTitle = $dir
-        "$dir> "
+        Update-TerminalLocation
+        "$($PWD.Path.Replace($HOME, '~'))> "
     }
 }
 if (Get-Command zoxide -ErrorAction SilentlyContinue) {

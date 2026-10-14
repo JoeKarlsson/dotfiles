@@ -1,0 +1,60 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Windows Terminal: the Ghostty setup (MesloLGS NF, Monokai Remastered, block
+# cursor, no close/paste prompts, split keys), from .chezmoitemplates/windows-terminal.json.
+# Terminal owns its settings.json and rewrites it from its Settings UI, so this
+# merges our keys in and leaves everything else alone. The old file is backed up.
+# Split keys are Ctrl+Alt+Shift+D/E/W; AutoHotkey maps Cmd+D, Cmd+Shift+D and
+# Cmd+W to them inside Terminal, so Ctrl+D and Ctrl+W still reach the shell.
+$ErrorActionPreference = 'Stop'
+
+$want = @'
+{{ include ".chezmoitemplates/windows-terminal.json" | trim }}
+'@ | ConvertFrom-Json
+$path = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+if (-not (Test-Path $path)) { Write-Host "Windows Terminal settings not found (open Terminal once, then chezmoi apply)"; exit 0 }
+
+$before = Get-Content $path -Raw
+$s = $before | ConvertFrom-Json
+# Update in place when the key exists: Add-Member -Force would move it to the
+# end, so the file would never compare equal and every run would rewrite it.
+function Set-Prop($obj, $name, $value) {
+    if ($obj.PSObject.Properties[$name]) { $obj.PSObject.Properties[$name].Value = $value }
+    else { $obj | Add-Member -NotePropertyName $name -NotePropertyValue $value }
+}
+
+foreach ($p in $want.global.PSObject.Properties) { Set-Prop $s $p.Name $p.Value }
+
+if (-not $s.profiles.defaults) { Set-Prop $s.profiles 'defaults' ([pscustomobject]@{}) }
+foreach ($p in $want.defaults.PSObject.Properties) { Set-Prop $s.profiles.defaults $p.Name $p.Value }
+
+Set-Prop $s 'schemes' @(@($s.schemes | Where-Object { $_.name -ne $want.scheme.name }) + $want.scheme)
+
+$actions = @($s.actions | Where-Object { $_ })
+$bindings = @($s.keybindings | Where-Object { $_ })
+foreach ($a in $want.actions) {
+    $actions = @($actions | Where-Object { $_.id -ne $a.id }) + [pscustomobject]@{ command = $a.command; id = $a.id }
+    $bindings = @($bindings | Where-Object { $_.id -ne $a.id -and $_.keys -ne $a.keys }) + [pscustomobject]@{ id = $a.id; keys = $a.keys }
+}
+Set-Prop $s 'actions' $actions
+Set-Prop $s 'keybindings' $bindings
+
+$after = $s | ConvertTo-Json -Depth 30
+# Terminal rewrites the file when it reloads it (sorts keys and bindings,
+# uppercases colors), so compare an order- and case-insensitive form;
+# otherwise every run would see a change and rewrite.
+function Get-Canonical($v) {
+    if ($v -is [System.Management.Automation.PSCustomObject]) {
+        $h = [ordered]@{}
+        foreach ($p in $v.PSObject.Properties | Sort-Object Name) { $h[$p.Name] = Get-Canonical $p.Value }
+        return [pscustomobject]$h
+    }
+    if ($v -is [array]) { return ,@($v | ForEach-Object { Get-Canonical $_ } | Sort-Object { $_ | ConvertTo-Json -Depth 30 -Compress }) }
+    if ($v -is [string]) { return $v.ToLowerInvariant() }
+    return $v
+}
+function Get-Normalized($json) { Get-Canonical ($json | ConvertFrom-Json) | ConvertTo-Json -Depth 30 -Compress }
+if ((Get-Normalized $before) -eq (Get-Normalized $after)) { exit 0 }
+Copy-Item $path "$path.bak-$(Get-Date -Format yyyyMMdd-HHmmss)"
+[IO.File]::WriteAllText($path, $after)
+"Updated Windows Terminal settings"
+{{ end -}}

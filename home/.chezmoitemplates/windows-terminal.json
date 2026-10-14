@@ -1,0 +1,56 @@
+{
+  "global": {
+    "warning.confirmCloseAllTabs": false,
+    "copyOnSelect": false,
+    "warning.multiLinePaste": "never",
+    "warning.largePaste": false
+  },
+  "defaults": {
+    "font": { "face": "MesloLGS NF", "size": 11 },
+    "colorScheme": "Monokai Remastered",
+    "cursorShape": "filledBox",
+    "historySize": 32767,
+    "padding": "4, 2",
+    "opacity": 100
+  },
+  "scheme": {
+    "name": "Monokai Remastered",
+    "black": "#1a1a1a",
+    "red": "#f4005f",
+    "green": "#98e024",
+    "yellow": "#fd971f",
+    "blue": "#9d65ff",
+    "purple": "#f4005f",
+    "cyan": "#58d1eb",
+    "white": "#c4c5b5",
+    "brightBlack": "#625e4c",
+    "brightRed": "#f4005f",
+    "brightGreen": "#98e024",
+    "brightYellow": "#e0d561",
+    "brightBlue": "#9d65ff",
+    "brightPurple": "#f4005f",
+    "brightCyan": "#58d1eb",
+    "brightWhite": "#f6f6ef",
+    "background": "#0c0c0c",
+    "foreground": "#d9d9d9",
+    "cursorColor": "#fc971f",
+    "selectionBackground": "#343434"
+  },
+  "actions": [
+    {
+      "id": "User.dotfiles.splitRight",
+      "keys": "ctrl+alt+shift+d",
+      "command": { "action": "splitPane", "split": "right", "splitMode": "duplicate" }
+    },
+    {
+      "id": "User.dotfiles.splitDown",
+      "keys": "ctrl+alt+shift+e",
+      "command": { "action": "splitPane", "split": "down", "splitMode": "duplicate" }
+    },
+    {
+      "id": "User.dotfiles.closePane",
+      "keys": "ctrl+alt+shift+w",
+      "command": "closePane"
+    }
+  ]
+}
