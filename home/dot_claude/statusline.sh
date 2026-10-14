@@ -6,6 +6,8 @@ input=$(cat)
 
 cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
 [ -z "$cwd" ] && cwd=$(pwd)
+# Windows (Git Bash): C:\Users\... -> /c/Users/... so the ~ abbreviation matches
+command -v cygpath >/dev/null && cwd=$(cygpath -u "$cwd")
 model=$(echo "$input" | jq -r '.model.display_name // empty')
 used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 title=$(echo "$input" | jq -r '.session_name // empty')

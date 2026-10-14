@@ -20,12 +20,13 @@ Library
 social-drafts
 {{- end }}
 {{- if eq .chezmoi.os "windows" }}
-# Windows: the docker modify script is bash + Homebrew jq, Raycast is Mac-only,
-# and the ~/.claude hook scripts are only wired up by the Mac settings.json.
+# Windows: the docker modify script is bash + Homebrew jq, Raycast is Mac-only.
+# ~/.claude hooks: notify.sh's OSC 777 notifications don't show in Windows
+# Terminal, and worktree-hygiene.sh needs BSD stat and Unix pids. statusline.sh
+# works in Git Bash (needs jq) and is wired up by the Windows settings.
 .docker
 .config/raycast
 .claude/notify.sh
-.claude/statusline.sh
 .claude/worktree-hygiene.sh
 {{- else }}
 # PowerShell profile (the zsh port) is Windows-only
