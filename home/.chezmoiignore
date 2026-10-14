@@ -8,6 +8,9 @@
 .ssh
 {{- end }}
 .Brewfile
+# The docker modify script runs Homebrew's jq (/opt/homebrew/bin/jq): Mac-only.
+# On claude-dev it failed every chezmoi apply (found 2026-10-14).
+.docker
 .claude/settings.json
 .claude/mcp.json
 .config/atuin
