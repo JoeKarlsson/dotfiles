@@ -14,7 +14,8 @@
         { "PackageIdentifier": "twpayne.chezmoi" },
         { "PackageIdentifier": "cjpais.Handy" },
         { "PackageIdentifier": "AutoHotkey.AutoHotkey" },
-        { "PackageIdentifier": "Microsoft.PowerToys" }
+        { "PackageIdentifier": "Microsoft.PowerToys" },
+        { "PackageIdentifier": "jqlang.jq" }
       ]
     }
   ]
