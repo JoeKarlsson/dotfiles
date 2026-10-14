@@ -34,6 +34,8 @@ social-drafts
 # winget package list and AutoHotkey Mac-style shortcuts are Windows-only
 .winget.json
 Documents/AutoHotkey
+# VS Code's Windows settings path (the Mac one is under Library)
+AppData
 {{- end }}
 {{- if eq .machine "personal" }}
 # docx MCP server is only set up on the work Mac

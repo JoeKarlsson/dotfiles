@@ -1,0 +1,18 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Installs the VS Code extensions listed in the Brewfile (vscode "..." lines),
+# so both OSes share one list. Re-runs whenever that list changes.
+$extensions = @(
+{{- range regexFindAll `(?m)^vscode "[^"]+"` (include "dot_Brewfile.tmpl") -1 }}
+    {{ . | trimPrefix "vscode \"" | trimSuffix "\"" | quote }}
+{{- end }}
+) | Where-Object { $_ -notlike "parallelsdesktop.*" }  # Mac-only
+
+$code = "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd"
+if (-not (Test-Path $code)) { Write-Host "vscode extensions: VS Code not installed, skipping"; exit 0 }
+
+$installed = & $code --list-extensions
+foreach ($ext in $extensions) {
+    if ($installed -notcontains $ext) { & $code --install-extension $ext }
+}
+exit 0
+{{ end -}}

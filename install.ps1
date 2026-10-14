@@ -39,5 +39,16 @@ chezmoi init --source "$DotfilesDir"
 chezmoi apply --exclude encrypted
 Ok "Dotfiles applied (check with: chezmoi status)"
 
+# ===========================================================================
+# Windows defaults (optional)
+# ===========================================================================
+Write-Host ""
+$applyDefaults = Read-Host "Apply Windows defaults? (y/N)"
+if ($applyDefaults -match '^[Yy]') {
+    & "$DotfilesDir\windows\set-defaults.ps1"
+} else {
+    Info "Skipping Windows defaults (run windows/set-defaults.ps1 later if desired)"
+}
+
 Write-Host ""
 Ok "All done! Open a new terminal to load your config."

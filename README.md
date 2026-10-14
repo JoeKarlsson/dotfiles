@@ -65,6 +65,12 @@ config plus a few Windows-only pieces:
   line/document start and end, Cmd+Shift+3/4 screenshots. Only those
   combinations change, so Ctrl and other apps' hotkeys (Handy's Ctrl+Space)
   still work. A chezmoi script adds it to Startup and reloads it on change.
+- VS Code: `~/AppData/Roaming/Code/User/settings.json` and
+  `keybindings.json` are rendered from the Mac files (keybindings with `cmd`
+  swapped for `ctrl`), so edit the Mac ones. Extensions come from the
+  Brewfile's `vscode` lines.
+- `windows/set-defaults.ps1` (not deployed, `install.ps1` offers it): show
+  file extensions and hidden files in Explorer.
 - PowerShell profile: `~/.config/powershell/profile.ps1` (port of
   `.zshrc`), loaded from `$PROFILE` by a chezmoi script that also sets the
   execution policy to RemoteSigned for the current user.

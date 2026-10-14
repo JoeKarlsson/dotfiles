@@ -1,0 +1,3 @@
+{{- /* Windows VS Code keybindings: the Mac file with cmd -> ctrl (the
+       AutoHotkey script sends Ctrl for Cmd-position shortcuts). Edit the Mac one. */ -}}
+{{ include "private_Library/private_Application Support/Code/User/keybindings.json" | replace "cmd+" "ctrl+" }}
