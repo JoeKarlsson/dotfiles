@@ -3,6 +3,9 @@
     "sessionUrl": false
   },
   "includeCoAuthoredBy": false,
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global;~/claude-skills/.claude/mods/homelab"
+  },
   "permissions": {
     "allow": [
       "Bash(tofu apply*)",

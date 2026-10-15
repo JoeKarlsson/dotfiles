@@ -20,7 +20,9 @@ The status line shows only when there's something to act on.
 instead of blocking every call. Don't remove a classic hook that a mod overlaps.
 
 **Loading.** `CLAUDE_CODE_PLUGIN_DIRS` in `home/dot_claude/settings.json` (Macs)
-lists the mod folders, `:`-separated. claude-dev sets the same variable from its
+lists the mod folders, `:`-separated. Windows sets it in
+`home/.chezmoitemplates/claude-settings-windows.json`, `;`-separated: there `:`
+is read as part of one path and neither mod loads. claude-dev sets the same variable from its
 OpenTofu provisioning. A folder that doesn't exist on a machine is skipped silently.
 Saving a file in a listed folder hot-reloads the mod in running sessions.
 
