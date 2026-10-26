@@ -11,13 +11,19 @@ import type { Checkout } from './git'
 
 type Peer = { name: string; cwd: string; pid: number }
 
-// The directory a `git commit` runs in: its `-C <dir>`, else null for the session's cwd.
-// Returns undefined when the command makes no path-less commit.
+// The directory a `git commit` runs in: the last `cd <dir>` before it, joined with
+// its `-C <dir>`, else null for the session's cwd. Returns undefined when the
+// command makes no path-less commit, or when that directory hides behind a `$var`
+// or backtick and can't be read from the text (fail open).
 export function pathlessCommit(command: string): string | null | undefined {
   for (const m of command.matchAll(/\bgit\b((?:\s+-C\s+\S+|\s+-c\s+\S+|\s+--?[\w-]+(?:=\S+)?)*)\s+commit\b([^;&|\n]*)/g)) {
     if (/(^|\s)--(\s|$)/.test(m[2] ?? '')) continue
-    const dir = /-C\s+(\S+)/.exec(m[1] ?? '')?.[1]
-    return dir ? dir.replace(/^['"]|['"]$/g, '') : null
+    const cd = [...command.slice(0, m.index).matchAll(/(?:^|[;&|(]\s*)cd\s+([^\s;&|)]+)/g)].at(-1)?.[1]
+    const c = /-C\s+(\S+)/.exec(m[1] ?? '')?.[1]
+    const parts = [cd, c].filter((p): p is string => !!p).map(p => p.replace(/^['"]|['"]$/g, ''))
+    if (parts.some(p => /[$`]/.test(p))) return undefined
+    if (parts.length === 0) return null
+    return parts.reduce((base, p) => (p.startsWith('/') || p.startsWith('~') ? p : `${base}/${p}`))
   }
   return undefined
 }
@@ -61,7 +67,8 @@ async function commitDenial($: EngineInterface, command: string): Promise<string
   const dir = pathlessCommit(command)
   if (dir === undefined) return null
   const cwd = await $.session.cwd()
-  const where = dir === null ? cwd : dir.startsWith('/') ? dir : `${cwd}/${dir}`
+  const abs = dir === null ? cwd : dir.replace(/^~(?=\/|$)/, (await $.env.get('HOME')) ?? '~')
+  const where = abs.startsWith('/') ? abs : `${cwd}/${abs}`
   const co = await checkout($, where)
   if (!co || !inMain(where, co)) return null
   const peers = await peersIn($, co)
