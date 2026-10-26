@@ -1,5 +1,11 @@
 {{ if ne .chezmoi.os "windows" -}}
 #!/bin/sh
 # Point the dotfiles repo at its own hooks (.githooks/pre-commit runs the Claude mods' tests).
-git -C "{{ .chezmoi.sourceDir }}/.." config core.hooksPath .githooks
+# Only the repo's owner can set this, and only the owner commits there. On
+# claude-dev the clone at /opt/dotfiles is root's and joe applies from it too:
+# git refused it ("dubious ownership", exit 128), and that failed script stopped
+# every apply for joe. Skip quietly for anyone else.
+repo="{{ .chezmoi.sourceDir }}/.."
+[ -O "$repo/.git/config" ] || exit 0
+git -C "$repo" config core.hooksPath .githooks
 {{ end -}}
