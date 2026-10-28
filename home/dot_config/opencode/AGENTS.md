@@ -50,6 +50,14 @@ Text-only edits (docs, comments, READMEs) need no run: re-read what you changed 
 - Find the cause before writing a fix. One fix at a time, then re-run.
 - If you are stuck after two failed attempts, stop and report what you tried and what you saw.
 
+## Code design
+
+- **Build only what was asked.** No speculative options, flags, or abstractions. Write the obvious solution; optimize only when there's a measured need.
+- **Don't hide failures.** No swallowed errors, silent fallbacks, or `|| true` without a stated reason. An explicit error beats a silent success.
+- **Rule of three.** Duplicate once; extract a shared helper when the third copy appears.
+- **Clean up as you go.** In the same change, delete code your change made dead or replaced: unused functions, variables, imports, files, stale comments, and debug leftovers. If you spot other clearly dead code nearby, grep for callers and remove it too. Less code is better; don't leave cleanup for later.
+- **Descriptive names over short ones.** Name variables, functions, parameters, and endpoints so they explain themselves to a human or an LLM (`waitUntilObjectIsSaved`, not `wait`). Keep the file's casing convention.
+
 ## Git
 
 - Commit messages: `feat: <Summary>`, `fix: <Summary>`, or `chore: <Summary>` (summary starts uppercase).
