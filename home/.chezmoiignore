@@ -12,15 +12,11 @@
 # On claude-dev it failed every chezmoi apply (found 2026-10-14).
 .docker
 .claude/settings.json
-.claude/mcp.json
 .config/atuin
 .config/mise
 .config/topgrade.toml
 # OpenCode runs only on the Mac (LiteLLM key comes from the macOS Keychain)
 .config/opencode
-# The Word skill drives Microsoft Word through AppleScript: Mac-only
-.agents/skills/docx
-.claude/skills/docx
 Library
 .local/share/obsbot-autotrack
 # /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
@@ -44,8 +40,4 @@ social-drafts
 Documents/AutoHotkey
 # VS Code's Windows settings path (the Mac one is under Library)
 AppData
-{{- end }}
-{{- if eq .machine "personal" }}
-# docx MCP server is only set up on the work Mac
-.claude/mcp.json
 {{- end }}

@@ -14,7 +14,7 @@ always **server** and never prompts. The answer lives in
 |---|---|---|---|
 | zsh, Starship, ssh, atuin, mise, topgrade, VS Code | yes | yes | no |
 | git, gh, `~/.claude/CLAUDE.md` | yes | yes | yes (no 1Password signing, no delta) |
-| Claude Code `settings.json`, `mcp.json` | yes | yes | no |
+| Claude Code `settings.json` | yes | yes | no |
 | `~/.Brewfile` App Store apps | shared + Office/OneDrive/Windows App | shared + personal list | n/a |
 
 ## Layout
@@ -30,7 +30,7 @@ chezmoi's naming: `dot_zshrc` is `~/.zshrc`, `private_dot_ssh/` is `~/.ssh`
 
 **Symlink mode.** Plain files are symlinks into `~/dotfiles/home`, so editing
 `~/.zshrc` edits the repo, same as before chezmoi. Templates (`.gitconfig`,
-`.ssh/config`, `.claude/mcp.json`, `.Brewfile`) are rendered copies: edit the
+`.ssh/config`, `.Brewfile`) are rendered copies: edit the
 source with `chezmoi edit ~/.gitconfig`, then `chezmoi apply`.
 
 **Encrypted files.** This repo is public, so homelab details (LAN hosts, users,
