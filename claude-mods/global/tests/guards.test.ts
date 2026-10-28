@@ -3,7 +3,7 @@ import { expect, test } from 'claude-code/testing'
 import { isPost, phraseFindings } from '../hooks/blog-check'
 import { commitSubject, formatDenial } from '../hooks/commit-format'
 import { unpushedText } from '../hooks/unpushed'
-import { writesDoc } from '../hooks/word-guard'
+import { openNames, writesDoc } from '../hooks/word-guard'
 
 test('commit subjects come from -m, -am, --message= and heredocs', async () => {
   expect(commitSubject('git commit -m "feat: Add X"')).toBe('feat: Add X')
@@ -31,6 +31,21 @@ test('Word guard: writes to the open document, not reads', async () => {
   expect(writesDoc('pandoc "Q3 Plan.docx" -o notes.md', name)).toBe(false)
   expect(writesDoc('unzip -p "Q3 Plan.docx" word/document.xml | grep foo', name)).toBe(false)
   expect(writesDoc('python3 /s/pack.py out/ other.docx', name)).toBe(false)
+})
+
+test('Word guard: the docx skill wrapper runs its checks on an open document', async () => {
+  const name = 'Q3 Plan.docx'
+  expect(writesDoc('~/.agents/skills/docx/scripts/py ~/.agents/skills/docx/scripts/word_guard.py check "Q3 Plan.docx"', name)).toBe(false)
+  expect(writesDoc('$SKILL/scripts/py $SKILL/scripts/word_guard.py close "Q3 Plan.docx"', name)).toBe(false)
+  expect(writesDoc('$SKILL/scripts/py $SKILL/scripts/preserve_check.py orig.docx "Q3 Plan.docx"', name)).toBe(false)
+  expect(writesDoc('$SKILL/scripts/py $SKILL/scripts/pack.py out/ "Q3 Plan.docx"', name)).toBe(true)
+})
+
+test('Word guard: Compatibility Mode windows count as open documents', async () => {
+  // Word can't name a Compatibility Mode document; only its window title shows it.
+  const names = openNames('Q3 Plan.docx\nQ3 Plan\nBrief_V1  -  Compatibility Mode\n')
+  expect(names).toEqual(['Q3 Plan.docx', 'Q3 Plan', 'Brief_V1'])
+  expect(writesDoc('cp /tmp/x.doc ~/OneDrive/Brief_V1.doc', 'Brief_V1')).toBe(true)
 })
 
 test('blog posts: site posts, newsletter, CData drafts, worktrees', async () => {
