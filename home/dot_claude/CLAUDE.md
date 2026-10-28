@@ -21,11 +21,11 @@
 
 ## Git Workflow
 
-This is my personal computer — do NOT open pull requests by default.
+This is my personal computer: do NOT open pull requests by default.
 
 1. Always fetch the latest changes from the remote repository before making any changes.
 2. Commit messages (and any PR titles) should follow the format `feat: <Summary>`, `fix: <Summary>`, or `chore: <Summary>`, where the summary starts with an uppercase letter. Use `chore:` for non user-facing changes.
-3. When a change is ready, commit it directly **and push** — always keep the remote up to date without being asked. Don't create a PR unless I explicitly request one.
+3. When a change is ready, commit it directly **and push**; always keep the remote up to date without being asked. Don't create a PR unless I explicitly request one.
 4. Only when I explicitly ask for a PR: open it as a draft with a concise single-sentence description.
 
 ## Parallel sessions: one worktree each
