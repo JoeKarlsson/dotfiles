@@ -18,6 +18,9 @@
 .config/topgrade.toml
 # OpenCode runs only on the Mac (LiteLLM key comes from the macOS Keychain)
 .config/opencode
+# The Word skill drives Microsoft Word through AppleScript: Mac-only
+.agents/skills/docx
+.claude/skills/docx
 Library
 .local/share/obsbot-autotrack
 # /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
