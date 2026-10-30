@@ -1,43 +1,33 @@
 <!-- chezmoi deploys this as a copy, not a symlink, because Cowork skips a symlinked
      ~/.claude/CLAUDE.md. Edit ~/dotfiles/home/dot_claude/private_CLAUDE.md, then run
-     `chezmoi apply ~/.claude/CLAUDE.md`. Block HTML comments are stripped from context. -->
+     `chezmoi apply ~/.claude/CLAUDE.md`. Block HTML comments are stripped from context.
+     Only rules that apply in every repo on every machine belong here. Tool- or
+     file-type-specific rules go in that tool's skill; situational ones in ~/.claude/knowledge/. -->
 # Global instructions
 
 ## Testing
 
-**Test the change you made.** Before calling it done, run the specific feature, fix, or test once and confirm it works. Don't claim something works without running it. If it fails, fix it and run it again. Don't ask me to check something you could check yourself.
-
-**Past that, use your judgment.** Match the effort to the risk. Speed matters, so don't be cautious just for the sake of it.
-- **Tests:** run the tests for the area you changed, not the whole suite by default. If existing tests check behavior you changed, update them. Add a test for new logic that's non-trivial and likely to break later; skip it for small or obvious changes.
-- **End-to-end and downstream checks:** do these when the change touches something shared (a module, schema, template, or config other things read), or when a failure would be silent or costly. Skip them for contained changes.
-- Check once. Don't confirm the same thing several different ways.
-
-**Reporting:** briefly say what you ran and what happened. **Text-only edits** (skills, CLAUDE.md, docs, READMEs, comments) need no test runs: re-read the section you edited and report what changed.
+- Run the change you made once and confirm it works before calling it done. Don't ask me to check what you can check yourself.
+- Match effort to risk: run the tests for the area you changed, update tests that cover changed behavior, add one only for non-trivial logic likely to break. Do end-to-end checks only when the change touches something shared or could fail silently.
+- Check once; don't confirm the same thing several ways.
+- Report briefly what you ran and what happened. Text-only edits (docs, skills, CLAUDE.md) need no test run: re-read what you changed.
 
 ## Code design
 
-- **Build only what was asked.** No speculative options, flags, or abstractions. Write the obvious solution; optimize only when there's a measured need.
-- **Don't hide failures.** No swallowed errors, silent fallbacks, or `|| true` without a stated reason. An explicit error beats a silent success.
-- **Rule of three.** Duplicate once; extract a shared helper when the third copy appears.
-- **Clean up as you go.** In the same change, delete code your change made dead or replaced: unused functions, variables, imports, files, stale comments, and debug leftovers. If you spot other clearly dead code nearby, grep for callers and remove it too. Less code is better; don't leave cleanup for later.
-- **Descriptive names over short ones.** Name variables, functions, parameters, and endpoints so they explain themselves to a human or an LLM (`waitUntilObjectIsSaved`, not `wait`). Keep the file's casing convention.
+- Build only what was asked: no speculative options, flags, or abstractions.
+- Don't hide failures: no swallowed errors, silent fallbacks, or unexplained `|| true`.
+- Duplicate once; extract a helper at the third copy.
+- In the same change, delete what it made dead (functions, imports, files, stale comments, debug leftovers).
+- Use descriptive names (`waitUntilObjectIsSaved`, not `wait`) in the file's casing convention.
 
-## Git Workflow
+## Git
 
-1. Always fetch the latest changes from the remote repository before making any changes.
-2. Commit messages (and any PR titles) should follow the format `feat: <Summary>`, `fix: <Summary>`, or `chore: <Summary>`, where the summary starts with an uppercase letter. Use `chore:` for non user-facing changes.
-3. **The repo's owner decides how to ship, not the machine or folder.** Check `git remote get-url origin`:
-   - **My repos (`github.com/JoeKarlsson/*`):** commit directly to main **and push**, without being asked. No PRs unless I explicitly ask; then open a draft with a concise single-sentence description.
-   - **Anyone else's (CDataSoftware, Azure DevOps, cloudquery, a colleague's repo):** never push to main. Commit on a branch, push the branch, and open a draft PR with a concise single-sentence description.
-   - **No remote:** commit only.
+- Fetch before making changes.
+- Commit messages: `feat:`, `fix:`, or `chore:` (non user-facing) plus a summary starting with an uppercase letter.
+- Ship by repo owner (`git remote get-url origin`):
+  - My repos (`github.com/JoeKarlsson/*`): commit to main and push without being asked. No PRs unless I ask; then a draft with a one-sentence description.
+  - Anyone else's (CDataSoftware, Azure DevOps, cloudquery, colleagues): never push to main. Push a branch and open a draft PR with a one-sentence description.
+  - No remote: commit only.
+- Before the first edit in a repo, run ListAgents. If another session is in the same repo (names start with the repo's directory name), use EnterWorktree. Outside a worktree, commit with explicit paths (`git commit -- <paths>`) and never touch another session's changes.
 
-## Parallel sessions: one worktree each
-
-- **Before the first edit in a git repo, run ListAgents.** If another session is working in the same repo (session names start with the repo's directory name), call **EnterWorktree** and do all the work there.
-- **Never touch another session's files or staged changes.** Outside a worktree, always commit with explicit paths: `git commit -- <paths>`.
-
-Other situational rules (shipping from and removing a worktree, gitignored files in one) live in `~/.claude/knowledge/index.md` (an Open Knowledge Format bundle): read the index line, open only the concept you need.
-
-## Word documents (.docx)
-
-Before reading or editing any .docx, load the local `docx` skill (`~/.agents/skills/docx`), not the `anthropic-skills:docx` plugin variant, which lacks the Word workflow. An edit isn't done until you've read it back from Word.
+Situational rules (like shipping from a worktree) live in `~/.claude/knowledge/index.md`: read the index, open only the concept you need.
