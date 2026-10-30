@@ -9,25 +9,25 @@
 
 ## Testing
 
-- Run the change you made once and confirm it works before calling it done. Don't ask me to check what you can check yourself.
-- Match effort to risk: run the tests for the area you changed, update tests that cover changed behavior, add one only for non-trivial logic likely to break. Do end-to-end checks only when the change touches something shared or could fail silently.
+- Run the change once and confirm it works before calling it done. Don't ask me to check what you can check.
+- Scale testing to risk: the changed area's tests, not the whole suite.
 - Check once; don't confirm the same thing several ways.
-- Report briefly what you ran and what happened. Text-only edits (docs, skills, CLAUDE.md) need no test run: re-read what you changed.
+- Report briefly what you ran. Text-only edits need no test run.
 
 ## Code design
 
-- Build only what was asked: no speculative options, flags, or abstractions.
-- Don't hide failures: no swallowed errors, silent fallbacks, or unexplained `|| true`.
-- Duplicate once; extract a helper at the third copy.
-- In the same change, delete what it made dead (functions, imports, files, stale comments, debug leftovers).
-- Use descriptive names (`waitUntilObjectIsSaved`, not `wait`) in the file's casing convention.
+- Build only what was asked: no speculative options or abstractions.
+- Don't hide failures: no swallowed errors or silent fallbacks.
+- Extract a helper at the third copy, not before.
+- Delete what your change made dead, in the same change.
+- Descriptive names (`waitUntilObjectIsSaved`, not `wait`).
 
 ## Git
 
 - Fetch before making changes.
 - Ship by repo owner (`git remote get-url origin`):
-  - My repos (`github.com/JoeKarlsson/*`): commit to main and push without being asked. No PRs unless I ask; then a draft with a one-sentence description.
-  - Anyone else's (CDataSoftware, Azure DevOps, cloudquery, colleagues): never push to main. Push a branch and open a draft PR with a one-sentence description.
+  - Mine (`github.com/JoeKarlsson/*`): commit to main and push without being asked. PRs only when I ask, as drafts.
+  - Anyone else's: never push to main; push a branch and open a draft PR.
   - No remote: commit only.
 
-Situational rules (like shipping from a worktree) live in `~/.claude/knowledge/index.md`: read the index, open only the concept you need.
+Situational rules: `~/.claude/knowledge/index.md`.
