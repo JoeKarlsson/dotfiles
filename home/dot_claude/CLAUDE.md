@@ -30,13 +30,11 @@ This is my personal computer: do NOT open pull requests by default.
 
 ## Parallel sessions: one worktree each
 
-I often run several Claude sessions in the same repo at once. They share one git index and working tree, so a plain `git commit` can sweep in another session's staged files, and edits collide (2026-10-01: my commit landed under another session's message, and pushes carried each other's commits).
-
-- **Before the first edit in a git repo, run ListAgents.** If another session is working in the same repo (session names start with the repo's directory name, e.g. `claude-skills-a2`), call **EnterWorktree** and do all the work there. To start a parallel session yourself: `claude -w <short-name>`.
-- **Ship from the worktree:** commit on its branch, then `git fetch && git rebase origin/main && git push origin HEAD:main`. Still no PRs (see Git Workflow). Push promptly; an unpushed worktree drifts.
-- **Gitignored files** (credentials, tfvars) are snapshots copied in from the main checkout via the repo's `.worktreeinclude`. Change them only in the main checkout.
+- **Before the first edit in a git repo, run ListAgents.** If another session is working in the same repo (session names start with the repo's directory name), call **EnterWorktree** and do all the work there.
 - **Never touch another session's files or staged changes.** Outside a worktree, always commit with explicit paths: `git commit -- <paths>`.
-- **When done,** remove the worktree, don't keep it. ExitWorktree `remove` refuses when the branch's commits are on `origin/main` but not on local `main` (always true after `push origin HEAD:main`); once `git branch -r --contains HEAD` lists `origin/main` and `git status` is clean, nothing can be lost, so pass `discard_changes: true`. The SessionStart hook `worktree-hygiene.sh` removes any finished worktree left behind after an hour idle.
+- **Working in a worktree** (shipping with `push origin HEAD:main`, gitignored files, removing it when done): read `~/.claude/knowledge/worktree-workflow.md` first.
+
+Other situational rules live in `~/.claude/knowledge/index.md` (an Open Knowledge Format bundle): read the index line, open only the concept you need.
 
 ## Word documents (.docx)
 
