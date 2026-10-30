@@ -31,7 +31,6 @@ brew "syncthing"
 # =============================================================================
 # Cloud / DevOps
 # =============================================================================
-brew "azure-cli"
 brew "colima"                # Container runtime; start by hand with `colima start` (ssh/config Includes its ssh_config)
 brew "docker"                # CLI only, talks to colima (no Docker Desktop)
 brew "docker-buildx"         # CLI plugins, found via ~/.docker/config.json cliPluginsExtraDirs
@@ -102,6 +101,7 @@ mas "Xnip", id: 1221250572
 {{- if eq .machine "work" }}
 
 # Work Mac only (CData)
+brew "azure-cli"             # az, for CData Azure DevOps
 cask "android-platform-tools" # adb/fastboot
 mas "LanguageTool", id: 1534275760
 mas "Microsoft Excel", id: 462058435
