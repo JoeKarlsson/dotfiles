@@ -12,9 +12,9 @@ stale_after: "2027-04-28T00:00:00-05:00"
 
 I often run several Claude sessions in the same repo at once. They share one git index and working tree, so a plain `git commit` can sweep in another session's staged files, and edits collide (2026-10-01: my commit landed under another session's message, and pushes carried each other's commits).
 
-- **Before the first edit in a git repo, run ListAgents.** If another session is working in the same repo (session names start with the repo's directory name, e.g. `claude-skills-a2`), call **EnterWorktree** and do all the work there. To start a parallel session yourself: `claude -w <short-name>`.
-- **Ship from the worktree:** commit on its branch, then `git fetch && git rebase origin/main && git push origin HEAD:main`. Still no PRs (see Git Workflow in `~/.claude/CLAUDE.md`). Push promptly; an unpushed worktree drifts.
+The always-on rules (run ListAgents before the first edit, commit with explicit paths) live in `~/.claude/CLAUDE.md` under Parallel sessions. To start a parallel session yourself: `claude -w <short-name>`.
+
+- **Ship from the worktree:** commit on its branch, then `git fetch && git rebase origin/main`. In my repos, `git push origin HEAD:main`; in anyone else's, push the branch and open a draft PR (Git Workflow in `~/.claude/CLAUDE.md`). Push promptly; an unpushed worktree drifts.
 - **Gitignored files** (credentials, tfvars) are snapshots copied in from the main checkout via the repo's `.worktreeinclude`. Change them only in the main checkout.
-- **Never touch another session's files or staged changes.** Outside a worktree, always commit with explicit paths: `git commit -- <paths>`.
 - **When done,** remove the worktree, don't keep it. ExitWorktree `remove` refuses when the branch's commits are on `origin/main` but not on local `main` (always true after `push origin HEAD:main`); once `git branch -r --contains HEAD` lists `origin/main` and `git status` is clean, nothing can be lost, so pass `discard_changes: true`. The SessionStart hook `worktree-hygiene.sh` removes any finished worktree left behind after an hour idle.
 - **Hooks in a worktree:** if a repo sets `core.hooksPath` to an absolute path, commits and pushes from a worktree run the main checkout's hooks, which are stale until main is pulled. Pull the main checkout after pushing a hook change.

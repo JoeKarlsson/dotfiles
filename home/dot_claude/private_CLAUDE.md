@@ -1,3 +1,6 @@
+<!-- chezmoi deploys this as a copy, not a symlink, because Cowork skips a symlinked
+     ~/.claude/CLAUDE.md. Edit ~/dotfiles/home/dot_claude/private_CLAUDE.md, then run
+     `chezmoi apply ~/.claude/CLAUDE.md`. Block HTML comments are stripped from context. -->
 # Global instructions
 
 ## Testing
@@ -21,20 +24,19 @@
 
 ## Git Workflow
 
-This is my personal computer: do NOT open pull requests by default.
-
 1. Always fetch the latest changes from the remote repository before making any changes.
 2. Commit messages (and any PR titles) should follow the format `feat: <Summary>`, `fix: <Summary>`, or `chore: <Summary>`, where the summary starts with an uppercase letter. Use `chore:` for non user-facing changes.
-3. When a change is ready, commit it directly **and push**; always keep the remote up to date without being asked. Don't create a PR unless I explicitly request one.
-4. Only when I explicitly ask for a PR: open it as a draft with a concise single-sentence description.
+3. **The repo's owner decides how to ship, not the machine or folder.** Check `git remote get-url origin`:
+   - **My repos (`github.com/JoeKarlsson/*`):** commit directly to main **and push**, without being asked. No PRs unless I explicitly ask; then open a draft with a concise single-sentence description.
+   - **Anyone else's (CDataSoftware, Azure DevOps, cloudquery, a colleague's repo):** never push to main. Commit on a branch, push the branch, and open a draft PR with a concise single-sentence description.
+   - **No remote:** commit only.
 
 ## Parallel sessions: one worktree each
 
 - **Before the first edit in a git repo, run ListAgents.** If another session is working in the same repo (session names start with the repo's directory name), call **EnterWorktree** and do all the work there.
 - **Never touch another session's files or staged changes.** Outside a worktree, always commit with explicit paths: `git commit -- <paths>`.
-- **Working in a worktree** (shipping with `push origin HEAD:main`, gitignored files, removing it when done): read `~/.claude/knowledge/worktree-workflow.md` first.
 
-Other situational rules live in `~/.claude/knowledge/index.md` (an Open Knowledge Format bundle): read the index line, open only the concept you need.
+Other situational rules (shipping from and removing a worktree, gitignored files in one) live in `~/.claude/knowledge/index.md` (an Open Knowledge Format bundle): read the index line, open only the concept you need.
 
 ## Word documents (.docx)
 
