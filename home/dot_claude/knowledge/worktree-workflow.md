@@ -12,7 +12,7 @@ stale_after: "2027-04-28T00:00:00-05:00"
 
 I often run several Claude sessions in the same repo at once. They share one git index and working tree, so a plain `git commit` can sweep in another session's staged files, and edits collide (2026-10-01: my commit landed under another session's message, and pushes carried each other's commits).
 
-The always-on rules (run ListAgents before the first edit, commit with explicit paths) live in `~/.claude/CLAUDE.md` under Git. To start a parallel session yourself: `claude -w <short-name>`.
+The parallel-sessions hook (`~/dotfiles/claude-mods/global`) refuses edits in a main checkout another live session shares, and commits there without `-- <paths>`; when it fires, call EnterWorktree. To start a parallel session yourself: `claude -w <short-name>`.
 
 - **Ship from the worktree:** commit on its branch, then `git fetch && git rebase origin/main`. In my repos, `git push origin HEAD:main`; in anyone else's, push the branch and open a draft PR (Git in `~/.claude/CLAUDE.md`). Push promptly; an unpushed worktree drifts.
 - **Gitignored files** (credentials, tfvars) are snapshots copied in from the main checkout via the repo's `.worktreeinclude`. Change them only in the main checkout.

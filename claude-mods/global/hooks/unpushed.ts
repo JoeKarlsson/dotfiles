@@ -2,7 +2,7 @@ import type { EngineInterface, On } from 'claude-code'
 
 import { checkout, git, inMain } from './git'
 
-// Global CLAUDE.md, Git Workflow: commit and push, always keep the remote up to
+// Global CLAUDE.md, Git: commit and push, always keep the remote up to
 // date. A worktree whose work is all on the remote should be removed.
 
 export type RepoState = { repo: string; ahead: number; isWorktree: boolean; isDone: boolean }

@@ -1,8 +1,10 @@
 <!-- chezmoi deploys this as a copy, not a symlink, because Cowork skips a symlinked
      ~/.claude/CLAUDE.md. Edit ~/dotfiles/home/dot_claude/private_CLAUDE.md, then run
      `chezmoi apply ~/.claude/CLAUDE.md`. Block HTML comments are stripped from context.
-     Only rules that apply in every repo on every machine belong here. Tool- or
-     file-type-specific rules go in that tool's skill; situational ones in ~/.claude/knowledge/. -->
+     Only rules that apply in every repo on every machine and that Claude can't work out
+     itself belong here. Tool- or file-type-specific rules go in that tool's skill;
+     situational ones in ~/.claude/knowledge/; zero-exception rules in a hook
+     (~/dotfiles/claude-mods/global: commit format, parallel sessions, keystrokes, Word). -->
 # Global instructions
 
 ## Testing
@@ -23,11 +25,9 @@
 ## Git
 
 - Fetch before making changes.
-- Commit messages: `feat:`, `fix:`, or `chore:` (non user-facing) plus a summary starting with an uppercase letter.
 - Ship by repo owner (`git remote get-url origin`):
   - My repos (`github.com/JoeKarlsson/*`): commit to main and push without being asked. No PRs unless I ask; then a draft with a one-sentence description.
   - Anyone else's (CDataSoftware, Azure DevOps, cloudquery, colleagues): never push to main. Push a branch and open a draft PR with a one-sentence description.
   - No remote: commit only.
-- Before the first edit in a repo, run ListAgents. If another session is in the same repo (names start with the repo's directory name), use EnterWorktree. Outside a worktree, commit with explicit paths (`git commit -- <paths>`) and never touch another session's changes.
 
 Situational rules (like shipping from a worktree) live in `~/.claude/knowledge/index.md`: read the index, open only the concept you need.

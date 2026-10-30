@@ -2,6 +2,7 @@ import { expect, test } from 'claude-code/testing'
 
 import { isPost, phraseFindings } from '../hooks/blog-check'
 import { commitSubject, formatDenial } from '../hooks/commit-format'
+import { keystrokeDenial } from '../hooks/keystroke-guard'
 import { unpushedText } from '../hooks/unpushed'
 import { openNames, writesDoc } from '../hooks/word-guard'
 
@@ -68,4 +69,11 @@ test('unpushed text', async () => {
   expect(unpushedText({ repo: 'r', ahead: 2, isWorktree: false, isDone: false })).toBe('2 commits in r not pushed')
   expect(unpushedText({ repo: 'r', ahead: 0, isWorktree: true, isDone: true })).toContain('remove it')
   expect(unpushedText({ repo: 'r', ahead: 0, isWorktree: false, isDone: false })).toBe(null)
+})
+
+test('keystroke guard: System Events keystrokes are refused, AX actions pass', async () => {
+  expect(keystrokeDenial(`osascript -e 'tell application "System Events" to keystroke "v" using command down'`)).toContain('frontmost')
+  expect(keystrokeDenial(`osascript -e 'tell application "System Events" to key code 44'`)).toContain('postToPid')
+  expect(keystrokeDenial(`osascript -e 'tell application "System Events" to perform action "AXPress" of button 1'`)).toBe(null)
+  expect(keystrokeDenial('grep -rn keystroke macos/')).toBe(null)
 })

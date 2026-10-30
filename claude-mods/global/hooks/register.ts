@@ -2,6 +2,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
+import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { registerUnpushed, unpushedLabel } from './unpushed'
 import { registerWordGuard } from './word-guard'
@@ -18,6 +19,7 @@ async function updateStatus($: EngineInterface) {
 export const register: Register = on => {
   registerParallelSessions(on)
   registerCommitFormat(on)
+  registerKeystrokeGuard(on)
   registerWordGuard(on)
   registerUnpushed(on)
   registerBlogCheck(on)

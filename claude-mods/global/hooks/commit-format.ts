@@ -2,7 +2,7 @@ import type { On } from 'claude-code'
 
 import { gitSubcommand, segments } from './shell'
 
-// Global CLAUDE.md, Git Workflow: `feat: <Summary>`, `fix: <Summary>` or
+// Joe's commit format: `feat: <Summary>`, `fix: <Summary>` or
 // `chore: <Summary>`, the summary starting with an uppercase letter.
 const FORMAT = /^(feat|fix|chore): [A-Z]/
 // Subjects git writes itself.
@@ -36,8 +36,7 @@ export function formatDenial(command: string): string | null {
   if (subject === null || FORMAT.test(subject) || GIT_MADE.test(subject)) return null
   return (
     `Commit message "${subject}" doesn't follow the format. Use feat: <Summary>, fix: <Summary> or ` +
-    `chore: <Summary> (chore for changes that aren't user facing), the summary starting with an uppercase ` +
-    `letter (global CLAUDE.md, "Git Workflow").`
+    `chore: <Summary> (chore for changes that aren't user facing), the summary starting with an uppercase letter.`
   )
 }
 

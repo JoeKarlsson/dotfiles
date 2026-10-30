@@ -3,7 +3,7 @@ import type { EngineInterface, On } from 'claude-code'
 import { checkout, inMain } from './git'
 import type { Checkout } from './git'
 
-// Global CLAUDE.md, "Parallel sessions: one worktree each": sessions in one
+// ~/.claude/knowledge/worktree-workflow.md: sessions in one
 // checkout share its index and working tree, so their edits collide and a plain
 // `git commit` sweeps in each other's staged files. While another live session
 // sits in a repo's main checkout, edits there and commits without `-- <paths>`
@@ -59,7 +59,7 @@ async function editDenial($: EngineInterface, path: string): Promise<string | nu
   if (ignored.exitCode === 0) return null
   return (
     `${names(peers)} also working in ${co.main}. Call EnterWorktree first and make this edit there ` +
-    `(global CLAUDE.md, "Parallel sessions: one worktree each").`
+    `(how to ship from it: ~/.claude/knowledge/worktree-workflow.md).`
   )
 }
 
