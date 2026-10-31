@@ -42,9 +42,20 @@ async function vale($: EngineInterface, path: string): Promise<string[] | null> 
 
 type Tells = { total: number; per_100_words: number; hits: Record<string, string[]> }
 
+// The humanizer skill lives in the homelab repo (~/claude on the Mac,
+// /root/claude-skills-joekarlsson on claude-dev), not in ~/.claude/skills.
+const AI_TELLS = '.claude/skills/humanizer/scripts/ai_tells.py'
+
+export async function aiTellsScript($: EngineInterface): Promise<string | null> {
+  for (const repo of [`${await $.env.get('HOME')}/claude`, '/root/claude-skills-joekarlsson']) {
+    if (await $.fs.exists(`${repo}/${AI_TELLS}`)) return `${repo}/${AI_TELLS}`
+  }
+  return null
+}
+
 async function aiTells($: EngineInterface, path: string): Promise<string[] | null> {
-  const script = `${await $.env.get('HOME')}/.claude/skills/humanizer/scripts/ai_tells.py`
-  if (!(await $.fs.exists(script))) return null
+  const script = await aiTellsScript($)
+  if (!script) return null
   const out = await $.process.run(['python3', '-I', script, path, '--json'], { timeoutMs: 30000 }).catch(() => null)
   if (!out || out.exitCode !== 0) return null
   const r = Object.values(JSON.parse(out.stdout) as Record<string, Tells>)[0]
@@ -95,7 +106,7 @@ export async function checkPost($: EngineInterface, path: string, opts: { vale: 
   return { sections, count }
 }
 
-function reviewSteps(path: string, top: string | null): string {
+function reviewSteps(path: string, top: string | null, tellsScript: string | null): string {
   const site = SITE.test(path)
   const guides = site
     ? `${top}/STYLE_GUIDE.md`
@@ -107,7 +118,7 @@ function reviewSteps(path: string, top: string | null): string {
     '2. Run the humanizer skill on the post and apply what it finds.',
     `3. Check the post against the voice guide: ${guides}.`,
     `4. Run the repo's review (${review}) and apply what it finds.`,
-    `5. Re-run the checks (vale --output=line ${path}; python3 ~/.claude/skills/humanizer/scripts/ai_tells.py ${path}; grep -n '—' ${path}) and tell me what's left and why each one stays.`,
+    `5. Re-run the checks (vale --output=line ${path}; python3 ${tellsScript ?? '<homelab repo>/' + AI_TELLS} ${path}; grep -n '—' ${path}) and tell me what's left and why each one stays.`,
   ].join('\n')
 }
 
@@ -139,7 +150,7 @@ export function registerBlogCheck(on: On) {
     if (!(await $.fs.exists(path))) return { text: `No file at ${path}` }
     const report = await checkPost($, path, { vale: true })
     const findings = report.sections.join('\n\n') || 'No findings.'
-    void $.prompt.submit({ text: `${reviewSteps(path, await repoTop($, path))}\n\nFindings:\n\n${findings}` })
+    void $.prompt.submit({ text: `${reviewSteps(path, await repoTop($, path), await aiTellsScript($))}\n\nFindings:\n\n${findings}` })
     return { text: `${report.count} findings in ${path.split('/').pop()}. Starting the full review.\n\n${findings}` }
   })
 }
