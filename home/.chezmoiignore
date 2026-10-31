@@ -12,6 +12,9 @@
 # On claude-dev it failed every chezmoi apply (found 2026-10-14).
 .docker
 .claude/settings.json
+# Private skills and memory (claude-private repo) are linked on the Mac only
+.claude/skills
+.claude/projects
 .config/atuin
 .config/mise
 .config/topgrade.toml

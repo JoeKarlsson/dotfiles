@@ -52,10 +52,10 @@ export function registerUnpushed(on: On) {
     const s = await repoState($, await $.session.cwd())
     return s?.ahead ? { ...answer, text: `⚠ ${unpushedText(s)}` } : answer
   })
+}
 
-  on('session.end', async ($, e, next) => {
-    const s = await repoState($, await $.session.cwd()).catch(() => null)
-    if (s?.ahead) void $.ui.notify(`${unpushedText(s)}`, { title: 'Claude session ended' })
-    return next(e)
-  })
+// Called from register.ts's one session.end hook.
+export async function notifyUnpushedAtEnd($: EngineInterface) {
+  const s = await repoState($, await $.session.cwd()).catch(() => null)
+  if (s?.ahead) void $.ui.notify(`${unpushedText(s)}`, { title: 'Claude session ended' })
 }

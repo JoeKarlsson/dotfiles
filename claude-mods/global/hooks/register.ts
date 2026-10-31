@@ -4,7 +4,8 @@ import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
-import { registerUnpushed, unpushedLabel } from './unpushed'
+import { startPrivateSync, toastLastSyncFailure } from './private-sync'
+import { notifyUnpushedAtEnd, registerUnpushed, unpushedLabel } from './unpushed'
 import { registerWordGuard } from './word-guard'
 
 // Guards fail open on purpose: a hook that throws is skipped, so a bug here lets
@@ -28,8 +29,15 @@ export const register: Register = on => {
     const started = await next(e)
     await $.command.register(BLOG_COMMAND)
     void updateStatus($)
+    void toastLastSyncFailure($).catch(() => undefined)
     $.clock.every(30_000, () => void updateStatus($))
     return started
+  })
+
+  // The one session.end hook: features export what they do at the end.
+  on('session.end', async ($, e, next) => {
+    await Promise.all([notifyUnpushedAtEnd($), startPrivateSync($)])
+    return next(e)
   })
 
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
