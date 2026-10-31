@@ -2,7 +2,7 @@
 
 `global/` is the one mod that applies in every repo, on every machine. Mods tied
 to one repo live in that repo instead (the homelab mod is
-`~/claude-skills/.claude/mods/homelab`). New global behaviour goes in `global/`
+`.claude/mods/homelab` in the homelab repo: `~/claude` on the laptop, `~/claude-skills` on the work Mac). New global behaviour goes in `global/`
 as another `hooks/<feature>.ts` registered from `hooks/register.ts`, so the list
 of mod folders in settings never changes.
 
