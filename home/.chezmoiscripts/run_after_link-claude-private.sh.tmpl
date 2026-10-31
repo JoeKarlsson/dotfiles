@@ -1,0 +1,35 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Link Claude Code's skills and memory folders into the private claude-private
+# repo (cloned by .chezmoiexternal). Memory folders are named after the project's
+# absolute path, so they differ per Mac (/Users/joe/claude on the laptop,
+# /Users/joekarlsson/claude-skills on the work Mac): work them out here instead
+# of hardcoding one. A real folder is never replaced: it is reported with the
+# command that merges it in first.
+set -u
+R="$HOME/Documents/dev/joe/claude-private"
+if [ ! -d "$R/.git" ]; then
+  echo "claude-private: not cloned yet (needs gh auth login, then chezmoi apply); skills and memory are not linked" >&2
+  exit 0
+fi
+
+slug() { printf '%s' "$1" | sed 's/[^A-Za-z0-9]/-/g'; }
+
+link() { # <link path> <target in the repo>
+  if [ -L "$1" ] || [ ! -e "$1" ]; then
+    mkdir -p "$(dirname "$1")"
+    ln -sfn "$2" "$1"
+  else
+    echo "claude-private: $1 is a real folder, so it was not linked. Merge it in with:" >&2
+    echo "  $R/merge-into-repo.sh '$1' '$2'" >&2
+  fi
+}
+
+link "$HOME/.claude/skills" "$R/skills"
+# The homelab repo: ~/claude on the laptop, ~/claude-skills on the work Mac.
+for repo in "$HOME/claude" "$HOME/claude-skills"; do
+  [ -d "$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$repo")/memory" "$R/memory/homelab"
+done
+[ -d "$HOME/Documents/dev/joe" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe")/memory" "$R/memory/dev-joe"
+exit 0
+{{ end -}}
