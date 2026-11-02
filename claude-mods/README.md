@@ -21,7 +21,7 @@ The status line shows only when there's something to act on.
 **Guards fail open.** A hook that throws is skipped, so a bug lets a call through
 instead of blocking every call. Don't remove a classic hook that a mod overlaps.
 
-**Loading.** `CLAUDE_CODE_PLUGIN_DIRS` in `home/dot_claude/settings.json` (Macs)
+**Loading.** `CLAUDE_CODE_PLUGIN_DIRS` in `home/dot_claude/private_settings.json` (Macs)
 lists the mod folders, `:`-separated. Windows sets it in
 `home/.chezmoitemplates/claude-settings-windows.json`, `;`-separated: there `:`
 is read as part of one path and neither mod loads. claude-dev sets the same variable from its

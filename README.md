@@ -32,6 +32,10 @@ chezmoi's naming: `dot_zshrc` is `~/.zshrc`, `private_dot_ssh/` is `~/.ssh`
 `~/.zshrc` edits the repo, same as before chezmoi. Templates (`.gitconfig`,
 `.ssh/config`, `.Brewfile`) are rendered copies: edit the
 source with `chezmoi edit ~/.gitconfig`, then `chezmoi apply`.
+`~/.claude/settings.json` is a `private_` file, which chezmoi copies instead of
+linking: Claude Code saves it often, and every save replaced the symlink with a
+plain file. When `doctor` flags it, keep the local version with
+`chezmoi re-add ~/.claude/settings.json`.
 
 **Encrypted files.** This repo is public, so homelab details (LAN hosts, users,
 ports) live in `encrypted_*.age` files, age-encrypted with chezmoi. Today that's
