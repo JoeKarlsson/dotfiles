@@ -1,13 +1,19 @@
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if or (eq .chezmoi.os "darwin") (eq .machine "claude-dev") -}}
 #!/bin/bash
 # Link Claude Code's skills and memory folders into the private claude-private
-# repo (cloned by .chezmoiexternal). Memory folders are named after the project's
-# absolute path, so they differ per Mac (/Users/joe/claude on the laptop,
-# /Users/joekarlsson/claude-skills on the work Mac): work them out here instead
-# of hardcoding one. A real folder is never replaced: it is reported with the
-# command that merges it in first.
+# repo (cloned by .chezmoiexternal on the Macs, by the provision on claude-dev).
+# Memory folders are named after the project's absolute path, so they differ per
+# machine (/Users/joe/claude on the laptop, /Users/joekarlsson/claude-skills on
+# the work Mac, /root/claude-skills-joekarlsson on claude-dev): work them out here
+# instead of hardcoding one. A real folder is never replaced: it is reported with
+# the command that merges it in first.
 set -u
+{{- if eq .machine "claude-dev" }}
+# claude-dev: root and joe share joe's clone (root can read /home/joe).
+R="/home/joe/Documents/dev/joe/claude-private"
+{{- else }}
 R="$HOME/Documents/dev/joe/claude-private"
+{{- end }}
 if [ ! -d "$R/.git" ]; then
   echo "claude-private: not cloned yet (needs gh auth login, then chezmoi apply); skills and memory are not linked" >&2
   exit 0
@@ -28,8 +34,9 @@ link() { # <link path> <target in the repo>
 link "$HOME/.claude/skills" "$R/skills"
 # Make `npx skills` links work through that link and keep them out of git.
 [ -x "$R/fix-skill-links.sh" ] && "$R/fix-skill-links.sh"
-# The homelab repo: ~/claude on the laptop, ~/claude-skills on the work Mac.
-for repo in "$HOME/claude" "$HOME/claude-skills"; do
+# The homelab repo: ~/claude on the laptop, ~/claude-skills on the work Mac,
+# /root/claude-skills-joekarlsson on claude-dev (for both root and joe).
+for repo in "$HOME/claude" "$HOME/claude-skills" /root/claude-skills-joekarlsson; do
   [ -d "$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$repo")/memory" "$R/memory/homelab"
 done
 [ -d "$HOME/Documents/dev/joe" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe")/memory" "$R/memory/dev-joe"

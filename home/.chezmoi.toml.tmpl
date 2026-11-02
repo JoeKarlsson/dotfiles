@@ -1,11 +1,14 @@
 {{- /* Macs are asked once at `chezmoi init` (re-ask: `chezmoi init --prompt`).
-       Linux is always "server" so provisioning never waits on a prompt.
+       Linux never prompts, so provisioning never waits: the claude-dev container
+       (CT 263, hostname claude-dev) is "claude-dev", any other Linux "server".
        Windows is always "windows". */ -}}
 {{- $machine := "server" -}}
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $machine = promptChoiceOnce . "machine" "Machine type" (list "work" "personal") "personal" -}}
 {{- else if eq .chezmoi.os "windows" -}}
 {{-   $machine = "windows" -}}
+{{- else if eq .chezmoi.hostname "claude-dev" -}}
+{{-   $machine = "claude-dev" -}}
 {{- end -}}
 # Plain files are symlinks into the source dir, so editing ~/.zshrc edits the
 # repo. Templates (.tmpl) are rendered copies: edit them with `chezmoi edit`.
