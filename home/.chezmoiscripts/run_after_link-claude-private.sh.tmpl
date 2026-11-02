@@ -33,5 +33,6 @@ for repo in "$HOME/claude" "$HOME/claude-skills"; do
   [ -d "$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$repo")/memory" "$R/memory/homelab"
 done
 [ -d "$HOME/Documents/dev/joe" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe")/memory" "$R/memory/dev-joe"
+link "$HOME/.claude/projects/$(slug {{ .chezmoi.workingTree | quote }})/memory" "$R/memory/dotfiles"
 exit 0
 {{ end -}}
