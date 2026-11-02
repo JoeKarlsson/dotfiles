@@ -99,8 +99,9 @@
     ],
     "additionalDirectories": [
       "~"
-    ],
+    ]{{- if eq .machine "work" }},
     "defaultMode": "auto"
+{{- end }}
   },
   "model": "opus[1m]",
   "env": {
@@ -112,7 +113,8 @@
     "anthropic-skills:mktg-link-scout": "off",
     "anthropic-skills:mktg-content-calendar": "off",
     "anthropic-skills:mktg-blog-review": "off",
-    "anthropic-skills:docx": "off",
+    "anthropic-skills:docx": "off"
+{{- if eq .machine "work" }},
     "audience-lifecycle": "off",
     "blog-ideation": "off",
     "competitive-positioning": "off",
@@ -125,6 +127,7 @@
     "learn": "off",
     "find-skills": "off",
     "microsoft-sharepoint": "off"
+{{- end }}
   },
   "hooks": {
     "Notification": [
@@ -154,8 +157,25 @@
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
+{{- if eq .machine "work" }}
     "swift-lsp@claude-plugins-official": true,
     "cowork-plugin-management@synced": false
+{{- else }}
+    "ai-commit-gen@claude-code-plugins-plus": true,
+    "ansible-playbook-creator@claude-code-plugins-plus": true,
+    "ast-grep@ast-grep-marketplace": true,
+    "backup-strategy-implementor@claude-code-plugins-plus": true,
+    "docker-compose-generator@claude-code-plugins-plus": true,
+    "e2e-test-framework@claude-code-plugins-plus": true,
+    "metrics-aggregator@claude-code-plugins-plus": true,
+    "secrets-manager-integrator@claude-code-plugins-plus": true,
+    "security-pro-pack@claude-code-plugins-plus": true,
+    "sql-query-optimizer@claude-code-plugins-plus": true,
+    "superpowers@superpowers-marketplace": true,
+    "swift-lsp@claude-plugins-official": true,
+    "test-coverage-analyzer@claude-code-plugins-plus": true,
+    "throughput-analyzer@claude-code-plugins-plus": true
+{{- end }}
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
