@@ -14,6 +14,7 @@ const STATUS = '.git/claude-sync-status'
 export const SYNC_SCRIPT = `
 cd "$1" || exit 0
 log() { printf '%s %s\\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$1" > ${STATUS}; }
+if [ -x fix-skill-links.sh ]; then ./fix-skill-links.sh >/dev/null || { log "failed: fix-skill-links.sh"; exit 1; }; fi
 git add -A || { log "failed: git add"; exit 1; }
 if ! git diff --cached --quiet; then
   git commit -q -m "chore: Sync Claude memory and skills" || { log "failed: git commit"; exit 1; }

@@ -26,6 +26,8 @@ link() { # <link path> <target in the repo>
 }
 
 link "$HOME/.claude/skills" "$R/skills"
+# Make `npx skills` links work through that link and keep them out of git.
+[ -x "$R/fix-skill-links.sh" ] && "$R/fix-skill-links.sh"
 # The homelab repo: ~/claude on the laptop, ~/claude-skills on the work Mac.
 for repo in "$HOME/claude" "$HOME/claude-skills"; do
   [ -d "$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$repo")/memory" "$R/memory/homelab"

@@ -13,7 +13,7 @@ of mod folders in settings never changes.
 | Unpushed work | `unpushed.ts` | Status line and a line under each answer when commits aren't pushed; "remove it" for a worktree whose work is all on the remote; a macOS notification if a session ends with commits unpushed |
 | Keystroke guard | `keystroke-guard.ts` | Refuses commands that send System Events `keystroke`/`key code` (they type into whatever app is frontmost); AX actions and menu clicks pass |
 | Word guard | `word-guard.ts` | Refuses writing a `.docx` (Write/Edit, `cp`, `pack.py`, `pandoc -o`, redirects) while Word has a document of that name open; reads pass |
-| Private sync | `private-sync.ts` | At session end, commits and pushes `~/Documents/dev/joe/claude-private` (the private repo `~/.claude/skills` and the memory folders link into) in a background shell; the next session start toasts if that sync failed |
+| Private sync | `private-sync.ts` | At session end, runs its `fix-skill-links.sh`, then commits and pushes `~/Documents/dev/joe/claude-private` (the private repo `~/.claude/skills` and the memory folders link into) in a background shell; the next session start toasts if that sync failed |
 | Blog checks | `blog-check.ts` | After each write to a blog post (joekarlsson.com blog and newsletter, CData `drafts/`), tells the model what Vale, the humanizer's `ai_tells.py` and the banned-phrase check (em dash, "That's real information") found. `/blog-check <post>` lists everything and starts the full review: humanizer, the repo's voice guide, its review command |
 
 The status line shows only when there's something to act on.
