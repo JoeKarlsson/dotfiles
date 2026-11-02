@@ -34,5 +34,9 @@ for repo in "$HOME/claude" "$HOME/claude-skills"; do
 done
 [ -d "$HOME/Documents/dev/joe" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe")/memory" "$R/memory/dev-joe"
 link "$HOME/.claude/projects/$(slug {{ .chezmoi.workingTree | quote }})/memory" "$R/memory/dotfiles"
+# joekarlsson.com: checked out in both places on the laptop; they share one memory.
+for repo in "$HOME/Documents/dev/joe/joekarlsson.com" "$HOME/Documents/dev/joekarlsson.com"; do
+  [ -d "$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$repo")/memory" "$R/memory/joekarlsson-com"
+done
 exit 0
 {{ end -}}
