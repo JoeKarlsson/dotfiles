@@ -14,7 +14,7 @@ always **server** and never prompts. The answer lives in
 |---|---|---|---|
 | zsh, Starship, ssh, atuin, mise, topgrade, VS Code | yes | yes | no |
 | git, gh, `~/.claude/CLAUDE.md` | yes | yes | yes (no 1Password signing, no delta) |
-| Claude Code `settings.json` | yes | yes | no |
+| Claude Code `settings.json` | yes | yes | yes (no plugins, no worktree hook) |
 | `~/.Brewfile` App Store apps | shared + Office/OneDrive/Windows App | shared + personal list | n/a |
 
 ## Layout
@@ -33,9 +33,10 @@ chezmoi's naming: `dot_zshrc` is `~/.zshrc`, `private_dot_ssh/` is `~/.ssh`
 `.ssh/config`, `.Brewfile`) are rendered copies: edit the
 source with `chezmoi edit ~/.gitconfig`, then `chezmoi apply`.
 `~/.claude/settings.json` is a template, `dot_claude/private_settings.json.tmpl`,
-rendered per machine: the enabled plugins, the skills switched off and the
-default permission mode differ between the work and personal Macs (`machine`
-in the chezmoi config); everything else is shared. Change it in the template,
+rendered per machine (`machine` in the chezmoi config): the enabled plugins,
+the skills switched off and the default permission mode differ between the work
+and personal Macs, and claude-dev gets its own mod paths, no plugins and no
+worktree hook (BSD `stat`); everything else is shared. Change it in the template,
 not with Claude Code's `/config`: `chezmoi apply` overwrites local edits, and
 `chezmoi re-add` skips templates.
 

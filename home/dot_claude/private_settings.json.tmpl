@@ -105,7 +105,11 @@
   },
   "model": "opus[1m]",
   "env": {
+{{- if eq .machine "claude-dev" }}
+    "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.workingTree }}/claude-mods/global:/root/claude-skills-joekarlsson/.claude/mods/homelab"
+{{- else }}
     "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude/.claude/mods/homelab:~/claude-skills/.claude/mods/homelab"
+{{- end }}
   },
   "skillOverrides": {
     "anthropic-skills:humanizer": "off",
@@ -139,7 +143,7 @@
           }
         ]
       }
-    ],
+    ]{{- if ne .machine "claude-dev" }},
     "SessionStart": [
       {
         "hooks": [
@@ -151,6 +155,7 @@
         ]
       }
     ]
+{{- end }}
   },
   "statusLine": {
     "type": "command",
@@ -160,6 +165,7 @@
 {{- if eq .machine "work" }}
     "swift-lsp@claude-plugins-official": true,
     "cowork-plugin-management@synced": false
+{{- else if eq .machine "claude-dev" }}
 {{- else }}
     "ai-commit-gen@claude-code-plugins-plus": true,
     "ansible-playbook-creator@claude-code-plugins-plus": true,

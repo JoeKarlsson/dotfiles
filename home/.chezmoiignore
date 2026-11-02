@@ -11,7 +11,9 @@
 # The docker modify script runs Homebrew's jq (/opt/homebrew/bin/jq): Mac-only.
 # On claude-dev it failed every chezmoi apply (found 2026-10-14).
 .docker
+{{- if ne .machine "claude-dev" }}
 .claude/settings.json
+{{- end }}
 .config/atuin
 .config/mise
 .config/topgrade.toml
