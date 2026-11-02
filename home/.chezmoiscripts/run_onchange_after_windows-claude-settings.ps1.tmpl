@@ -1,7 +1,7 @@
 {{- if eq .chezmoi.os "windows" -}}
 # Claude Code settings for Windows, from .chezmoitemplates/claude-settings-windows.json.
-# Not a regular managed file: on the Macs ~/.claude/settings.json is a symlink
-# into the repo, and chezmoi can't map two sources to one target. Runs whenever
+# Not a regular managed file: on the Macs ~/.claude/settings.json is managed
+# from dot_claude/private_settings.json, and chezmoi can't map two sources to one target. Runs whenever
 # that JSON changes. Repo keys win; keys only in the local file (ones Claude
 # Code adds itself, like autoUpdatesChannel) are kept. The old file is backed up.
 $ErrorActionPreference = 'Stop'
