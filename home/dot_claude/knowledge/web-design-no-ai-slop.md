@@ -78,7 +78,7 @@ Keep this section current: whenever I react to a design, reference site or mocku
 - **One concept, pushed all the way, taken from my life.** A video-store look (rental cards, shelf tags, staff picks, VHS spines) is a favorite for anything about films and my Letterboxd reviews.
 - **Dark mode first** for concept pages. A normal, clean site (below) may be light.
 - **Loud color, pinks first:** hot pink, magenta, bubblegum, with tangerine as the second loud color. Dark, moody maroon/oxblood palettes fell flat (2026-11-04 mockup).
-- **Punk and handmade:** cut-and-paste, tape, stickers, stamps, imperfect edges, things that look made by a person. No halftone or dithered photos: they didn't look right to me (2026-11-04). Real photos go up as they are, taped or collaged.
+- **Punk and handmade:** cut-and-paste, tape, stickers, stamps, imperfect edges, things that look made by a person. Halftone works as hot pink duotone on my own photos and video (the joekarlsson.com mock-ups); a black-and-white xerox halftone of a film poster didn't (2026-11-04). Otherwise real photos go up as they are, taped or collaged.
 - **Cy Twombly:** scrawled, gestural marks and handwriting over big quiet fields, and running over photos and across sections. I like these scrawls; use them generously. Use my own scanned handwriting or hand-drawn SVG strokes; never generate fake handwriting.
 - **Rothko:** large stacked fields of loud color (hot pink over tangerine, say) on a near-black ground, with soft, uneven brushed edges, for heroes and section breaks. Use a real painted or scanned texture, not a CSS gradient.
 - **Not the old-web homepage look** (Melon Land style: dashed boxes, pixel fonts, 88x31 buttons, three busy columns). A mockup of it didn't work for me (2026-11-04).
@@ -86,11 +86,12 @@ Keep this section current: whenever I react to a design, reference site or mocku
 - **Doable without being an illustrator.** I'm not a visual artist: build it from real photos (as they are, cropped, collaged), type, color, texture scans and code, not commissioned-looking illustration.
 
 References:
-- [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS. Take the concept-from-the-subject idea and the loud pink from it, not the halftone.
+- **The joekarlsson.com redesign mock-ups** (mock-k and mock-l, built in that repo's session, 2026-11-04): the model for my own site. Black ground and one hot pink (about #ff4fd8); pink-duotone photos and video of me; huge Anton ALL CAPS lists for projects and blog topics; marquee tickers; crayon-textured scrawls that redraw themselves; a "make a mark" board visitors draw on; a tilted collage of photos; a warped poster footer. Motion is welcome when it's ambient or on hover, never scroll-triggered.
+- [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS. Take the concept-from-the-subject idea and the loud pink from it.
 
 ### A normal, clean site
 
-Not every page needs a concept. For a normal site, I like the clean, confident look of these (2026-11-04):
+Not every page needs a concept. For professional pages, I like the clean, confident look of these (2026-11-04). For my own site they're too plain: a light, Kalkbrenner-style joekarlsson.com mockup looked bad to me (2026-11-04).
 
 - [paulkalkbrenner.net](https://www.paulkalkbrenner.net/): the model. White space everywhere, big black grotesque type, a tiny photo set inline inside his name, a "now playing" music widget with a sound toggle, and large real photos.
 - [mobbin.com](https://mobbin.com/): bold black headline with small app icons set inline between the words; lots of white space.
