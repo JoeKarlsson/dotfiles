@@ -1,7 +1,7 @@
 ---
 type: Rule
-title: "Web design: banned AI-slop patterns"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 28 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, squircles, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead"
+title: "Web design: banned AI-slop patterns, and what Joe likes"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 28 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, squircles, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; Joe's taste for his own sites (video store, punk, handmade, Twombly, Rothko, dark mode) with references"
 tags: [design, web, css, frontend, artifacts]
 sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
@@ -12,7 +12,7 @@ stale_after: "2027-11-04T00:00:00-06:00"
 
 Applies to every site, page, HTML artifact and UI I ask for, and overrides any design skill or template default that says otherwise. These patterns mark a page as AI-made. Don't use them. If a page you're editing already has them, remove them in the same change.
 
-The goal is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
+The goal is a page with one idea behind it (see "Aim for"). When there's no idea yet, the fallback is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
 
 ## Banned
 
@@ -46,6 +46,26 @@ The goal is plain and confident: one good typeface, real hierarchy from size and
 | 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. |
 | 27 | **Inter or the system stack as an unchosen default** | Choose a typeface on purpose for the page's subject and tone. |
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
+
+## Exception: a named concept
+
+A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), scroll animations (#26).
+
+## Aim for (my own sites)
+
+For my personal sites (joekarlsson.com, side projects, homelab pages). Work sites follow the company brand instead.
+
+- **One concept, pushed all the way, taken from my life.** A video-store look (rental cards, shelf tags, staff picks, VHS spines) is a favorite for anything about films and my Letterboxd reviews.
+- **Dark mode first.** Light mode, if any, is the alternate.
+- **Punk and handmade:** xerox and cut-and-paste, tape, stickers, imperfect edges, things that look made by a person.
+- **Cy Twombly:** scrawled, gestural marks and handwriting over big quiet fields. Use my own scanned handwriting or hand-drawn SVG strokes; never generate fake handwriting.
+- **Rothko:** large fields of deep, dark color (maroons, blacks, oxblood, deep orange) with soft, uneven painted edges, for mood and section breaks. Use a real painted or scanned texture, not a CSS gradient.
+- **A little subconscious and dreamlike:** odd juxtapositions and surprises, not tidy grids.
+- **Doable without being an illustrator.** I'm not a visual artist: build it from real photos (filtered, halftoned, collaged), type, color, texture scans and code, not commissioned-looking illustration.
+
+References:
+- [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS.
+- [melonland.net](https://melonland.net): hand-made personal web with charm built from found pieces.
 
 ## Page copy
 
