@@ -47,6 +47,10 @@ The goal is plain and confident: one good typeface, real hierarchy from size and
 | 27 | **Inter or the system stack as an unchosen default** | Choose a typeface on purpose for the page's subject and tone. |
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
 
+## Page copy
+
+The same rules apply to the words. Run all page copy (headings, buttons, body) through the `humanizer` skill, and avoid the phrases in my banned-phrases list (`~/.claude/projects/-Users-joekarlsson-claude-skills/memory/feedback-banned-phrases.md`).
+
 ## Checking a page
 
 Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `Inter`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.
