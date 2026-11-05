@@ -55,6 +55,8 @@ A page built around one clear concept that comes from its subject may use a bann
 
 For my personal sites (joekarlsson.com, side projects, homelab pages). Work sites follow the company brand instead.
 
+Keep this section current: whenever I react to a design, reference site or mockup (like it, dislike it, or a specific part), record it here with the date in the same session, and commit it.
+
 - **One concept, pushed all the way, taken from my life.** A video-store look (rental cards, shelf tags, staff picks, VHS spines) is a favorite for anything about films and my Letterboxd reviews.
 - **Dark mode first** for concept pages. A normal, clean site (below) may be light.
 - **Loud color, pinks first:** hot pink, magenta, bubblegum, with tangerine as the second loud color. Dark, moody maroon/oxblood palettes fell flat (2026-11-04 mockup).
