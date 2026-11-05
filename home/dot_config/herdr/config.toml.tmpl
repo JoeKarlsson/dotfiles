@@ -8,6 +8,11 @@ onboarding = false
 name = "vesper"
 auto_switch = false
 
+[terminal]
+# root's login shell (the Mac zsh setup); explicit so a server started from bash
+# still opens zsh panes.
+default_shell = "/usr/bin/zsh"
+
 [ui]
 status_indicators = "symbols"
 
