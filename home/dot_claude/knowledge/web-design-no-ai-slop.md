@@ -14,6 +14,18 @@ Applies to every site, page, HTML artifact and UI I ask for, and overrides any d
 
 The goal is a page with one idea behind it (see "Aim for"). When there's no idea yet, the fallback is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
 
+## First: what is the page for?
+
+Pick the kind of page from the job before any styling. The bans below apply to all of them.
+
+- **Text document** (notes, a write-up, a runbook): reads like a well-set document. One readable face, ~65-character lines, headings and lists, almost no decoration.
+- **Rich document** (a report or explainer with images, tables, callouts, maybe a chart): still a document first; richness comes from real figures and tables, not chrome.
+- **Data visualization or dashboard:** clarity over personality. Load the `dataviz` skill; color encodes data, not mood; the hook's "opacity" and "border" flags can be legitimate here.
+- **Clean site** (a homepage, a project or product page): the clean references in "Aim for".
+- **Concept page** (something personal and expressive, like a review page): the concept direction in "Aim for", with the concept exception.
+
+When it isn't obvious which one, ask me.
+
 ## Banned
 
 | # | Banned | Do instead |
