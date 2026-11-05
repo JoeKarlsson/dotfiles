@@ -102,6 +102,7 @@ test('design check: banned patterns are found, plain styles pass', async () => {
   for (const n of ['#19', '#21', '#4', '#18', '#22', '#23', '#16', '#7', '#20', '#12', '#25', '#17']) expect(found).toContain(n)
   const good = [
     'body { background: #fafaf7; color: #1a1a1a; font-family: "Source Serif 4", Georgia, serif; }',
+    '.ui { font-family: "Inter", system-ui, sans-serif; }',
     'pre, code { font-family: ui-monospace, monospace; }',
     '.btn { border-radius: 4px; }',
     '<h2>Build faster</h2>',

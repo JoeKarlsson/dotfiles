@@ -62,7 +62,6 @@ When the kind or the tone isn't obvious, ask me.
 | 24 | **Gradient text**: gradient-filled headlines (`background-clip: text`) | Solid text color. |
 | 25 | **Decorative emoji and sparkle icons**: ✨🚀 in headings, bullets, buttons | No emoji in UI chrome. Icons only where they aid recognition. |
 | 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. |
-| 27 | **Inter or the system stack as an unchosen default** | Choose a typeface on purpose for the page's subject and tone. |
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
 
 ## Exception: a named concept
@@ -106,4 +105,4 @@ The same rules apply to the words. Run all page copy (headings, buttons, body) t
 
 ## Checking a page
 
-Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `Inter`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.
+Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.

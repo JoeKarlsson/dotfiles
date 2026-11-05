@@ -19,7 +19,6 @@ const CHECKS: [RegExp, string, ((line: string) => boolean)?][] = [
   [/letter-spacing:\s*-|\btracking-(tight|tighter)\b|\btracking-\[-/, 'negative letter-spacing (#4): use normal tracking'],
   [/text-transform:\s*uppercase|(^|[\s"'`])uppercase([\s"'`]|$)/, 'ALL CAPS (#18): use sentence case'],
   [/Instrument Serif/i, 'Instrument Serif (#3)'],
-  [/font-family:[^;}]*\bInter\b|family=Inter\b|\bfont-inter\b|['"]Inter['"]/, 'Inter (#27): only if chosen on purpose for this page; say why'],
   [/#(6366f1|4f46e5|818cf8|8b5cf6|7c3aed|a78bfa|a855f7|9333ea)\b|\b(indigo|violet|purple)-\d{2,3}\b/i, 'indigo/violet accent (#21)'],
   [/backdrop-filter|\bbackdrop-blur/, 'glassmorphism (#22): use opaque surfaces'],
   [/box-shadow|drop-shadow|\bshadow(-(sm|md|lg|xl|2xl|inner))?\b(?![-\w])/, 'shadow/glow (#23): none, except menus and dialogs'],
