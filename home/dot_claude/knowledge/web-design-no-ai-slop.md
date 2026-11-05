@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: "Web design: banned AI-slop patterns"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 20 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, squircles, bordered cards, mono overuse, section numbers, periods in titles...) and what to do instead"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 28 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, squircles, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead"
 tags: [design, web, css, frontend, artifacts]
 sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
@@ -10,7 +10,7 @@ stale_after: "2027-11-04T00:00:00-06:00"
 
 # Web design: banned AI-slop patterns
 
-Applies to every site, page, HTML artifact and UI I ask for, and overrides any design skill or template default that says otherwise. These 20 patterns mark a page as AI-made. Don't use them. If a page you're editing already has them, remove them in the same change.
+Applies to every site, page, HTML artifact and UI I ask for, and overrides any design skill or template default that says otherwise. These patterns mark a page as AI-made. Don't use them. If a page you're editing already has them, remove them in the same change.
 
 The goal is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
 
@@ -38,7 +38,15 @@ The goal is plain and confident: one good typeface, real hierarchy from size and
 | 18 | **ALL CAPS subtitles**: uppercase, letter-spaced labels and subheads | Sentence case. |
 | 19 | **Gradient backgrounds**: gradient fills, mesh/aurora blobs, glows | Solid background colors. |
 | 20 | **Periods in titles**: "Build faster." "Ship it." | No terminal period on headings, titles or buttons. |
+| 21 | **Indigo/violet accent**: Tailwind's `#6366f1` family and its purple neighbors | Pick an accent that fits the subject; one accent color. |
+| 22 | **Glassmorphism**: frosted `backdrop-filter: blur` panels | Opaque surfaces. |
+| 23 | **Glows and shadows everywhere**: shadows on every card, glowing borders, hover lift | No shadows by default; at most one subtle shadow for things that truly float (menus, dialogs). |
+| 24 | **Gradient text**: gradient-filled headlines (`background-clip: text`) | Solid text color. |
+| 25 | **Decorative emoji and sparkle icons**: ✨🚀 in headings, bullets, buttons | No emoji in UI chrome. Icons only where they aid recognition. |
+| 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. |
+| 27 | **Inter or the system stack as an unchosen default** | Choose a typeface on purpose for the page's subject and tone. |
+| 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
 
 ## Checking a page
 
-Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, and headings ending in `.`.
+Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `Inter`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.
