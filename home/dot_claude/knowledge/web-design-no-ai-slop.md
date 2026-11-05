@@ -56,7 +56,7 @@ A page built around one clear concept that comes from its subject may use a bann
 For my personal sites (joekarlsson.com, side projects, homelab pages). Work sites follow the company brand instead.
 
 - **One concept, pushed all the way, taken from my life.** A video-store look (rental cards, shelf tags, staff picks, VHS spines) is a favorite for anything about films and my Letterboxd reviews.
-- **Dark mode first.** Light mode, if any, is the alternate.
+- **Dark mode first** for concept pages. A normal, clean site (below) may be light.
 - **Loud color, pinks first:** hot pink, magenta, bubblegum, with tangerine as the second loud color. Dark, moody maroon/oxblood palettes fell flat (2026-11-04 mockup).
 - **Punk and handmade:** cut-and-paste, tape, stickers, stamps, imperfect edges, things that look made by a person. No halftone or dithered photos: they didn't look right to me (2026-11-04). Real photos go up as they are, taped or collaged.
 - **Cy Twombly:** scrawled, gestural marks and handwriting over big quiet fields, and running over photos and across sections. I like these scrawls; use them generously. Use my own scanned handwriting or hand-drawn SVG strokes; never generate fake handwriting.
@@ -67,6 +67,16 @@ For my personal sites (joekarlsson.com, side projects, homelab pages). Work site
 
 References:
 - [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS. Take the concept-from-the-subject idea and the loud pink from it, not the halftone.
+
+### A normal, clean site
+
+Not every page needs a concept. For a normal site, I like the clean, confident look of these (2026-11-04):
+
+- [paulkalkbrenner.net](https://www.paulkalkbrenner.net/): the model. White space everywhere, big black grotesque type, a tiny photo set inline inside his name, a "now playing" music widget with a sound toggle, and large real photos.
+- [mobbin.com](https://mobbin.com/): bold black headline with small app icons set inline between the words; lots of white space.
+- [privy.io](https://www.privy.io/): clean type and strong hierarchy. Take only that: its purple gradients, fake dashboard mockups, centered two-button hero and gray-faded headline words are all on the banned list.
+
+What carries over: generous white space, one big confident grotesque typeface, small playful details (inline images or icons in a headline, a now-playing widget), and real photos instead of illustration.
 
 ## Page copy
 
