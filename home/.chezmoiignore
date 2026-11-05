@@ -46,3 +46,7 @@ Documents/AutoHotkey
 # VS Code's Windows settings path (the Mac one is under Library)
 AppData
 {{- end }}
+# Herdr (agent multiplexer) runs on claude-dev only; the Macs SSH in with `shed`.
+{{- if ne .machine "claude-dev" }}
+.config/herdr
+{{- end }}

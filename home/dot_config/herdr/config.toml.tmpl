@@ -1,0 +1,35 @@
+# Herdr on claude-dev (CT 263), for root and joe. Managed by dotfiles: change it
+# here, not in Herdr's settings screen (chezmoi apply --force puts this file back).
+# A .tmpl so chezmoi writes a real file, not a symlink into root-owned /opt/dotfiles.
+# Apply to a running server: herdr server reload-config
+onboarding = false
+
+[theme]
+name = "vesper"
+auto_switch = false
+
+[ui]
+status_indicators = "symbols"
+
+[ui.toast]
+delivery = "terminal"
+
+[update]
+# The version is pinned in claude-dev's provision (HERDR_VERSION), so no nagging.
+version_check = false
+
+[keys]
+# Default prefix; change it here, e.g. prefix = "ctrl+a".
+prefix = "ctrl+b"
+
+# Agent in a new pane to the right, same folder (herdr-agent-split is installed
+# by claude-dev's provision). prefix+o is taken by notifications.
+[[keys.command]]
+key = "prefix+a"
+type = "shell"
+command = "herdr-agent-split claude"
+
+[[keys.command]]
+key = "prefix+shift+o"
+type = "shell"
+command = "herdr-agent-split opencode"

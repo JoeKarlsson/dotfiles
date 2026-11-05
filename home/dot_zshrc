@@ -70,6 +70,8 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cs="cd ~/claude-skills"
 alias skills="cd ~/claude-skills"
+# claude-dev (CT 263): SSH in and attach to the Herdr session (Tailscale off-LAN)
+alias shed="ssh -t root@192.168.0.224 herdr"
 
 alias ..='cd ../'
 alias ...='cd ../../'
