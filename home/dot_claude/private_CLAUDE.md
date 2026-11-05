@@ -13,10 +13,13 @@
 - Scale testing to risk: the changed area's tests, not the whole suite.
 - Check once; don't confirm the same thing several ways.
 - Report briefly what you ran. Text-only edits need no test run.
+- New logic with a branch, loop, parser, money or security leaves one small test behind.
 
 ## Code design
 
 - Build only what was asked: no speculative options or abstractions.
+- Before writing new code, reuse in this order: what the codebase already has, the standard library or a platform feature, an installed dependency. Never add a dependency for a few lines.
+- Bug fix: find every caller of the function you touch, then fix the root cause once in the shared code.
 - Don't hide failures: no swallowed errors or silent fallbacks.
 - Extract a helper at the third copy, not before.
 - Delete what your change made dead, in the same change.
