@@ -24,7 +24,13 @@ Pick the kind of page from the job before any styling. The bans below apply to a
 - **Clean site** (a homepage, a project or product page): the clean references in "Aim for".
 - **Concept page** (something personal and expressive, like a review page): the concept direction in "Aim for", with the concept exception.
 
-When it isn't obvious which one, ask me.
+Then pick the tone, which is separate from the kind:
+
+- **Professional** (work, talks, anything a client or employer reads): clean and restrained. Clean references, at most one accent color, no scribbles or concept tricks. Company work follows the company brand.
+- **Personal and weird** (my own projects, reviews, homelab pages): loud pinks, scribbles, a concept, surprises.
+- Many of my own pages sit in between: a clean base with one or two personal touches (a pink accent, a scribble, a now-playing widget).
+
+When the kind or the tone isn't obvious, ask me.
 
 ## Banned
 
