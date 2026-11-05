@@ -30,4 +30,4 @@
   - Anyone else's: never push to main; push a branch and open a draft PR.
   - No remote: commit only.
 
-Situational rules: `~/.claude/knowledge/index.md`.
+Situational rules (incl. web design: read before building any page or UI): `~/.claude/knowledge/index.md`.
