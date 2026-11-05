@@ -1,0 +1,44 @@
+# Ghostty overrides for the Herdr window only, opened by `shed` (dot_zshrc).
+# Loaded on top of config.ghostty, so theme and font match. Here your usual
+# Ghostty shortcuts drive Herdr: each sends Herdr's prefix (Ctrl+b = \x02) and
+# key, so there are no Herdr shortcuts to learn. Normal Ghostty windows are
+# unaffected. Herdr side: dotfiles home/dot_config/herdr/config.toml.tmpl.
+title = Herdr (claude-dev)
+
+# Panes: split right / down, close, zoom
+keybind = cmd+d=text:\x02v
+keybind = cmd+shift+d=text:\x02-
+keybind = cmd+w=text:\x02x
+keybind = cmd+shift+enter=text:\x02z
+# Move between panes: Cmd+[ / Cmd+] and Cmd+Option+arrows
+keybind = cmd+[=text:\x02h
+keybind = cmd+]=text:\x02l
+keybind = cmd+alt+arrow_left=text:\x02h
+keybind = cmd+alt+arrow_right=text:\x02l
+keybind = cmd+alt+arrow_up=text:\x02k
+keybind = cmd+alt+arrow_down=text:\x02j
+# Tabs: new, previous / next, jump to 1-9
+keybind = cmd+t=text:\x02c
+keybind = cmd+shift+[=text:\x02p
+keybind = cmd+shift+]=text:\x02n
+keybind = cmd+1=text:\x021
+keybind = cmd+digit_1=text:\x021
+keybind = cmd+2=text:\x022
+keybind = cmd+digit_2=text:\x022
+keybind = cmd+3=text:\x023
+keybind = cmd+digit_3=text:\x023
+keybind = cmd+4=text:\x024
+keybind = cmd+digit_4=text:\x024
+keybind = cmd+5=text:\x025
+keybind = cmd+digit_5=text:\x025
+keybind = cmd+6=text:\x026
+keybind = cmd+digit_6=text:\x026
+keybind = cmd+7=text:\x027
+keybind = cmd+digit_7=text:\x027
+keybind = cmd+8=text:\x028
+keybind = cmd+digit_8=text:\x028
+keybind = cmd+9=text:\x029
+keybind = cmd+digit_9=text:\x029
+# Agents in a new pane to the right: Cmd+Shift+A = Claude, Cmd+Shift+O = OpenCode
+keybind = cmd+shift+a=text:\x02a
+keybind = cmd+shift+o=text:\x02O

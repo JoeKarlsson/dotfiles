@@ -72,8 +72,13 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cs="cd ~/claude-skills"
 alias skills="cd ~/claude-skills"
-# claude-dev (CT 263): SSH in and attach to the Herdr session (Tailscale off-LAN)
-alias shed="ssh -t root@192.168.0.224 herdr"
+# claude-dev (CT 263): open a Herdr window attached to its session (Tailscale
+# off-LAN). That window loads herdr.ghostty, so Cmd+D/Cmd+T/Cmd+W etc. drive Herdr.
+shed() {
+  open -na Ghostty.app --args \
+    --config-file="$HOME/Library/Application Support/com.mitchellh.ghostty/herdr.ghostty" \
+    -e ssh -t root@192.168.0.224 herdr
+}
 
 alias ..='cd ../'
 alias ...='cd ../../'
