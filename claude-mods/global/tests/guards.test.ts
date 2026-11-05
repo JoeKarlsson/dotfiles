@@ -2,6 +2,7 @@ import { expect, test } from 'claude-code/testing'
 
 import { isPost, phraseFindings } from '../hooks/blog-check'
 import { commitSubject, formatDenial } from '../hooks/commit-format'
+import { designFindings, isWebFile } from '../hooks/design-check'
 import { keystrokeDenial } from '../hooks/keystroke-guard'
 import { unpushedText } from '../hooks/unpushed'
 import { openNames, writesDoc } from '../hooks/word-guard'
@@ -76,4 +77,36 @@ test('keystroke guard: System Events keystrokes are refused, AX actions pass', a
   expect(keystrokeDenial(`osascript -e 'tell application "System Events" to key code 44'`)).toContain('postToPid')
   expect(keystrokeDenial(`osascript -e 'tell application "System Events" to perform action "AXPress" of button 1'`)).toBe(null)
   expect(keystrokeDenial('grep -rn keystroke macos/')).toBe(null)
+})
+
+test('design check: web files, not build output', async () => {
+  expect(isWebFile('/r/src/pages/index.astro')).toBe(true)
+  expect(isWebFile('/tmp/scratch/page.html')).toBe(true)
+  expect(isWebFile('/r/node_modules/x/a.css')).toBe(false)
+  expect(isWebFile('/r/public/app.min.css')).toBe(false)
+  expect(isWebFile('/r/README.md')).toBe(false)
+})
+
+test('design check: banned patterns are found, plain styles pass', async () => {
+  const bad = [
+    'body { background: linear-gradient(90deg, #6366f1, #a855f7); }',
+    'h1 { letter-spacing: -0.02em; }',
+    '<p class="text-xs uppercase tracking-wide">Features</p>',
+    '.card { backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0,0,0,.1); border-radius: 24px; }',
+    '<h2>Build faster.</h2>',
+    '<h2>01 / Features</h2>',
+    '<span>✨ New</span>',
+    '.label { font-family: "JetBrains Mono", monospace; }',
+  ].join('\n')
+  const found = designFindings(bad).join('\n')
+  for (const n of ['#19', '#21', '#4', '#18', '#22', '#23', '#16', '#7', '#20', '#12', '#25', '#17']) expect(found).toContain(n)
+  const good = [
+    'body { background: #fafaf7; color: #1a1a1a; font-family: "Source Serif 4", Georgia, serif; }',
+    'pre, code { font-family: ui-monospace, monospace; }',
+    '.btn { border-radius: 4px; }',
+    '<h2>Build faster</h2>',
+    '<p>© 2026 Joe Karlsson. Version 1.2.</p>',
+    'const shadowRoot = el.attachShadow({ mode: "open" })',
+  ].join('\n')
+  expect(designFindings(good)).toEqual([])
 })

@@ -2,6 +2,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
+import { registerDesignCheck } from './design-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
@@ -24,6 +25,7 @@ export const register: Register = on => {
   registerWordGuard(on)
   registerUnpushed(on)
   registerBlogCheck(on)
+  registerDesignCheck(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
