@@ -107,8 +107,10 @@
   "env": {
 {{- if eq .machine "claude-dev" }}
     "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.workingTree }}/claude-mods/global:/root/claude-skills-joekarlsson/.claude/mods/homelab"
+{{- else if eq .machine "work" }}
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude-skills/.claude/mods/homelab"
 {{- else }}
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude/.claude/mods/homelab:~/claude-skills/.claude/mods/homelab"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude/.claude/mods/homelab"
 {{- end }}
   },
   "skillOverrides": {

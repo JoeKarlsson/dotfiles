@@ -22,7 +22,8 @@ The status line shows only when there's something to act on.
 instead of blocking every call. Don't remove a classic hook that a mod overlaps.
 
 **Loading.** `CLAUDE_CODE_PLUGIN_DIRS` in `home/dot_claude/private_settings.json.tmpl` (Macs)
-lists the mod folders, `:`-separated. Windows sets it in
+lists the mod folders, `:`-separated, one homelab path per machine (work Mac `~/claude-skills`, personal Mac `~/claude`;
+on the work Mac `~/claude` is a symlink to it, and listing both loads the mod twice). Windows sets it in
 `home/.chezmoitemplates/claude-settings-windows.json`, `;`-separated: there `:`
 is read as part of one path and neither mod loads. claude-dev gets it from the same template,
 with its own paths. A folder that doesn't exist on a machine is skipped silently.
