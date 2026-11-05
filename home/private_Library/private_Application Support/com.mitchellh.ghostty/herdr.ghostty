@@ -4,6 +4,9 @@
 # key, so there are no Herdr shortcuts to learn. Normal Ghostty windows are
 # unaffected. Herdr side: dotfiles home/dot_config/herdr/config.toml.tmpl.
 title = Herdr (claude-dev)
+# One plain window running Herdr: never restore a saved Ghostty layout (that
+# brought back extra local-shell splits on 2026-11-04 and keys went to them).
+window-save-state = never
 
 # Panes: split right / down, close, zoom
 keybind = cmd+d=text:\x02v
