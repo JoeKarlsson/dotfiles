@@ -57,14 +57,15 @@ For my personal sites (joekarlsson.com, side projects, homelab pages). Work site
 
 - **One concept, pushed all the way, taken from my life.** A video-store look (rental cards, shelf tags, staff picks, VHS spines) is a favorite for anything about films and my Letterboxd reviews.
 - **Dark mode first.** Light mode, if any, is the alternate.
-- **Punk and handmade:** xerox and cut-and-paste, tape, stickers, imperfect edges, things that look made by a person.
-- **Cy Twombly:** scrawled, gestural marks and handwriting over big quiet fields. Use my own scanned handwriting or hand-drawn SVG strokes; never generate fake handwriting.
-- **Rothko:** large fields of deep, dark color (maroons, blacks, oxblood, deep orange) with soft, uneven painted edges, for mood and section breaks. Use a real painted or scanned texture, not a CSS gradient.
+- **Loud color, pinks first:** hot pink, magenta, bubblegum, with tangerine as the second loud color. Dark, moody maroon/oxblood palettes fell flat (2026-11-04 mockup).
+- **Punk and handmade:** cut-and-paste, tape, stickers, stamps, imperfect edges, things that look made by a person. No halftone or dithered photos: they didn't look right to me (2026-11-04). Real photos go up as they are, taped or collaged.
+- **Cy Twombly:** scrawled, gestural marks and handwriting over big quiet fields, and running over photos and across sections. I like these scrawls; use them generously. Use my own scanned handwriting or hand-drawn SVG strokes; never generate fake handwriting.
+- **Rothko:** large stacked fields of loud color (hot pink over tangerine, say) on a near-black ground, with soft, uneven brushed edges, for heroes and section breaks. Use a real painted or scanned texture, not a CSS gradient.
 - **A little subconscious and dreamlike:** odd juxtapositions and surprises, not tidy grids.
-- **Doable without being an illustrator.** I'm not a visual artist: build it from real photos (filtered, halftoned, collaged), type, color, texture scans and code, not commissioned-looking illustration.
+- **Doable without being an illustrator.** I'm not a visual artist: build it from real photos (as they are, cropped, collaged), type, color, texture scans and code, not commissioned-looking illustration.
 
 References:
-- [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS.
+- [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS. Take the concept-from-the-subject idea and the loud pink from it, not the halftone.
 - [melonland.net](https://melonland.net): hand-made personal web with charm built from found pieces.
 
 ## Page copy
