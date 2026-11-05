@@ -17,8 +17,11 @@
 .config/atuin
 .config/mise
 .config/topgrade.toml
-# OpenCode runs only on the Mac (LiteLLM key comes from the macOS Keychain)
+# OpenCode: the Mac and claude-dev (CT 263) only. Its LiteLLM key comes from the
+# macOS Keychain on the Mac and from /root/.claude-env (tofu) on claude-dev.
+{{- if ne .machine "claude-dev" }}
 .config/opencode
+{{- end }}
 Library
 .local/share/obsbot-autotrack
 # /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
