@@ -17,7 +17,6 @@ const CHECKS: [RegExp, string, ((line: string) => boolean)?][] = [
   [/\b(linear|radial|conic)-gradient\(|\bbg-(gradient|linear|radial|conic)-/, 'gradient (#19): use a solid color'],
   [/background-clip:\s*text|\bbg-clip-text\b/, 'gradient text (#24): use a solid text color'],
   [/letter-spacing:\s*-|\btracking-(tight|tighter)\b|\btracking-\[-/, 'negative letter-spacing (#4): use normal tracking'],
-  [/text-transform:\s*uppercase|(^|[\s"'`])uppercase([\s"'`]|$)/, 'ALL CAPS (#18): use sentence case'],
   [/Instrument Serif/i, 'Instrument Serif (#3)'],
   [/#(6366f1|4f46e5|818cf8|8b5cf6|7c3aed|a78bfa|a855f7|9333ea)\b|\b(indigo|violet|purple)-\d{2,3}\b/i, 'indigo/violet accent (#21)'],
   [/backdrop-filter|\bbackdrop-blur/, 'glassmorphism (#22): use opaque surfaces'],
