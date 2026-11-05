@@ -74,9 +74,10 @@ Not every page needs a concept. For a normal site, I like the clean, confident l
 
 - [paulkalkbrenner.net](https://www.paulkalkbrenner.net/): the model. White space everywhere, big black grotesque type, a tiny photo set inline inside his name, a "now playing" music widget with a sound toggle, and large real photos.
 - [mobbin.com](https://mobbin.com/): bold black headline with small app icons set inline between the words; lots of white space.
+- [syntetica.co](https://www.syntetica.co/): headlines that mix a light serif with heavy sans words for emphasis ("Nylon that goes **on** and **on**"), and big close-up photos of the actual material. Skip its scroll-triggered blur-in and pill button.
 - [privy.io](https://www.privy.io/): clean type and strong hierarchy. Take only that: its purple gradients, fake dashboard mockups, centered two-button hero and gray-faded headline words are all on the banned list.
 
-What carries over: generous white space, one big confident grotesque typeface, small playful details (inline images or icons in a headline, a now-playing widget), and real photos instead of illustration.
+What carries over: generous white space, one big confident grotesque typeface, small playful details (inline images or icons in a headline, a serif/sans mix inside one headline, a now-playing widget), and real photos instead of illustration.
 
 ## Page copy
 
