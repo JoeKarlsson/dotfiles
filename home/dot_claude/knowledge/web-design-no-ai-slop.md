@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: "Web design: banned AI-slop patterns, and what Joe likes"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 28 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, squircles, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; Joe's taste for his own sites (video store, punk, handmade, Twombly, Rothko, dark mode) with references"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 27 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; Joe's taste for his own sites (video store, punk, handmade, Twombly, Rothko, dark mode) with references"
 tags: [design, web, css, frontend, artifacts]
 sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
@@ -51,7 +51,7 @@ When the kind or the tone isn't obvious, ask me.
 | 13 | **Eyebrows**: the small kicker label above a heading | Just the heading. |
 | 14 | **Dithering**: dithered/halftone images and textures | Real photos or plain images, or none. |
 | 15 | **ASCII images**: ASCII art, box-drawing art, text-mode illustrations | Real images or none. |
-| 16 | **Squircles**: superellipse/heavily rounded corners on cards, icons, buttons | Square corners or a small, consistent radius (2–6px). |
+| 16 | *Retired 2026-11-06: rounded corners are fine, any radius.* | |
 | 17 | **Excessive mono fonts**: monospace for labels, nav, metadata, body | Monospace only for code. |
 | 18 | **ALL CAPS subtitles**: uppercase, letter-spaced labels and subheads | Sentence case. |
 | 19 | **Gradient backgrounds**: gradient fills, mesh/aurora blobs, glows | Solid background colors. |
@@ -110,4 +110,4 @@ The same rules apply to the words. Run all page copy (headings, buttons, body) t
 
 ## Checking a page
 
-Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `border-radius` above 8px, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.
+Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.

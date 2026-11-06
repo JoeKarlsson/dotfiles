@@ -23,7 +23,8 @@ const CHECKS: [RegExp, string, ((line: string) => boolean)?][] = [
   [/box-shadow|drop-shadow|\bshadow(-(sm|md|lg|xl|2xl|inner))?\b(?![-\w])/, 'shadow/glow (#23): none, except menus and dialogs'],
   [/IntersectionObserver|data-aos|animation-timeline:\s*view|\bwhileInView\b|ScrollTrigger/, 'scroll animation (#26): content is just there'],
   [/monospace|\bfont-mono\b|(JetBrains|IBM Plex|Space|Fira|SF|Geist|Roboto) Mono|Fira Code/, 'monospace (#17): code only', line => !CODE_SELECTOR.test(line)],
-  [/border-radius:\s*(9\d*|[1-9]\d+)px|border-radius:\s*(0?\.[6-9]|[1-9])\d*rem|border-radius:\s*50%|\brounded-(xl|2xl|3xl|full)\b/, 'large radius (#16 squircles, #1 pills): 2-6px or square'],
+  // Rounded corners are allowed (#16 retired 2026-11-06); only the full pill shape is flagged
+  [/\brounded-full\b|border-radius:\s*9{3,}px/, 'pill shape (#1): plain text or a simple label'],
   [/\bopacity:\s*0?\.\d|rgba?\([^)]*[,/]\s*0?\.\d+\s*\)|\b(text|bg|border)-[a-z]+(-\d+)?\/\d+\b/, 'opacity/alpha color (#7): use a solid color'],
   [/dither/i, 'dithering (#14)'],
   [/[─│┌┐└┘├┤┬┴┼═║╔╗╚╝]{3,}/, 'ASCII/box-drawing art (#15)'],

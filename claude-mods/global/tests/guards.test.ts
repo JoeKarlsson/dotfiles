@@ -99,12 +99,13 @@ test('design check: banned patterns are found, plain styles pass', async () => {
     '.label { font-family: "JetBrains Mono", monospace; }',
   ].join('\n')
   const found = designFindings(bad).join('\n')
-  for (const n of ['#19', '#21', '#4', '#22', '#23', '#16', '#7', '#20', '#12', '#25', '#17']) expect(found).toContain(n)
+  for (const n of ['#19', '#21', '#4', '#22', '#23', '#7', '#20', '#12', '#25', '#17']) expect(found).toContain(n)
   const good = [
     'body { background: #fafaf7; color: #1a1a1a; font-family: "Source Serif 4", Georgia, serif; }',
     '.ui { font-family: "Inter", system-ui, sans-serif; }',
     'pre, code { font-family: ui-monospace, monospace; }',
     '.btn { border-radius: 4px; }',
+    '.card { border-radius: 24px; } <div class="rounded-xl">',
     '<h2>Build faster</h2>',
     '<p>© 2026 Joe Karlsson. Version 1.2.</p>',
     'const shadowRoot = el.attachShadow({ mode: "open" })',
