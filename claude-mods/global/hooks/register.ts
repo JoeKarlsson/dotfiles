@@ -4,6 +4,7 @@ import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
 import { registerDesignCheck } from './design-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
+import { registerMarketing } from './marketing'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { registerPonytail } from './ponytail'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
@@ -30,6 +31,7 @@ export const register: Register = on => {
   registerBlogCheck(on)
   registerDesignCheck(on)
   registerPonytail(on)
+  registerMarketing(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)

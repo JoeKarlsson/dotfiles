@@ -32,6 +32,10 @@ link() { # <link path> <target in the repo>
 }
 
 link "$HOME/.claude/skills" "$R/skills"
+# Subagents a skill ships in its agents/ folder (e.g. personal-marketing's marketing-strategist).
+for a in "$R"/skills/*/agents/*.md; do
+  [ -f "$a" ] && link "$HOME/.claude/agents/$(basename "$a")" "$a"
+done
 # Make `npx skills` links work through that link and keep them out of git.
 [ -x "$R/fix-skill-links.sh" ] && "$R/fix-skill-links.sh"
 # The homelab repo: ~/claude on the laptop, ~/claude-skills on the work Mac,
