@@ -5,6 +5,7 @@ import { registerCommitFormat } from './commit-format'
 import { registerDesignCheck } from './design-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
+import { registerPonytail } from './ponytail'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
 import { registerSensitiveShell } from './sensitive-shell'
 import { notifyUnpushedAtEnd, registerUnpushed, unpushedLabel } from './unpushed'
@@ -28,6 +29,7 @@ export const register: Register = on => {
   registerUnpushed(on)
   registerBlogCheck(on)
   registerDesignCheck(on)
+  registerPonytail(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
