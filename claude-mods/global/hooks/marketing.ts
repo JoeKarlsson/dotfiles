@@ -52,7 +52,7 @@ export const note = (topics: Topic[]) =>
 // /social's repurpose mode (follow-up posts from one source, 2026-11-10). /social is
 // a slash command, so asking for it in plain words never loaded it.
 export const REPURPOSE =
-  /\brepurpos\w*\b|\bfollow[- ]up posts?\b|\bmore posts (out of|from)\b|\b(a week|weeks?) of posts\b|\bturn (this|it|that|my|the)\b[^.?!\n]{0,40}\binto (more |several |a few |a week of )?posts\b/i
+  /\brepurpos\w*\b[^.?!\n]{0,30}\b(this|it|post|blog|talk|article|newsletter|issue|video|thread|recording)\b|\bfollow[- ]up posts?\b|\bmore posts (out of|from)\b|\b(a week|weeks?) of posts\b|\bturn (this|it|that|my|the)\b[^.?!\n]{0,40}\binto (more |several |a few |a week of )?posts\b/i
 
 export const repurposeNote =
   'Repurpose (global mod): load the social skill (Skill tool, skill "social") and follow its "Repurpose: follow-up posts from one source" section.'
@@ -64,9 +64,10 @@ export function registerMarketing(on: On) {
     const notes: string[] = []
     const video = videoTopicsFor(e.text).filter(t => !sent.has(t.key))
     if (video.length) notes.push(videoNote(video))
-    const fresh = isCdata(await $.session.cwd()) ? [] : topicsFor(e.text).filter(t => !sent.has(t.key))
+    const cdata = isCdata(await $.session.cwd())
+    const fresh = cdata ? [] : topicsFor(e.text).filter(t => !sent.has(t.key))
     if (fresh.length) notes.push(note(fresh))
-    const repurpose = !sent.has('repurpose') && !isCdata(await $.session.cwd()) && REPURPOSE.test(e.text)
+    const repurpose = !sent.has('repurpose') && !cdata && REPURPOSE.test(e.text)
     if (repurpose) {
       notes.push(repurposeNote)
       sent.add('repurpose')

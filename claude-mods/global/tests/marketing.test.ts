@@ -39,6 +39,8 @@ test('asking for follow-up posts loads /social repurpose mode', async () => {
   expect(REPURPOSE.test('write some follow-up posts for the DBeaver launch')).toBe(true)
   expect(REPURPOSE.test('turn this blog post into a week of posts')).toBe(true)
   expect(REPURPOSE.test('follow up on the PR')).toBe(false)
+  expect(REPURPOSE.test('repurpose the old NUC as a Proxmox node')).toBe(false)
+  expect(REPURPOSE.test('repurpose this https://www.joekarlsson.com/blog/doom/')).toBe(true)
   expect(REPURPOSE.test('fix the Postiz scheduler')).toBe(false)
   expect(REPURPOSE.test('how many posts are queued this week')).toBe(false)
   expect(repurposeNote).toContain('skill "social"')
