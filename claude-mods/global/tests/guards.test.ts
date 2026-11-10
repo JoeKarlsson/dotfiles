@@ -72,9 +72,9 @@ test('social drafts: the opener of each platform, with its length', async () => 
     '## X', '### 1', 'Thanks @[CData Software](urn:li:organization:2409769).',
   ].join('\n')
   expect(firstLines(draft)).toEqual([
-    'LinkedIn: "I turned Doom into an MCP server." (33 chars)',
-    `Bluesky: "${'x'.repeat(150)}" (150 chars, past the 140-char fold)`,
-    'X: "Thanks @CData Software." (23 chars)',
+    'LinkedIn (33 chars): "I turned Doom into an MCP server."',
+    `Bluesky (150 chars): above the fold "${'x'.repeat(140)}…"`,
+    'X (23 chars): "Thanks @CData Software."',
   ])
 })
 

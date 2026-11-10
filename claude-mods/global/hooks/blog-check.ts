@@ -26,7 +26,12 @@ export function firstLines(text: string): string[] {
     if (inFirst && line.trim()) {
       // LinkedIn mention markup shows as @Name, so count what readers see.
       const l = line.trim().replace(/@\[([^\]]+)\]\(urn:[^)]+\)/g, '@$1')
-      out.push(`${platform}: "${l.length > 160 ? l.slice(0, 160) + '…' : l}" (${l.length} chars${l.length > 140 ? ', past the 140-char fold' : ''})`)
+      // Past the fold, show what readers see before "see more": the moment has to start there.
+      out.push(
+        l.length > 140
+          ? `${platform} (${l.length} chars): above the fold "${l.slice(0, 140)}…"`
+          : `${platform} (${l.length} chars): "${l}"`,
+      )
       inFirst = false
     }
   }
@@ -115,7 +120,7 @@ export async function checkPost($: EngineInterface, path: string, opts: { vale: 
   if (openers.length) {
     sections.push(
       [
-        "Openers (run /social Rule 4's first-line tests on each: would a developer keep reading after five words, does it work as a post alone, what's the specific reason to forward it):",
+        "Openers (run /social Rule 4's first-line tests on each: would a developer keep reading after five words, does it work as a post alone, what's the specific reason to forward it; the concrete moment must start above the 140-char fold):",
         ...openers.map(l => `  ${l}`),
       ].join('\n'),
     )
