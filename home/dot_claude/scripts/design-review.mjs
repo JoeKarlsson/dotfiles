@@ -150,8 +150,31 @@ function measurePage(isPhone) {
 					.map(({ el, w }) => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} "${label(el)}" ${Math.round(w)}px wide`)
 			: [];
 
+	// Fitts: links and buttons on the first screen whose middle is covered by something
+	// else (a big title's line box, an overlay), so a click there misses them
+	const coveredTargets = interactive
+		.filter((el) => {
+			const r = el.getBoundingClientRect();
+			if (r.top < 0 || r.bottom > innerHeight || r.right > innerWidth) return false;
+			const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+			return hit && hit !== el && !el.contains(hit) && !hit.contains(el);
+		})
+		.map((el) => {
+			const r = el.getBoundingClientRect();
+			const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+			return `${el.tagName.toLowerCase()} "${label(el)}" is under ${hit.tagName.toLowerCase()} "${label(hit)}"`;
+		});
+
+	// Focus visible: focusable things that are see-through until hover
+	const hiddenFocusables = interactive
+		.filter((el) => Number(getComputedStyle(el).opacity) === 0)
+		.map((el) => `${el.tagName.toLowerCase()}.${[...el.classList].join('.')} "${label(el)}"`);
+
 	return {
 		title: document.title,
+		coveredTargets: coveredTargets.slice(0, 15),
+		hiddenFocusables: [...new Set(hiddenFocusables)].slice(0, 10),
+		hiddenFocusableCount: hiddenFocusables.length,
 		headerBox,
 		titleOverflow,
 		longLines: longLines.slice(0, 15),
