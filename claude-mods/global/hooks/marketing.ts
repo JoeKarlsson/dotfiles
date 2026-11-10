@@ -1,5 +1,7 @@
 import type { On } from 'claude-code'
 
+import { videoNote, videoTopicsFor } from './video'
+
 // personal-marketing (~/.claude/skills/personal-marketing) merges six personal-brand
 // skills that were never loaded in 60 days (2026-09-11 to 2026-11-10). A prompt
 // about ideas, launches, talks, audience growth or positioning now gets a note
@@ -51,9 +53,13 @@ export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
     if (e.command || e.isMeta) return next(e)
-    const fresh = topicsFor(e.text).filter(t => !sent.has(t.key))
-    if (!fresh.length || isCdata(await $.session.cwd())) return next(e)
-    for (const t of fresh) sent.add(t.key)
-    return next({ ...e, context: [...(e.context ?? []), note(fresh)] })
+    const notes: string[] = []
+    const video = videoTopicsFor(e.text).filter(t => !sent.has(t.key))
+    if (video.length) notes.push(videoNote(video))
+    const fresh = isCdata(await $.session.cwd()) ? [] : topicsFor(e.text).filter(t => !sent.has(t.key))
+    if (fresh.length) notes.push(note(fresh))
+    if (!notes.length) return next(e)
+    for (const t of [...video, ...fresh]) sent.add(t.key)
+    return next({ ...e, context: [...(e.context ?? []), ...notes] })
   })
 }
