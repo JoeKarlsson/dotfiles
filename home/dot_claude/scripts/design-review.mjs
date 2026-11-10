@@ -104,8 +104,59 @@ function measurePage(isPhone) {
 		return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 8);
 	};
 
+	// Header consistency: where the page's own header sits, to compare across pages
+	const pageHeader = document.querySelector('main header');
+	const headerBox = pageHeader
+		? (({ left, top, width }) => ({ left: Math.round(left), top: Math.round(top + scrollY), width: Math.round(width) }))(pageHeader.getBoundingClientRect())
+		: null;
+
+	// Pragnanz: display titles whose text runs past the box that holds them
+	const titleOverflow = [...document.querySelectorAll('h1, h2')]
+		.filter(visible)
+		.map((h) => {
+			const range = document.createRange();
+			range.selectNodeContents(h);
+			const text = range.getBoundingClientRect();
+			let box = h.parentElement;
+			while (box && getComputedStyle(box).display === 'contents') box = box.parentElement;
+			const limit = box ? box.getBoundingClientRect().right - parseFloat(getComputedStyle(box).paddingRight) : innerWidth;
+			return { h, over: Math.round(text.right - Math.min(limit, innerWidth)) };
+		})
+		.filter(({ over }) => over > 2)
+		.map(({ h, over }) => `${h.tagName} "${label(h)}" runs ${over}px past its container`);
+
+	// Line length: running text wider than about 75 characters a line
+	const longLines = [...document.querySelectorAll('main p, main li')]
+		.filter((el) => visible(el) && el.textContent.trim().length > 160 && !el.closest('nav, pre, table'))
+		.map((el) => {
+			const probe = document.createElement('span');
+			probe.textContent = '0'.repeat(20);
+			probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+			el.appendChild(probe);
+			const ch = probe.getBoundingClientRect().width / 20;
+			probe.remove();
+			return { el, chars: Math.round(el.getBoundingClientRect().width / ch) };
+		})
+		.filter(({ chars }) => chars > 75)
+		.map(({ el, chars }) => `${el.tagName.toLowerCase()} "${label(el)}" ~${chars}ch a line`);
+
+	// Big screens: top-level blocks that run edge to edge
+	const wideSections =
+		innerWidth >= 2000
+			? [...document.querySelectorAll('main > *, main > * > section, body > * > section')]
+					.filter((el) => visible(el) && !['absolute', 'fixed'].includes(getComputedStyle(el).position) && label(el))
+					.map((el) => ({ el, w: el.getBoundingClientRect().width }))
+					.filter(({ w }) => w > 1600)
+					.map(({ el, w }) => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} "${label(el)}" ${Math.round(w)}px wide`)
+			: [];
+
 	return {
 		title: document.title,
+		headerBox,
+		titleOverflow,
+		longLines: longLines.slice(0, 15),
+		longLineCount: longLines.length,
+		wideSections: wideSections.slice(0, 10),
 		pageHeight: document.documentElement.scrollHeight,
 		horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
 		h1Count: document.querySelectorAll('h1').length,

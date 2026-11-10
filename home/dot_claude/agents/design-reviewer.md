@@ -32,7 +32,7 @@ Run the measurement script with every URL at once, writing to your scratchpad (n
 node ~/.claude/scripts/design-review.mjs <scratch-dir> <url> [url...]
 ```
 
-It saves a viewport and a full-page screenshot per page at desktop (1440), phone (iPhone 13) and wide (2560, viewport only), and `report.json` with, per page and width: status, TTFB, LCP, CLS, script errors, horizontal overflow, headings, nav items and their position, clickable choices on the first screen, tap targets under 44px (phone) or 24px (desktop) with sizes and positions, form fields (type, autocomplete, label, required), distinct link styles inside `<main>` and button styles page-wide, and axe-core WCAG violations (desktop only; other widths say "not run"). Off-screen elements such as an unfocused skip link are left out, and text skips `aria-hidden` parts.
+It saves a viewport and a full-page screenshot per page at desktop (1440), phone (iPhone 13) and wide (2560, viewport only), and `report.json` with, per page and width: status, TTFB, LCP, CLS, script errors, horizontal overflow, headings, nav items and their position, clickable choices on the first screen, tap targets under 44px (phone) or 24px (desktop) with sizes and positions, form fields (type, autocomplete, label, required), distinct link styles inside `<main>` and button styles page-wide, and axe-core WCAG violations (desktop only; other widths say "not run"). Off-screen elements such as an unfocused skip link are left out, and text skips `aria-hidden` parts. It also records the page header's box (`headerBox`: left, top and width of the first `header` in `main`) so you can compare pages, display titles that run past their container (`titleOverflow`), paragraphs and list items wider than about 75 characters a line (`longLines`), and, at 2560, top-level sections wider than 1600px (`wideSections`).
 
 Then run the Impeccable detector (github.com/pbakaus/impeccable): 62 fixed rules for AI-design tells and layout problems that screenshots hide, such as one-word last lines, unbalanced headings, images buried at opacity 0, low contrast, nested cards and monotonous spacing. Run it from your scratch directory against each URL, plus the page's source files when you have a repo:
 
@@ -47,12 +47,19 @@ Exit 2 means findings, 0 clean, 1 couldn't scan. Never run its `install`, `init`
 - **Look at every screenshot.** The viewport shots are what a visitor sees first; read the full-page ones for structure and the end of the page. Full-page phone shots get downscaled hard, so for detail on a long page, take an extra screenshot clipped to the area in question.
 - **Walk the main task** on each page (find a post, subscribe, contact, get back home) and note every step, jump and dead end. Never submit a form that creates a real record (a subscription, a message, an order); read its `action` and the code that handles it instead, and say you didn't submit it.
 - **Read the code** behind anything you flag, so the finding cites `path:line`.
+- **Compare across pages.** With several URLs, line up `headerBox` per width: every section page should share one left edge, top and width. A page that differs is a header-consistency finding, sub-pages and the 404 included.
+- **Hunt breakpoint gaps.** Grep the page's components for `hidden md:`, `hidden lg:`, `hidden xl:` and `max-md:hidden`. Each thing shown only above a width (a contents sidebar, a filter rail) needs a stand-in below it; check the phone and 1024px screenshots for one.
+- **Follow promises.** Where a card or link says what's on the other side ("and email", "every talk"), open the destination and confirm it's there.
+- **Try a wrong URL.** On a site with a 404, load a typo of a real path and see what the visitor gets. A local `astro preview` serves Astro's own 404 page, not the site's; on a local build, intercept the request in Playwright and serve `dist/404.html` instead.
+- **Third-party end screens.** When the main task ends on another service (a listmonk confirmation, a checkout), open its public page with a GET to judge it. Don't submit to reach it.
 
 ## Review
 
 Go law by law through `ux-laws.md`, then the slop, motion and checklist rules. For each rule, decide: passes, fails, or not checked (and why, such as "Pareto needs analytics").
 
 A finding needs evidence you actually observed: a measurement from `report.json`, a screenshot with where to look, or a `path:line`. If you can't point to it, don't report it. Don't report the same problem under three laws; name the one that fits best and mention the others in a word. A deliberate choice documented in a code comment or project doc is a judgment call, not a bug: list it separately, once.
+
+Before blaming a change for a failing test or regression, check it on a clean copy of `origin/main`: other sessions push to these repos all day, and a failure may predate the change. On a shared machine, a local preview port can belong to another session's checkout (`lsof -iTCP:<port> -sTCP:LISTEN`, then check that process's cwd) before you trust what it serves.
 
 Ignore pure taste disagreements not covered by the rules. Don't recommend new features, libraries or redesigns; the fix is the smallest change that makes the page follow the rule.
 

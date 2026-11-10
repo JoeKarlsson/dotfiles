@@ -22,11 +22,11 @@ Each law: what it says, how to build for it, how to check it.
 
 2. **Miller's law.** People hold about 7 (plus or minus 2) things in working memory.
    - Build: chunk. Phone numbers, codes and long forms come in groups; long pages get headings every screen or so; long posts get a table of contents. Never make someone remember something from a previous screen.
-   - Check: any list, form or menu over ~9 flat items gets grouped. Don't use "7" as a hard cap on nav; it's about chunking, not a magic number.
+   - Check: any list, form or menu over ~9 flat items gets grouped. Don't use "7" as a hard cap on nav; it's about chunking, not a magic number. A contents list shown only on wide screens (`hidden xl:block`) doesn't count for phones and laptops; check that every width has one.
 
 3. **Jakob's law.** People spend most of their time on other sites, so they expect yours to work the same way.
    - Build: logo top-left links home, nav at the top (or a Menu button top-right on phones), search looks like a search box, links look like links, the cart/subscribe/contact live where everyone puts them. Be weird in the art, not in the controls.
-   - Check: could a first-time visitor find home, nav, search and contact without thinking? Every unconventional control needs a reason.
+   - Check: could a first-time visitor find home, nav, search and contact without thinking? Every unconventional control needs a reason. Within a site, every page (the 404 and sub-pages included) shares one header pattern; a page that invents its own breaks the visitor's expectations of your site, not just the web's. Link labels promise what the destination has: an About card saying "and email" that leads to a page with no email is a broken promise.
 
 4. **Tesler's law** (conservation of complexity). Every system has complexity that can't be removed, only moved. Move it to the code, not the visitor.
    - Build: sensible defaults, auto-detect what you can (time zone, dark mode, country from locale), prefill, accept pasted input as-is, do the sorting and formatting yourself.
@@ -34,7 +34,7 @@ Each law: what it says, how to build for it, how to check it.
 
 5. **Occam's razor.** Of two designs that both work, pick the one with fewer parts.
    - Build: remove elements until removing one more would hurt. No duplicate CTAs, no decorative labels, no copy that repeats a heading.
-   - Check: delete each element in your head. If nobody would miss it, delete it for real.
+   - Check: delete each element in your head. If nobody would miss it, delete it for real. Common repeats: a page whose job is a form also showing the site footer's copy of that form; the same label in a ticker, a card and the heading under it.
 
 6. **Pareto principle** (80/20). Most use comes from a small share of features and content.
    - Build: find the 20% from analytics (top pages, top clicks, top searches) and make those the fastest to reach. Don't give rarely used pages equal billing in the nav.
@@ -48,7 +48,7 @@ Each law: what it says, how to build for it, how to check it.
 
 8. **Fitts's law.** Time to hit a target depends on its size and distance.
    - Build: tap targets at least 44x44px on phones (24px is the WCAG AA floor), generous padding on links and buttons, the whole card clickable rather than just its title, screen edges and corners for important controls on desktop.
-   - Check: run a script over every `a`, `button` and `input` on a phone viewport and list anything under 44px tall that isn't an inline text link.
+   - Check: run a script over every `a`, `button` and `input` on a phone viewport and list anything under 44px tall that isn't an inline text link, then the same at desktop for anything under 24px. Stacked list links (venue lists, gear lists, footer nav words) are where it fails; a link that sits alone on its row isn't inline. Lock the result in with an e2e assertion.
 
 9. **Minimize target distance.** Fitts's other half: put the next action where the pointer or thumb already is.
    - Build: submit buttons right after the last field, related actions next to the thing they act on, primary phone actions in the thumb zone (bottom and right for right-handed reach), "next post" at the end of the post, not back at the top.
@@ -60,7 +60,7 @@ Each law: what it says, how to build for it, how to check it.
 
 11. **Postel's law** (robustness principle). Be liberal in what you accept, conservative in what you send.
     - Build: accept phone numbers with or without dashes, emails with stray spaces, search with typos and any case; redirect old URLs instead of 404ing; output consistent, clean, predictable markup and data. Don't block a form for a format you could have fixed.
-    - Check: try a messy input in every field and an old URL. The site should either accept it or say exactly what to change.
+    - Check: try a messy input in every field and an old URL. The site should either accept it or say exactly what to change. Load a typo'd URL and see whether the 404 offers the closest real page; pull the real 404 paths from analytics and redirect the repeat ones.
 
 ## Grouping and perception (Gestalt)
 
@@ -92,7 +92,7 @@ Each law: what it says, how to build for it, how to check it.
 
 18. **Peak-end rule.** People judge an experience by its most intense moment and its end, not the average.
     - Build: design the emotional high (the demo, the reveal, the success message) and the ending (thank-you page, end of a post, confirmation email). A form's success screen matters more than its fields. Errors are peaks too: make them kind and fixable.
-    - Check: walk the main task to its last screen. If the last thing a visitor sees is a stock page, a raw JSON response or a dead end, fix that first.
+    - Check: walk the main task to its last screen. If the last thing a visitor sees is a stock page, a raw JSON response or a dead end, fix that first. When the end lives on another service (a newsletter's listmonk confirmation, a payment page), open its public page with a GET to see its styling; never submit a real signup to check.
 
 19. **Zeigarnik effect.** People remember unfinished tasks better than finished ones, and want to finish them.
     - Build: progress indicators on long reads and multi-step forms, "continue reading" and "part 2 of 3" cues, saved drafts. Use it to help people finish, never to nag (no fake "profile 80% complete" pressure).
