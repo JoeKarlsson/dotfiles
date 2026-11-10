@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { isPost, phraseFindings } from '../hooks/blog-check'
+import { firstLines, isPost, phraseFindings } from '../hooks/blog-check'
 import { commitSubject, formatDenial } from '../hooks/commit-format'
 import { designFindings, isWebFile } from '../hooks/design-check'
 import { keystrokeDenial } from '../hooks/keystroke-guard'
@@ -57,6 +57,25 @@ test('blog posts: site posts, newsletter, CData drafts, worktrees', async () => 
   expect(isPost('/Users/j/Documents/dev/cdata/skills/drafts/x-2026/x.md')).toBe(true)
   expect(isPost('/Users/j/Documents/dev/cdata/skills-wt-humanizer/drafts/x.md')).toBe(true)
   expect(isPost('/Users/j/Documents/dev/joe/joekarlsson.com/README.md')).toBe(false)
+  expect(isPost('/Users/j/social-drafts/2026-11-17-best-mcp-servers.md')).toBe(true)
+  expect(isPost('/Users/j/social-drafts/work/2026-11-20-x.md')).toBe(true)
+  expect(isPost('/root/newsletter-drafts/2026-11-18-issue.md')).toBe(true)
+  expect(isPost('/Users/j/social-drafts/backups/2026-11-10-move/x.md')).toBe(false)
+  expect(isPost('/Users/j/social-drafts/images/x/clip.mp4')).toBe(false)
+})
+
+test('social drafts: the opener of each platform, with its length', async () => {
+  const draft = [
+    '# Title', 'Source: https://x', '',
+    '## LinkedIn', '', '### 1', 'I turned Doom into an MCP server.', 'Second line.', '', '### 2', 'https://link', '',
+    '## Bluesky', '', '### 1', '', 'x'.repeat(150), '', '### 2', 'part two',
+    '## X', '### 1', 'Thanks @[CData Software](urn:li:organization:2409769).',
+  ].join('\n')
+  expect(firstLines(draft)).toEqual([
+    'LinkedIn: "I turned Doom into an MCP server." (33 chars)',
+    `Bluesky: "${'x'.repeat(150)}" (150 chars, past the 140-char fold)`,
+    'X: "Thanks @CData Software." (23 chars)',
+  ])
 })
 
 test('banned phrases: em dash and "That\'s real information", not in code', async () => {

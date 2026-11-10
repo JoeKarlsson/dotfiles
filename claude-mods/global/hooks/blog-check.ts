@@ -1,13 +1,37 @@
 import type { EngineInterface, On } from 'claude-code'
 
-// Joe's blog posts: joekarlsson.com posts and newsletter issues, CData drafts
-// (worktrees included). After each write the model gets what the linters found;
-// /blog-check runs them all and starts the full review.
+// Joe's writing: joekarlsson.com posts and newsletter issues, CData drafts
+// (worktrees included), and the /social and newsletter skill drafts in
+// ~/social-drafts and ~/newsletter-drafts (added 2026-11-10: those were linted
+// only when the skill remembered to). After each write the model gets what the
+// linters found; /blog-check runs them all and starts the full review.
 
 const SITE = /\/joekarlsson\.com\/(?:.+\/)?src\/content\/(?:blog|newsletter)\/.+\.mdx?$/
 const CDATA = /\/cdata\/skills[^/]*\/(?:.+\/)?drafts\/.+\.mdx?$/
+const SOCIAL = /\/social-drafts\/(?!backups\/).+\.md$/
+const NEWSLETTER = /\/newsletter-drafts\/(?!backups\/).+\.md$/
 
-export const isPost = (path: string) => SITE.test(path) || CDATA.test(path)
+export const isPost = (path: string) => SITE.test(path) || CDATA.test(path) || SOCIAL.test(path) || NEWSLETTER.test(path)
+
+// A /social draft's opener on each platform (the first line under `## <Platform>` /
+// `### 1`), so the model runs /social Rule 4's first-line tests on every revision.
+export function firstLines(text: string): string[] {
+  const out: string[] = []
+  let platform: string | null = null
+  let inFirst = false
+  for (const line of text.split('\n')) {
+    const h2 = line.match(/^## (.+)/)
+    if (h2) { platform = h2[1].trim(); inFirst = false; continue }
+    if (/^### /.test(line)) { inFirst = platform !== null && /^### 1\s*$/.test(line); continue }
+    if (inFirst && line.trim()) {
+      // LinkedIn mention markup shows as @Name, so count what readers see.
+      const l = line.trim().replace(/@\[([^\]]+)\]\(urn:[^)]+\)/g, '@$1')
+      out.push(`${platform}: "${l.length > 160 ? l.slice(0, 160) + '…' : l}" (${l.length} chars${l.length > 140 ? ', past the 140-char fold' : ''})`)
+      inFirst = false
+    }
+  }
+  return out
+}
 
 // Banned in all of Joe's writing. Vale misses both on joekarlsson.com (its em
 // dash rule covers headings only), so they are checked here everywhere.
@@ -87,6 +111,15 @@ export async function checkPost($: EngineInterface, path: string, opts: { vale: 
   ])
   const phrases = phraseFindings(text)
   const sections: string[] = []
+  const openers = SOCIAL.test(path) ? firstLines(text) : []
+  if (openers.length) {
+    sections.push(
+      [
+        "Openers (run /social Rule 4's first-line tests on each: would a developer keep reading after five words, does it work as a post alone, what's the specific reason to forward it):",
+        ...openers.map(l => `  ${l}`),
+      ].join('\n'),
+    )
+  }
   let count = phrases.length
   const add = (title: string, lines: string[]) => {
     if (!lines.length) return
@@ -138,7 +171,7 @@ export function registerBlogCheck(on: On) {
     const top = await repoTop($, e.file_path)
     const report = await checkPost($, e.file_path, { vale: !(await repoRunsVale($, top)), cap: 15 })
     if (!report.sections.length) return ran
-    const note = [`Blog post checks on ${e.file_path} (global mod). Fix what applies before calling the post done.`, ...report.sections].join('\n\n')
+    const note = [`Writing checks on ${e.file_path} (global mod). Fix what applies before calling it done.`, ...report.sections].join('\n\n')
     return { ...ran, context: [...(ran.context ?? []), note] }
   })
 
