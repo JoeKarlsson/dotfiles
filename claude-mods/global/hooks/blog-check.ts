@@ -167,7 +167,8 @@ export function registerBlogCheck(on: On) {
   on('tool.call', { tool: ['Edit', 'Write'] }, async ($, e, next) => {
     const ran = await next(e)
     if (ran.deny !== undefined || ran.isError || !isPost(e.file_path)) return ran
-    lastPost = e.file_path
+    // /blog-check with no path reviews a blog post; drafts get the after-write checks only.
+    if (SITE.test(e.file_path) || CDATA.test(e.file_path)) lastPost = e.file_path
     const top = await repoTop($, e.file_path)
     const report = await checkPost($, e.file_path, { vale: !(await repoRunsVale($, top)), cap: 15 })
     if (!report.sections.length) return ran
