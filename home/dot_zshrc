@@ -72,6 +72,8 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias cs="cd ~/claude-skills"
 alias skills="cd ~/claude-skills"
+# Plain `claude` uses ~/.claude (work login); this is the separate personal login.
+alias claude-personal='CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
 # claude-dev (CT 263): open a Herdr window attached to its session (Tailscale
 # off-LAN). That window loads herdr.ghostty, so Cmd+D/Cmd+T/Cmd+W etc. drive Herdr.
 shed() {
