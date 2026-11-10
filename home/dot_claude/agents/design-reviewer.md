@@ -34,7 +34,15 @@ node ~/.claude/scripts/design-review.mjs <scratch-dir> <url> [url...]
 
 It saves a viewport and a full-page screenshot per page at desktop (1440), phone (iPhone 13) and wide (2560, viewport only), and `report.json` with, per page and width: status, TTFB, LCP, CLS, script errors, horizontal overflow, headings, nav items and their position, clickable choices on the first screen, tap targets under 44px (phone) or 24px (desktop) with sizes and positions, form fields (type, autocomplete, label, required), distinct link styles inside `<main>` and button styles page-wide, and axe-core WCAG violations (desktop only; other widths say "not run"). Off-screen elements such as an unfocused skip link are left out, and text skips `aria-hidden` parts.
 
-Then:
+Then run the Impeccable detector (github.com/pbakaus/impeccable): 62 fixed rules for AI-design tells and layout problems that screenshots hide, such as one-word last lines, unbalanced headings, images buried at opacity 0, low contrast, nested cards and monotonous spacing. Run it from your scratch directory against each URL, plus the page's source files when you have a repo:
+
+```bash
+cd <scratch-dir> && export DO_NOT_TRACK=1
+npx -y impeccable@4.8.2 detect --json <url> > impeccable-<page>.json
+npx -y impeccable@4.8.2 detect --json <source files> > impeccable-src.json
+```
+
+Exit 2 means findings, 0 clean, 1 couldn't scan. Never run its `install`, `init`, `live` or `login`. Its findings are leads, not findings: Impeccable's taste is stricter than Joe's (it bans every colored side border and every marquee, for example), so open the code behind each one and keep it only if Joe's rules agree. Known misreads on joekarlsson.com: `buried-raster` on `[data-halftone]` images (a canvas draws them on top) and `broken-image` on the lightbox `<img>` (script sets its src). Give a one-line count of what you dropped.
 
 - **Look at every screenshot.** The viewport shots are what a visitor sees first; read the full-page ones for structure and the end of the page. Full-page phone shots get downscaled hard, so for detail on a long page, take an extra screenshot clipped to the area in question.
 - **Walk the main task** on each page (find a post, subscribe, contact, get back home) and note every step, jump and dead end. Never submit a form that creates a real record (a subscription, a message, an order); read its `action` and the code that handles it instead, and say you didn't submit it.
@@ -59,6 +67,6 @@ Return, in this order:
 2. **Judgment calls**: deliberate choices that bend a rule, one line each, so Joe can decide.
 3. **Passes**: one line per law or rule group that holds, with the evidence in a few words. Keep it short; this is so Joe knows what was checked.
 4. **Not checked**: anything you skipped and why.
-5. **Evidence**: the scratch directory with the screenshots and `report.json`.
+5. **Evidence**: the scratch directory with the screenshots, `report.json` and the Impeccable output.
 
 Write plainly, no em dashes. Don't pad the passes list to look thorough.
