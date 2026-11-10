@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { isCdata, note, topicsFor } from '../hooks/marketing'
+import { isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
 
 const keys = (text: string) => topicsFor(text).map(t => t.key)
 
@@ -31,4 +31,15 @@ test('the note names the skill, each reference and the subagent', async () => {
   expect(n).toContain('references/talks.md')
   expect(n).toContain('references/launches.md')
   expect(n).toContain('marketing-strategist')
+})
+
+test('asking for follow-up posts loads /social repurpose mode', async () => {
+  expect(REPURPOSE.test('repurpose my Doom post')).toBe(true)
+  expect(REPURPOSE.test('can you get more posts out of the MCP servers post')).toBe(true)
+  expect(REPURPOSE.test('write some follow-up posts for the DBeaver launch')).toBe(true)
+  expect(REPURPOSE.test('turn this blog post into a week of posts')).toBe(true)
+  expect(REPURPOSE.test('follow up on the PR')).toBe(false)
+  expect(REPURPOSE.test('fix the Postiz scheduler')).toBe(false)
+  expect(REPURPOSE.test('how many posts are queued this week')).toBe(false)
+  expect(repurposeNote).toContain('skill "social"')
 })

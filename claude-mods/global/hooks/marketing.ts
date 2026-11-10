@@ -49,6 +49,14 @@ export const note = (topics: Topic[]) =>
   `${topics.map(t => `references/${t.ref}`).join(' and ')} for this. For a full plan (launch plan, talk plan, idea slate, ` +
   'audience or positioning review), hand it to the marketing-strategist subagent instead of doing it inline.'
 
+// /social's repurpose mode (follow-up posts from one source, 2026-11-10). /social is
+// a slash command, so asking for it in plain words never loaded it.
+export const REPURPOSE =
+  /\brepurpos\w*\b|\bfollow[- ]up posts?\b|\bmore posts (out of|from)\b|\b(a week|weeks?) of posts\b|\bturn (this|it|that|my|the)\b[^.?!\n]{0,40}\binto (more |several |a few |a week of )?posts\b/i
+
+export const repurposeNote =
+  'Repurpose (global mod): load the social skill (Skill tool, skill "social") and follow its "Repurpose: follow-up posts from one source" section.'
+
 export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
@@ -58,6 +66,11 @@ export function registerMarketing(on: On) {
     if (video.length) notes.push(videoNote(video))
     const fresh = isCdata(await $.session.cwd()) ? [] : topicsFor(e.text).filter(t => !sent.has(t.key))
     if (fresh.length) notes.push(note(fresh))
+    const repurpose = !sent.has('repurpose') && !isCdata(await $.session.cwd()) && REPURPOSE.test(e.text)
+    if (repurpose) {
+      notes.push(repurposeNote)
+      sent.add('repurpose')
+    }
     if (!notes.length) return next(e)
     for (const t of [...video, ...fresh]) sent.add(t.key)
     return next({ ...e, context: [...(e.context ?? []), ...notes] })
