@@ -6,6 +6,7 @@ import { registerDesignCheck } from './design-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
+import { registerSensitiveShell } from './sensitive-shell'
 import { notifyUnpushedAtEnd, registerUnpushed, unpushedLabel } from './unpushed'
 import { registerWordGuard } from './word-guard'
 
@@ -23,6 +24,7 @@ export const register: Register = on => {
   registerCommitFormat(on)
   registerKeystrokeGuard(on)
   registerWordGuard(on)
+  registerSensitiveShell(on)
   registerUnpushed(on)
   registerBlogCheck(on)
   registerDesignCheck(on)
