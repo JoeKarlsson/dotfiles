@@ -87,6 +87,7 @@ The page should look like one system: every page shares the same building blocks
 - One page header for every major page, sub-pages and the 404 included: same nav position, same page-title style, same column, and the same distance from the top of the viewport to the `h1`. A back link above the header on some pages counts as a second pattern (joekarlsson.com, 2026-11-10: Talks and Resume dropped theirs and light up their parent in the nav instead). Check it by screenshotting the top of each major page at the same viewport side by side, and by a test that measures each page's `h1` top and font size (see "Tests").
 - One gutter: every page's content lines up on the same left edge at every width, including full-bleed sections that break out on purpose
 - One button style, one link style, one form-field style, one caption style
+- Interactive widgets (dialog, drawer, menu, combobox, date input, data table, command palette) aren't hand-rolled from scratch: a React app uses a tested library, and a static site copies that library's keyboard and ARIA behavior in its own markup. Options and when each fits: [ui-component-libraries](ui-component-libraries.md)
 - Headings use one case convention, with no terminal periods. Nav labels match the page titles they lead to.
 - Vertical rhythm: the same space before every section heading and after every page title, from the spacing scale
 - Fonts: only the families the design names, each in its job. Grep for `font-family` values outside the tokens.
