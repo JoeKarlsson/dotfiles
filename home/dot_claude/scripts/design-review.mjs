@@ -201,7 +201,9 @@ const browser = await chromium.launch();
 const report = [];
 try {
 	for (const [vpName, opts] of Object.entries(VIEWPORTS)) {
-		const context = await browser.newContext({ ...opts, reducedMotion: 'reduce' });
+		// bypassCSP: axe goes in by addScriptTag, which a site's script CSP or Trusted
+		// Types (joekarlsson.com's per-page meta policy) would otherwise block
+		const context = await browser.newContext({ ...opts, reducedMotion: 'reduce', bypassCSP: true });
 		const page = await context.newPage();
 		for (const url of urls) {
 			const slug = new URL(url).pathname.replace(/^\/|\/$/g, '').replace(/\//g, '_') || 'home';
