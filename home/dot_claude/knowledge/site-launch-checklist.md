@@ -120,6 +120,10 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 - The homepage is the page most likely to skip the column: its sections get written outside the shared container. At 2560 check that the nav is still on the first screen and every section sits in the column.
 - Huge display titles sized to fill a panel (`100cqw / ratio`) need a measured ratio: wide letters (W, M) overflow an estimate. Compare the title's text box to its panel at 1440 and 390.
 
+## Platform standards
+
+- Run the `web-standards-reviewer` agent in full mode on the built site: it checks HTML, CSS, accessibility, performance, security, forms and every hand-built widget against Google's Modern Web Guidance ([modern-web-guidance](modern-web-guidance.md)) and flags JS the platform now does natively. Fix its High and Medium findings and turn the testable ones into tests.
+
 ## Accessibility
 
 - Automated: axe (`@axe-core/playwright`, tags `wcag2a`, `wcag2aa`, `wcag21aa`, `wcag22aa`) on every page type, in the e2e suite, with zero violations. Pin the axe version. It catches only about a third of problems, so the manual pass still matters.
