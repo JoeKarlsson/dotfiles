@@ -1,5 +1,7 @@
 import type { On } from 'claude-code'
 
+import { takeSubagentNote } from './verification'
+
 // Memory `feedback-open-outputs-for-joe`: open any page, image, video or doc made
 // for Joe before calling it done. It lived only in the homelab project's memory, and
 // "open it again" / "you didn't open it" came up 41 times in a month of sessions
@@ -54,9 +56,9 @@ export function registerOpenOutputs(on: On) {
 
   on('classic.Stop', async ($, e, next) => {
     const result = await next(e)
-    if (e.stop_hook_active || pending.length === 0 || result.block) return result
-    const paths = pending
+    if (e.stop_hook_active || result.block) return result
+    const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote()].filter(Boolean)
     pending = []
-    return { ...result, block: openNote(paths) }
+    return notes.length ? { ...result, block: notes.join('\n\n') } : result
   })
 }

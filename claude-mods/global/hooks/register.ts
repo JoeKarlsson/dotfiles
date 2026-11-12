@@ -14,6 +14,7 @@ import { registerPonytail } from './ponytail'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
 import { registerSensitiveShell } from './sensitive-shell'
 import { notifyUnpushedAtEnd, registerUnpushed, unpushedLabel } from './unpushed'
+import { registerVerification } from './verification'
 import { registerWordGuard } from './word-guard'
 
 // Guards fail open on purpose: a hook that throws is skipped, so a bug here lets
@@ -40,6 +41,7 @@ export const register: Register = on => {
   registerOpenOutputs(on)
   registerOutboundText(on)
   registerDecisions(on)
+  registerVerification(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
