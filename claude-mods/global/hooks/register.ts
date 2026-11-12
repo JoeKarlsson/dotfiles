@@ -2,9 +2,13 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
+import { registerDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
+import { registerMacScheduler } from './mac-scheduler'
 import { registerMarketing } from './marketing'
+import { registerOpenOutputs, resetOpenOutputs } from './open-outputs'
+import { registerOutboundText, resetOutboundText } from './outbound-text'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { registerPonytail } from './ponytail'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
@@ -32,6 +36,10 @@ export const register: Register = on => {
   registerDesignCheck(on)
   registerPonytail(on)
   registerMarketing(on)
+  registerMacScheduler(on)
+  registerOpenOutputs(on)
+  registerOutboundText(on)
+  registerDecisions(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
@@ -40,6 +48,15 @@ export const register: Register = on => {
     void toastLastSyncFailure($).catch(() => undefined)
     $.clock.every(30_000, () => void updateStatus($))
     return started
+  })
+
+  // The one turn.start hook: per-turn state of the main loop starts over.
+  on('turn.start', async ($, e, next) => {
+    if (!e.agentId) {
+      resetOpenOutputs()
+      resetOutboundText()
+    }
+    return next(e)
   })
 
   // The one session.end hook: features export what they do at the end.

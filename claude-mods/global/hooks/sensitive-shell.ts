@@ -59,6 +59,17 @@ export function sensitiveShellAsk(command: string, inHomelab: boolean): string |
   return null
 }
 
+// Joe's secrets live in a gitignored .env.local or in 1Password, never in the macOS
+// keychain ("Never to the keychain": 2026-10-29 connect-doom, 2026-11-10 screencast-director).
+export function keychainDenial(command: string): string | null {
+  for (const { cmd, args } of segments(command)) {
+    if ((cmd === 'security' && /^(add-(generic|internet)-password|import)$/.test(args[0] ?? '')) || (cmd === 'keyring' && args[0] === 'set')) {
+      return 'Secrets never go in the macOS keychain (Joe, 2026-11-10). Put it in the project\'s gitignored .env.local, or in 1Password (`op --account my.1password.com`).'
+    }
+  }
+  return null
+}
+
 export function envReadDenial(path: string): string | null {
   if (!isEnvFile(path)) return null
   return 'Reading a .env file puts its secrets in the conversation. Check which keys exist with `grep -c "^NAME=" .env`, or let the script that needs them load it.'
@@ -71,6 +82,8 @@ export function registerSensitiveShell(on: On) {
   // PreToolUse first and skips later hooks, so an ask there never fired. Here the
   // guard asks Joe itself, and refuses when no one answers (dismissed, or a -p run).
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
+    const keychain = keychainDenial(e.command)
+    if (keychain) return { deny: keychain }
     const reason = sensitiveShellAsk(e.command, isHomelabRepo(await $.session.cwd()))
     if (!reason) return next(e)
     let answer: string

@@ -46,5 +46,9 @@ done
 [ -d "$HOME/Documents/dev/joe" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe")/memory" "$R/memory/dev-joe"
 link "$HOME/.claude/projects/$(slug {{ .chezmoi.workingTree | quote }})/memory" "$R/memory/dotfiles"
 [ -d "$HOME/Documents/dev/joe/joekarlsson.com/.git" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe/joekarlsson.com")/memory" "$R/memory/joekarlsson-com"
+# Added 2026-11-12: these had memory with no off-Mac copy.
+for repo in screencast-director bechdel-test connect-doom; do
+  [ -d "$HOME/Documents/dev/joe/$repo/.git" ] && link "$HOME/.claude/projects/$(slug "$HOME/Documents/dev/joe/$repo")/memory" "$R/memory/$repo"
+done
 exit 0
 {{ end -}}
