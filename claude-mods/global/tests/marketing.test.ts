@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
+import { HANDOFF, isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
 
 const keys = (text: string) => topicsFor(text).map(t => t.key)
 
@@ -44,4 +44,9 @@ test('asking for follow-up posts loads /social repurpose mode', async () => {
   expect(REPURPOSE.test('fix the Postiz scheduler')).toBe(false)
   expect(REPURPOSE.test('how many posts are queued this week')).toBe(false)
   expect(repurposeNote).toContain('skill "social"')
+})
+
+test('handoff: closing or resuming a session loads the handoff skill', async () => {
+  for (const t of ['I am going to have to close this session and work on this again tomorrow', 'Can you pull and figure out what was left', 'pick up where we left off', 'let us hand this off']) expect(HANDOFF.test(t)).toBe(true)
+  for (const t of ['close the garage door', 'continue', 'what is left in the queue']) expect(HANDOFF.test(t)).toBe(false)
 })

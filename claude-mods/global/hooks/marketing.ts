@@ -57,6 +57,13 @@ export const REPURPOSE =
 export const repurposeNote =
   'Repurpose (global mod): load the social skill (Skill tool, skill "social") and follow its "Repurpose: follow-up posts from one source" section.'
 
+// The handoff skill (2026-11-12): sessions lost to closed terminals and timeouts.
+export const HANDOFF =
+  /\b(close|closing|end|ending|wrap up)\b[^.?!\n]{0,20}\b(this|the) session\b|\b(continue|pick (this|it) (back )?up|work on (this|it)( again)?)\b[^.?!\n]{0,15}\b(tomorrow|later|next time)\b|\bhand(ing)? (this |it )?off\b|\bpick up where (we|you|I) left off\b|\bwhat was left\b|\bsave (the )?state\b/i
+
+export const handoffNote =
+  'Handoff (global mod): load the handoff skill (Skill tool, skill "handoff") and follow it: write or read the resume file.'
+
 export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
@@ -72,6 +79,7 @@ export function registerMarketing(on: On) {
       notes.push(repurposeNote)
       sent.add('repurpose')
     }
+    if (HANDOFF.test(e.text)) notes.push(handoffNote)
     if (!notes.length) return next(e)
     for (const t of [...video, ...fresh]) sent.add(t.key)
     return next({ ...e, context: [...(e.context ?? []), ...notes] })
