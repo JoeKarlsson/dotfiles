@@ -14,10 +14,15 @@
 - Check once; don't confirm the same thing several ways.
 - Report briefly what you ran. Text-only edits need no test run.
 - New logic with a branch, loop, parser, money or security leaves one small test behind.
+- A regression test must fail without the fix: undo the fix, watch it fail, put it back.
+- A subagent's "done" is a claim: read its diff before reporting the work done.
+- Flaky or timing-out test: find the cause. Never just raise the timeout or add a retry; tell subagents fixing tests the same.
+- Suggest deleting low-value tests as readily as adding missing ones.
 
 ## Code design
 
 - Build only what was asked: no speculative options or abstractions.
+- Every changed line traces to the request. Unrelated problems you notice get mentioned, not fixed.
 - Before writing new code, reuse in this order: what the codebase already has, the standard library or a platform feature, an installed dependency. Never add a dependency for a few lines.
 - Bug fix: find every caller of the function you touch, then fix the root cause once in the shared code.
 - Don't hide failures: no swallowed errors or silent fallbacks.

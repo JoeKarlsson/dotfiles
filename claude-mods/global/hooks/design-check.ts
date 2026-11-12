@@ -31,6 +31,9 @@ const CHECKS: [RegExp, string, ((line: string) => boolean)?][] = [
   [/<h[1-6]\b[^>]*>\s*(0\d\b|§|\[\d+\])/i, 'section numbering (#12)'],
   [/<(h[1-6]|title|button)\b[^>]*>[^<]*[a-z0-9]\.\s*<\/\1>/i, 'period at the end of a title (#20)'],
   [/(?![©®™])\p{Extended_Pictographic}/u, 'emoji (#25): none in UI'],
+  [/#(d97757|f4f1ea)\b/i, 'cream-and-terracotta default (#29)'],
+  [/<(a|button)\b[^>]*>[^<]*(→|&rarr;)\s*<\/\1>/i, 'arrow appended to link or button text (#30)'],
+  [/>[^<]*\w \u00b7 \w[^<]*\u00b7 \w/, 'middle-dot meta string (#31)'],
 ]
 
 export function designFindings(text: string): string[] {

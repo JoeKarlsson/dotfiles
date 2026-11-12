@@ -64,6 +64,13 @@ export const HANDOFF =
 export const handoffNote =
   'Handoff (global mod): load the handoff skill (Skill tool, skill "handoff") and follow it: write or read the resume file.'
 
+// grill-me (2026-11-12): stress-tests a plan before Joe commits to it.
+export const GRILL =
+  /\bgrill (me|this|it|that)\b|\bgrill (the|my) (plan|idea|design|approach|proposal)\b|\bpoke holes\b|\bstress[- ]test (this|the|my|that)? ?(plan|idea|design|approach)\b|\bpre-?mortem\b|\bwhat could go wrong with (this|the|my) (plan|idea|design|approach)\b/i
+
+export const grillNote =
+  'Grill (global mod): load the grill-me skill (Skill tool, skill "grill-me") and follow it: interview one question at a time, then a pre-mortem for big or hard-to-undo plans.'
+
 export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
@@ -80,6 +87,10 @@ export function registerMarketing(on: On) {
       sent.add('repurpose')
     }
     if (HANDOFF.test(e.text)) notes.push(handoffNote)
+    if (!sent.has('grill') && GRILL.test(e.text)) {
+      notes.push(grillNote)
+      sent.add('grill')
+    }
     if (!notes.length) return next(e)
     for (const t of [...video, ...fresh]) sent.add(t.key)
     return next({ ...e, context: [...(e.context ?? []), ...notes] })

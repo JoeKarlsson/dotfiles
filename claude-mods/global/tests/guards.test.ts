@@ -117,9 +117,12 @@ test('design check: banned patterns are found, plain styles pass', async () => {
     '<h2>01 / Features</h2>',
     '<span>✨ New</span>',
     '.label { font-family: "JetBrains Mono", monospace; }',
+    'body { background: #F4F1EA; } a { color: #d97757; }',
+    '<a href="/docs">Read the docs →</a>',
+    '<p class="meta">Nov 12 · 6 min read · Homelab</p>',
   ].join('\n')
   const found = designFindings(bad).join('\n')
-  for (const n of ['#19', '#21', '#4', '#22', '#23', '#7', '#20', '#12', '#25', '#17']) expect(found).toContain(n)
+  for (const n of ['#19', '#21', '#4', '#22', '#23', '#7', '#20', '#12', '#25', '#17', '#29', '#30', '#31']) expect(found).toContain(n)
   const good = [
     'body { background: #fafaf7; color: #1a1a1a; font-family: "Source Serif 4", Georgia, serif; }',
     '.ui { font-family: "Inter", system-ui, sans-serif; }',
@@ -129,6 +132,8 @@ test('design check: banned patterns are found, plain styles pass', async () => {
     '<h2>Build faster</h2>',
     '<p>© 2026 Joe Karlsson. Version 1.2.</p>',
     'const shadowRoot = el.attachShadow({ mode: "open" })',
+    '<p>Posted Nov 12 · Homelab</p>',
+    '<a href="/next">Next post</a>',
   ].join('\n')
   expect(designFindings(good)).toEqual([])
 })

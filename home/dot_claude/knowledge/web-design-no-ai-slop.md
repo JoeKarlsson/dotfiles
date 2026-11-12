@@ -1,9 +1,9 @@
 ---
 type: Rule
 title: "Web design: banned AI-slop patterns, and what Joe likes"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 27 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; the goal-first brief and direction table, the palette and type library, the registry of Joe's sites, and the pink punk direction for his own sites"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 31 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles, cream and terracotta, arrows on links...) and what to do instead; when a concept may break them; the goal-first brief and direction table, the palette and type library, the registry of Joe's sites, and the pink punk direction for his own sites"
 tags: [design, web, css, frontend, artifacts]
-sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}]
+sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}, {resource: "anthropics/skills frontend-design, adopted by Joe 2026-11-12 (#29-33, plan check, interface text)"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
 stale_after: "2027-11-04T00:00:00-06:00"
 ---
@@ -47,6 +47,7 @@ A site can mix, say a clear instrument with one concept touch. Name the directio
 - **Palettes and type come from the library,** not from memory: `~/.claude/knowledge/design-library/` holds taste-skill's 64 palettes and 38 type pairings (MIT). Render the board with `python3 ~/.claude/knowledge/design-library/board.py ~/.claude/knowledge/design-library <scratchpad>/board.html`, then show me three palettes and two pairings that fit the direction, numbered, as mockups of the actual first screen. Follow each palette's note: it says how much of the page each color gets. Ignore the library's `tracking` values (ban #4) and its Instrument Serif pairing (ban #3).
 - **Pink is reserved for my own voice.** Another site gets pink only when its subject calls for it, and then not on black.
 - **Differ from the neighbors:** a new site uses a palette family and a display face that no site in the registry uses, unless it is part of joekarlsson.com.
+- **Check the plan against the brief before building.** Ask whether a similar brief would have produced the same palette, type and layout. If it would, that part is a default, not a choice: revise it and say what changed and why.
 - **A palette or face I reject gets cut from the library** and noted here, so it isn't offered again.
 
 ### Registry: my sites and their looks
@@ -93,6 +94,11 @@ When the kind, the goal or the direction isn't obvious, ask me.
 | 25 | **Decorative emoji and sparkle icons**: ✨🚀 in headings, bullets, buttons | No emoji in UI chrome. Icons only where they aid recognition. |
 | 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. |
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
+| 29 | **Cream and terracotta**: a warm cream ground (near `#F4F1EA`) with a high-contrast serif and a clay accent (near `#D97757`, Claude's own accent) | A palette from the library that fits the direction. |
+| 30 | **Arrows appended to links and buttons**: "Read more →" | The label alone; it already says where it goes. |
+| 31 | **Middle-dot meta strings**: "Nov 12 · 6 min read · Homelab" | Show only the meta the reader uses, in a plain sentence or separate lines. |
+| 32 | **One acid accent on near-black**: acid green or vermilion on `#0B0B0B`/`#111` (my own voice's hot pink on black is the exception) | A palette from the library; true black when the design wants black. |
+| 33 | **Broadsheet by default**: hairline rules, zero radius and dense newspaper columns with no newspaper reason | Use it only as a named concept (below). |
 
 ## Exception: a named concept
 
@@ -140,6 +146,11 @@ What carries over: generous white space, one big confident grotesque typeface, s
 
 The same rules apply to the words. Run all page copy (headings, buttons, body) through the `humanizer` skill, and avoid the phrases in my banned-phrases list (`~/.claude/projects/-Users-joekarlsson-claude-skills/memory/feedback-banned-phrases.md`).
 
+Interface text:
+- Name things by what the reader understands, not how the system is built: "notifications", not "webhook config".
+- A button says exactly what happens ("Save changes", not "Submit"), and an action keeps its name through the flow: a "Publish" button leads to a "Published" toast.
+- Errors say what went wrong and how to fix it, plainly, without apologizing. An empty screen says what to do next.
+
 ## Checking a page
 
-Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`. Check body text contrast.
+Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`, `#F4F1EA`/`#D97757`, `→`/`&rarr;` at the end of link text, and ` · ` meta strings. Check body text contrast. Check that CSS rules don't cancel each other out: a class selector like `.section` and an element or second class like `.cta` fighting over the same padding or margin is the usual cause of uneven spacing between sections.

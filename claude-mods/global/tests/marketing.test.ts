@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { HANDOFF, isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
+import { GRILL, HANDOFF, isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
 
 const keys = (text: string) => topicsFor(text).map(t => t.key)
 
@@ -49,4 +49,9 @@ test('asking for follow-up posts loads /social repurpose mode', async () => {
 test('handoff: closing or resuming a session loads the handoff skill', async () => {
   for (const t of ['I am going to have to close this session and work on this again tomorrow', 'Can you pull and figure out what was left', 'pick up where we left off', 'let us hand this off']) expect(HANDOFF.test(t)).toBe(true)
   for (const t of ['close the garage door', 'continue', 'what is left in the queue']) expect(HANDOFF.test(t)).toBe(false)
+})
+
+test('grill: asking to stress-test a plan loads the grill-me skill', async () => {
+  for (const t of ['grill me on the NAS migration plan', 'can you poke holes in this', 'stress test this plan before I start', 'run a pre-mortem on the site rebuild', 'what could go wrong with this plan?']) expect(GRILL.test(t)).toBe(true)
+  for (const t of ['grill the burgers at 6', 'run the stress test on the UPS', 'what went wrong with the backup?']) expect(GRILL.test(t)).toBe(false)
 })
