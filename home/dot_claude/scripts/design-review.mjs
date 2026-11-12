@@ -1,5 +1,5 @@
 // Evidence for the design-reviewer agent: screenshots and measurements of each page at
-// desktop (1440), phone (iPhone 13) and big-screen (2560) widths.
+// desktop (1440), phone (iPhone 13), narrow phone (320) and big-screen (2560) widths.
 //
 //   node ~/.claude/scripts/design-review.mjs <outDir> <url> [url...]
 //
@@ -40,6 +40,8 @@ const axePath = resolveFromRepo('axe-core/axe.min.js');
 const VIEWPORTS = {
 	desktop: { viewport: { width: 1440, height: 900 } },
 	phone: devices['iPhone 13'],
+	// the smallest phones still in use (iPhone SE 1st gen, small Androids at large text)
+	narrow: { viewport: { width: 320, height: 640 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
 	wide: { viewport: { width: 2560, height: 1440 } },
 };
 
@@ -170,8 +172,55 @@ function measurePage(isPhone) {
 		.filter((el) => Number(getComputedStyle(el).opacity) === 0)
 		.map((el) => `${el.tagName.toLowerCase()}.${[...el.classList].join('.')} "${label(el)}"`);
 
+	// Phones: things that run past the right edge, and text or controls lying on each other
+	const offViewport = isPhone
+		? [...document.querySelectorAll('body *')]
+				.filter((el) => visible(el) && el.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !el.closest('[aria-hidden="true"], pre, table'))
+				.filter((el) => {
+					const r = el.getBoundingClientRect();
+					if (r.right <= innerWidth + 1) return false;
+					// inside a box that scrolls or clips sideways on purpose
+					for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+						const ox = getComputedStyle(p).overflowX;
+						if (['auto', 'scroll', 'hidden', 'clip'].includes(ox)) return false;
+					}
+					return true;
+				})
+				.filter((el, _, all) => !all.some((o) => o !== el && o.contains(el)))
+				.map((el) => `${el.tagName.toLowerCase()}${el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/)[0] : ''} "${label(el)}" right edge at ${Math.round(el.getBoundingClientRect().right)}px of ${innerWidth}`)
+		: [];
+	const blocks = isPhone
+		? [...document.querySelectorAll('h1, h2, h3, p, li, a[href], button, input, select, textarea')].filter(
+				// checkVisibility drops a closed <details>, opacity 0 and content-visibility: hidden
+				(el) => visible(el) && el.checkVisibility({ contentVisibilityAuto: true, opacityProperty: true, visibilityProperty: true }) && !el.closest('[aria-hidden="true"]') && label(el),
+			)
+		: [];
+	// a link that wraps has one box per line; its bounding box would cover the lines between
+	const boxes = (el) => (getComputedStyle(el).display === 'inline' ? [...el.getClientRects()] : [el.getBoundingClientRect()]);
+	const collisions = [];
+	for (let i = 0; i < blocks.length && collisions.length < 15; i++) {
+		const as = boxes(blocks[i]);
+		for (let j = i + 1; j < blocks.length; j++) {
+			if (blocks[i].contains(blocks[j]) || blocks[j].contains(blocks[i])) continue;
+			let hit = null;
+			for (const a of as)
+				for (const b of boxes(blocks[j])) {
+					const w = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+					const h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+					// over 8px both ways: line boxes of neighbouring lines touch by a few px
+					if (w > 8 && h > 8) hit ??= { w, h, y: a.top };
+				}
+			if (hit) {
+				collisions.push(`${blocks[i].tagName.toLowerCase()} "${label(blocks[i])}" overlaps ${blocks[j].tagName.toLowerCase()} "${label(blocks[j])}" by ${Math.round(hit.w)}x${Math.round(hit.h)} at y=${Math.round(hit.y + scrollY)}`);
+				break;
+			}
+		}
+	}
+
 	return {
 		title: document.title,
+		offViewport: offViewport.slice(0, 15),
+		collisions,
 		coveredTargets: coveredTargets.slice(0, 15),
 		hiddenFocusables: [...new Set(hiddenFocusables)].slice(0, 10),
 		hiddenFocusableCount: hiddenFocusables.length,
@@ -194,6 +243,65 @@ function measurePage(isPhone) {
 		fields,
 		linkLooks: tally(interactive.filter((el) => el.tagName === 'A' && el.closest('main'))),
 		buttonLooks: tally(interactive.filter((el) => el.tagName === 'BUTTON')),
+	};
+}
+
+// After the screenshots (it scrolls). Shift+Tab scrolls the focused element just into
+// view at the top of the screen, where a fixed or sticky header can hide it unless
+// scroll-padding-top leaves room. Press Shift+Tab up from the bottom of the page and
+// report each focused element the header covers.
+async function focusUnderHeader(page) {
+	const header = await page.evaluate(() => {
+		document.documentElement.style.scrollBehavior = 'auto';
+		// scrolled partway, a sticky bar has stuck to the top wherever it started
+		window.scrollTo(0, document.documentElement.scrollHeight / 2);
+		const bar = [...document.querySelectorAll('body *')].find((el) => {
+			const s = getComputedStyle(el);
+			const r = el.getBoundingClientRect();
+			// a bar, not a full-screen decorative layer
+			return ['fixed', 'sticky'].includes(s.position) && r.top <= 40 && r.bottom > 0 && r.height > 20 && r.height < innerHeight * 0.4 &&
+				r.width > innerWidth / 2 && s.visibility !== 'hidden' && s.display !== 'none' && s.pointerEvents !== 'none' && !el.closest('[aria-hidden="true"]');
+		});
+		if (!bar) return null;
+		bar.dataset.reviewBar = '';
+		window.scrollTo(0, document.documentElement.scrollHeight);
+		// start past the last focusable so the first Shift+Tab lands on it
+		const end = document.createElement('span');
+		end.tabIndex = 0;
+		document.body.append(end);
+		end.focus();
+		end.dataset.reviewEnd = '';
+		return { name: `${bar.tagName.toLowerCase()}${bar.id ? '#' + bar.id : ''} ${getComputedStyle(bar).position}`, height: Math.round(bar.getBoundingClientRect().height) };
+	});
+	if (!header) return { header: null, hidden: [] };
+	const hidden = [];
+	for (let i = 0; i < 80; i++) {
+		await page.keyboard.press('Shift+Tab');
+		const r = await page.evaluate(() => {
+			const el = document.activeElement;
+			const bar = document.querySelector('[data-review-bar]');
+			if (!el || el === document.body || bar.contains(el)) return { stop: !el || el === document.body };
+			const e = el.getBoundingClientRect();
+			const b = bar.getBoundingClientRect();
+			const covered = b.bottom > e.top + 2 && b.top < e.bottom;
+			return { covered, at: window.scrollY, text: `${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 40)}" top at ${Math.round(e.top)}px, header bottom at ${Math.round(b.bottom)}px` };
+		});
+		if (r.stop || r.at === 0) break;
+		if (r.covered) hidden.push(r.text);
+	}
+	const scrollPaddingTop = await page.evaluate(() => {
+		document.querySelector('[data-review-end]')?.remove();
+		document.activeElement?.blur();
+		return getComputedStyle(document.documentElement).scrollPaddingTop;
+	});
+	return {
+		header: `${header.name}, ${header.height}px tall`,
+		scrollPaddingTop,
+		// Chromium centres an off-screen element on desktop, so the walk can pass where Safari
+		// and Firefox (which scroll it just into view) hide it; the padding is the real test
+		paddingShort: (parseFloat(scrollPaddingTop) || 0) < header.height,
+		hidden: hidden.slice(0, 10),
+		hiddenCount: hidden.length,
 	};
 }
 
@@ -223,7 +331,8 @@ try {
 			const shot = join(outDir, `${slug}-${vpName}`);
 			await page.screenshot({ path: `${shot}.png` });
 			if (vpName !== 'wide') await page.screenshot({ path: `${shot}-full.png`, fullPage: true });
-			const measured = await page.evaluate(measurePage, vpName === 'phone');
+			const isPhone = vpName === 'phone' || vpName === 'narrow';
+			const measured = await page.evaluate(measurePage, isPhone);
 			const vitals = await page.evaluate(() => window.__vitals);
 			const nav = await page.evaluate(() => {
 				const n = performance.getEntriesByType('navigation')[0];
@@ -237,6 +346,7 @@ try {
 					return r.violations.map((v) => ({ id: v.id, impact: v.impact, count: v.nodes.length, example: v.nodes[0]?.target.join(' ') }));
 				});
 			}
+			const focusHidden = vpName === 'wide' ? 'not run at this width' : await focusUnderHeader(page);
 			report.push({
 				url,
 				viewport: vpName,
@@ -247,6 +357,7 @@ try {
 				cls: Number(vitals.cls.toFixed(3)),
 				scriptErrors: errors,
 				...measured,
+				focusUnderHeader: focusHidden,
 				axe,
 			});
 		}
