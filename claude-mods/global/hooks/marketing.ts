@@ -40,6 +40,9 @@ export const TOPICS: Topic[] = [
 
 export const isCdata = (cwd: string) => /\/dev\/cdata(\/|$)/.test(cwd)
 
+// A finished subagent arrives as a prompt; its report is not Joe asking (10 of 44 pointer injections, week of 2026-11-12).
+export const isAgentOutput = (text: string) => text.trimStart().startsWith('<task-notification>')
+
 export function topicsFor(text: string): Topic[] {
   return TOPICS.filter(t => t.re.test(text))
 }
@@ -74,7 +77,7 @@ export const grillNote =
 export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
-    if (e.command || e.isMeta) return next(e)
+    if (e.command || e.isMeta || isAgentOutput(e.text)) return next(e)
     const notes: string[] = []
     const video = videoTopicsFor(e.text).filter(t => !sent.has(t.key))
     if (video.length) notes.push(videoNote(video))

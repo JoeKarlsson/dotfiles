@@ -35,7 +35,7 @@
 <!-- Condensed 2026-11-12 from feedback memories that lived only in the homelab project, while
      the repeat complaints came from the other repos. Hooks enforce opening outputs, humanizing
      GitHub comments, no keychain and no Mac schedulers (global mod). -->
-- Don't ask before tests, routine updates or the obvious next step of what I asked. When something truly needs me, end with one yes/no question naming the exact action.
+- Don't ask before tests, routine updates or the obvious next step of what I asked. Do every step you can do yourself (create the token, look it up, configure it); never hand me a to-do list of steps you could do. When something truly needs me, end with one yes/no question naming the exact action.
 - Offer an optional extra once. If I don't answer it, the answer is no.
 - Every ask stands on its own: what you found, the exact question, your recommendation. Label every image or option you show me (before/after, A/B).
 - Visual work: show me mockups or the result (opened on my screen) before it goes live. My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.

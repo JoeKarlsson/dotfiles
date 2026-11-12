@@ -1,6 +1,11 @@
 import { expect, test } from 'claude-code/testing'
 
-import { GRILL, HANDOFF, isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
+import { GRILL, HANDOFF, isAgentOutput, isCdata, note, REPURPOSE, repurposeNote, topicsFor } from '../hooks/marketing'
+
+test('a subagent report is not a prompt from Joe', async () => {
+  expect(isAgentOutput('<task-notification>\n<summary>launch plan for the talk</summary>')).toBe(true)
+  expect(isAgentOutput('help me plan the launch of my talk')).toBe(false)
+})
 
 const keys = (text: string) => topicsFor(text).map(t => t.key)
 
