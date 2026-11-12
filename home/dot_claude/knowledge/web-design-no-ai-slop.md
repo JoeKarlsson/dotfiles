@@ -59,7 +59,7 @@ Update this whenever a site's look changes.
 | joekarlsson.com | My work, writing and newsletter | My own voice | Black, hot pink (~#ff4fd8) | Anton |
 | hello.joekarlsson.io | Link-in-bio | My own voice | Black, hot pink | Anton |
 | Punc | Art project on public-domain books | Concept: punk band posters | Pink and black, dithered | Anton, Fraunces |
-| bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site (2026-11-12) | Anton, Fraunces |
+| bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site, and the black stays too, an exception to the not-on-black rule (2026-11-12) | Anton, Fraunces |
 
 When the kind, the goal or the direction isn't obvious, ask me.
 
