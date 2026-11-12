@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: "Web design: banned AI-slop patterns, and what Joe likes"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 27 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; Joe's taste for his own sites (video store, punk, handmade, Twombly, Rothko, dark mode) with references"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 27 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles...) and what to do instead; when a concept may break them; the goal-first brief and direction table, the palette and type library, the registry of Joe's sites, and the pink punk direction for his own sites"
 tags: [design, web, css, frontend, artifacts]
 sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
@@ -12,25 +12,55 @@ stale_after: "2027-11-04T00:00:00-06:00"
 
 Applies to every site, page, HTML artifact and UI I ask for, and overrides any design skill or template default that says otherwise. These patterns mark a page as AI-made. Don't use them. If a page you're editing already has them, remove them in the same change.
 
-The goal is a page with one idea behind it (see "Aim for"). When there's no idea yet, the fallback is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
+The goal is a page with one idea behind it, and the idea comes from what the site is for. When there's no idea yet, the fallback is plain and confident: one good typeface, real hierarchy from size and weight, generous whitespace, a small flat palette, and copy that says each thing once.
 
-## First: what is the page for?
+## First: the goal, then the direction, then the style
 
-Pick the kind of page from the job before any styling. The bans below apply to all of them.
+My pink-and-black punk look is one direction, for things that are plainly me. It is not the default. By November 2026 joekarlsson.com, Punc and bechdel.io had all drifted into the same pink-and-black look, and I want sites that look made for their own job (2026-11-12). So no color or font gets picked until the site's goal is written down.
 
-- **Text document** (notes, a write-up, a runbook): reads like a well-set document. One readable face, ~65-character lines, headings and lists, almost no decoration.
-- **Rich document** (a report or explainer with images, tables, callouts, maybe a chart): still a document first; richness comes from real figures and tables, not chrome.
-- **Data visualization or dashboard:** clarity over personality. Load the `dataviz` skill; color encodes data, not mood; the hook's "opacity" and "border" flags can be legitimate here.
-- **Clean site** (a homepage, a project or product page): the clean references in "Aim for".
-- **Concept page** (something personal and expressive, like a review page): the concept direction in "Aim for", with the concept exception.
+### 1. Write the brief (five lines, on the plan, shown to me with the first mockups)
 
-Then pick the tone, which is separate from the kind:
+1. **Goal:** what the site has to get done, in one sentence: get a film checked, get someone to subscribe, sell a ticket, be an art piece, show my work to a hiring manager.
+2. **Reader:** who arrives, from where, and what they already know.
+3. **The one action** they should take.
+4. **The subject's own concept,** if it has one, taken from the subject itself (a film checker's subject is films and feminist film theory, not me). Write "none" when there isn't one. A plain site is fine.
+5. **Neighbors:** which of my sites it sits beside (the registry below), and how it will look different from them.
 
-- **Professional** (work, talks, anything a client or employer reads): clean and restrained. Clean references, at most one accent color, no scribbles or concept tricks. Company work follows the company brand.
-- **Personal and weird** (my own projects, reviews, homelab pages): loud pinks, scribbles, a concept, surprises.
-- Many of my own pages sit in between: a clean base with one or two personal touches (a pink accent, a scribble, a now-playing widget).
+If I can't answer line 1, question it with me before designing anything: what the site is for decides everything after it.
 
-When the kind or the tone isn't obvious, ask me.
+### 2. Pick the direction from the goal
+
+The kind of page still matters: a text document reads like a well-set document (one readable face, ~65-character lines, almost no decoration); a rich document gets its richness from real figures and tables, not chrome; a dashboard loads the `dataviz` skill and color encodes data, not mood. Within that, the goal picks the direction:
+
+| Goal | Direction | Start from (palette families on the board) | Type |
+|---|---|---|---|
+| Reading and reference: docs, a runbook, a long explainer | **Plain document.** Almost no decoration; the words and figures carry it | Light and plain; Quiet, for photo-led pages | One text serif or one sober grotesk |
+| A tool or data product: a checker, a tracker, a calculator, a dashboard | **Clear instrument.** Neutral ground, one accent that means "act" or marks data; real charts | Neutral plus one accent; Light and plain; Dark grounds | A sober grotesk with good figures |
+| Professional profile, talks, anything an employer or client reads | **Clean site** (references below). One big confident face, white space, real photos | Light and plain; Neutral plus one accent | One grotesk, two weights |
+| An art project, a community or an event | **Concept from the subject** (gig flyer, record sleeve, zine, field guide), with the concept exception | Flat and loud; One big color field; Two colors only | A poster or display face plus a readable text face |
+| Things that are plainly me: joekarlsson.com, hello.joekarlsson.io, my homelab pages | **My own voice:** the pink-and-black punk below | Black and hot pink only | Anton plus the site's text face |
+
+A site can mix, say a clear instrument with one concept touch. Name the direction on the plan right under the brief. Company work follows the company brand.
+
+### 3. Pick the style inside the direction
+
+- **Palettes and type come from the library,** not from memory: `~/.claude/knowledge/design-library/` holds taste-skill's 64 palettes and 38 type pairings (MIT). Render the board with `python3 ~/.claude/knowledge/design-library/board.py ~/.claude/knowledge/design-library <scratchpad>/board.html`, then show me three palettes and two pairings that fit the direction, numbered, as mockups of the actual first screen. Follow each palette's note: it says how much of the page each color gets. Ignore the library's `tracking` values (ban #4) and its Instrument Serif pairing (ban #3).
+- **Pink is reserved for my own voice.** Another site gets pink only when its subject calls for it, and then not on black.
+- **Differ from the neighbors:** a new site uses a palette family and a display face that no site in the registry uses, unless it is part of joekarlsson.com.
+- **A palette or face I reject gets cut from the library** and noted here, so it isn't offered again.
+
+### Registry: my sites and their looks
+
+Update this whenever a site's look changes.
+
+| Site | Goal | Direction | Palette | Display face |
+|---|---|---|---|---|
+| joekarlsson.com | My work, writing and newsletter | My own voice | Black, hot pink (~#ff4fd8) | Anton |
+| hello.joekarlsson.io | Link-in-bio | My own voice | Black, hot pink | Anton |
+| Punc | Art project on public-domain books | Concept: punk band posters | Pink and black, dithered | Anton, Fraunces |
+| bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black today | |
+
+When the kind, the goal or the direction isn't obvious, ask me.
 
 ## Banned
 
@@ -68,9 +98,9 @@ When the kind or the tone isn't obvious, ask me.
 
 A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), scroll animations (#26).
 
-## Aim for (my own sites)
+## My own voice: the pink-and-black punk direction
 
-For my personal sites (joekarlsson.com, side projects, homelab pages). Work sites follow the company brand instead.
+For sites that are plainly me (joekarlsson.com, hello.joekarlsson.io, homelab pages), plus the verdicts I've given on my sites so far. Other sites pick their direction from their goal (above). From this list they keep only what holds everywhere: a concept from the subject, real photos and type over commissioned-looking illustration, handmade over slick, no tidy template grids. Work sites follow the company brand instead.
 
 Keep this section current: whenever I react to a design, reference site or mockup (like it, dislike it, or a specific part), record it here with the date in the same session, and commit it.
 
@@ -95,9 +125,9 @@ References:
 - **The joekarlsson.com redesign mock-ups** (mock-k and mock-l, built in that repo's session, 2026-11-04): the model for my own site. Black ground and one hot pink (about #ff4fd8); pink-duotone photos and video of me; huge Anton ALL CAPS lists for projects and blog topics; marquee tickers; crayon-textured scrawls that redraw themselves; a "make a mark" board visitors draw on; a tilted collage of photos; a warped poster footer. Motion is welcome when it's ambient or on hover, never scroll-triggered.
 - [carrierescene.ca/evenements](https://carrierescene.ca/evenements): the model. A gig-flyer concept from the subject: halftone backstage photos, one loud color (hot pink on black), condensed poster type, a warped wordmark, a marquee ticker, and a plain readable event list underneath. All of it is photos, a font, one color and CSS. Take the concept-from-the-subject idea and the loud pink from it.
 
-### A normal, clean site
+## The clean site direction: references
 
-Not every page needs a concept. For professional pages, I like the clean, confident look of these (2026-11-04). For my own site they're too plain: a light, Kalkbrenner-style joekarlsson.com mockup looked bad to me (2026-11-04).
+Not every page needs a concept. For the clean site direction (professional pages), I like the clean, confident look of these (2026-11-04). For my own site they're too plain: a light, Kalkbrenner-style joekarlsson.com mockup looked bad to me (2026-11-04).
 
 - [paulkalkbrenner.net](https://www.paulkalkbrenner.net/): the model. White space everywhere, big black grotesque type, a tiny photo set inline inside his name, a "now playing" music widget with a sound toggle, and large real photos.
 - [mobbin.com](https://mobbin.com/): bold black headline with small app icons set inline between the words; lots of white space.
