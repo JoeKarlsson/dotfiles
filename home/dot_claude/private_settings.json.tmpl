@@ -145,6 +145,17 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/worktree-hygiene.sh",
+            "timeout": 15
+          }
+        ]
+      }
     ]
 {{- end }}
   },

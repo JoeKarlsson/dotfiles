@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# SessionStart hook: tidy the Claude worktrees in .claude/worktrees/.
+# SessionStart and SessionEnd hook: tidy the Claude worktrees in .claude/worktrees/.
+# At session end it does the same tidy and prints nothing (no one reads it then).
 #
 # One worktree per concurrent session (global CLAUDE.md rule) means they pile up:
 # a session that crashed, or exited with "keep", leaves its worktree, its branch
@@ -16,6 +17,9 @@
 # Never fetches (must stay fast) and never touches the main checkout. Silent
 # unless it did or found something.
 set -uo pipefail
+
+# Hooks pass their event as JSON on stdin; a hand run has a terminal there.
+event=""; [[ -t 0 ]] || event=$(sed -n 's/.*"hook_event_name" *: *"\([A-Za-z]*\)".*/\1/p')
 
 ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null)}"
 [[ -n "$ROOT" && -d "$ROOT/.claude/worktrees" ]] || exit 0
@@ -62,7 +66,7 @@ while IFS= read -r line; do
 done < <(G "$ROOT" worktree list --porcelain 2>/dev/null; echo)
 G "$ROOT" worktree prune 2>/dev/null
 
-(( ${#removed[@]} + ${#report[@]} )) || exit 0
+(( ${#removed[@]} + ${#report[@]} )) && [[ "$event" != SessionEnd ]] || exit 0
 msg=""
 (( ${#removed[@]} )) && msg+="Removed ${#removed[@]} finished worktree(s): ${removed[*]}. "
 (( ${#report[@]} )) && msg+="Stale worktrees with unfinished work in .claude/worktrees/: $(IFS='; '; echo "${report[*]}"). Ask Joe before removing (git worktree remove <path>)."
