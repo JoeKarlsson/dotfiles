@@ -74,13 +74,6 @@ alias cs="cd ~/claude-skills"
 alias skills="cd ~/claude-skills"
 # Plain `claude` uses ~/.claude (work login); this is the separate personal login.
 alias claude-personal='CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
-# claude-dev (CT 263): open a Herdr window attached to its session (Tailscale
-# off-LAN). That window loads herdr.ghostty, so Cmd+D/Cmd+T/Cmd+W etc. drive Herdr.
-shed() {
-  open -na Ghostty.app --args \
-    --config-file="$HOME/Library/Application Support/com.mitchellh.ghostty/herdr.ghostty" \
-    -e ssh -t root@192.168.0.224 herdr
-}
 
 alias ..='cd ../'
 alias ...='cd ../../'
@@ -256,5 +249,5 @@ source $_zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 alias joe="cd ~/Documents/dev/joe"
 
 # Machine-local additions, not in this repo. On claude-dev, provision writes it:
-# the Claude/LiteLLM tokens, landing in the repo, and the Herdr Claude autostart.
+# the Claude/LiteLLM tokens and landing in the repo.
 [[ -r ~/.zshrc.local ]] && source ~/.zshrc.local
