@@ -10,6 +10,7 @@ sources:
   - {resource: "https://web.dev/articles/vitals"}
   - {resource: "https://scotthelme.co.uk/launching-report-uri-js/ (CSP on GitHub Pages)"}
   - {resource: "https://www.w3.org/TR/WCAG22/"}
+  - {resource: "nutlope/hallmark v2.0.0 gates 34, 50, 62 (MIT), adopted by Joe 2026-11-13"}
 generated: {by: claude-code, at: "2026-11-06T08:30:00-06:00"}
 stale_after: "2027-11-06T00:00:00-06:00"
 ---
@@ -96,7 +97,8 @@ The page should look like one system: every page shares the same building blocks
 ## Phones
 
 - Screenshot every page type at 390px and 320px wide, full length, and look at it. Also check landscape.
-- No sideways scroll (`scrollWidth === innerWidth`). Anything wider scrolls in its own frame and says so.
+- No sideways scroll (`scrollWidth === innerWidth`). Anything wider scrolls in its own frame and says so. Set `overflow-x: clip` (not `hidden`, which breaks `position: sticky`) on both `html` and `body`, and never size anything in `100vw` (it includes the scrollbar); use `width: 100%`.
+- Display headings carry `overflow-wrap: break-word; min-width: 0` so one long word can't push the page sideways at 320px.
 - Tap targets of at least 24px (WCAG 2.2), 44px for primary actions, with space between them
 - Copy works for touch: "tap", not "click" or "drop" on its own; nothing that only works on hover
 - Text at least 16px; form inputs at least 16px so iOS Safari doesn't zoom on focus
@@ -113,7 +115,7 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 
 - Screenshot every page type at 2560px wide (and 1280px), and look at it. At 2560 nothing should run from screen edge to screen edge except deliberate full-bleed bands (a footer color, a background).
 - One centered column for the whole site, the way joekarlsson.com does it: a `--page-max` token (about 1440px) and padding of `max(var(--gutter), calc((100% - var(--page-max)) / 2))` on the header, `main` and footer. Every page uses it, set once in the shared CSS, never per page. Background bands stay full width; their content sits in the column.
-- Grids of images or cards don't stretch without limit. `repeat(auto-fit, minmax(X, 1fr))` with a handful of items blows each one up on a wide screen (four book covers became posters). Cap the column (`minmax(230px, 300px)`) or the item's `max-width`.
+- Grids of images or cards don't stretch without limit. `repeat(auto-fit, minmax(X, 1fr))` with a handful of items blows each one up on a wide screen (four book covers became posters). Cap the column (`minmax(230px, 300px)`) or the item's `max-width`. Tracks that hold images use `minmax(0, 1fr)`, not bare `1fr`, so a wide image can't blow its column out.
 - Use the room: on a computer, show more per page than a phone does (Punc: 72 books a page on a computer, 24 on a phone; pick a count that divides evenly into the likely column counts).
 - Pagination lists many page numbers on a computer (all of them when they fit in a row or two) with compact buttons (about 2.5rem), not "1 2 3 … 41" with huge buttons. A phone gets a few either side of the current page.
 - Measure line length: body text stays under about 70ch even inside the wide column. Résumés, gear lists and section intros are where it slips (joekarlsson.com /resume/ ran 115 characters a line until capped at `max-w-[65ch]`).
@@ -137,6 +139,7 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 - Body text contrast at least 4.5:1, large text and UI parts at least 3:1, in every theme
 - Zoom to 200% and reflow at 320px without losing content
 - `prefers-reduced-motion` stops ambient animation; nothing flashes
+- Content is visible with JavaScript off: a reveal class that sets `opacity: 0` or `visibility: hidden` and waits for a script ships a blank page when the script fails. Hide only under a class the script adds (`.js .reveal`), or animate from visible with `@starting-style`. Check by loading the page with JS disabled.
 - Form fields have labels; errors are announced; status changes use `aria-live`
 
 ## Performance

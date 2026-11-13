@@ -1,9 +1,9 @@
 ---
 type: Rule
 title: "Web design: banned AI-slop patterns, and what Joe likes"
-description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 31 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles, cream and terracotta, arrows on links...) and what to do instead; when a concept may break them; the goal-first brief and direction table, the palette and type library, the registry of Joe's sites, and the pink punk direction for his own sites"
+description: "Read before designing or styling any website, web page, HTML artifact, landing page, dashboard or UI: 31 banned AI-design tells (pills, Instrument Serif, eyebrows, ALL CAPS subtitles, gradients, gradient text, bordered cards, glassmorphism, glows, indigo accents, scroll animations, mono overuse, periods in titles, cream and terracotta, arrows on links, invented facts, fake form success, card in a card...) and what to do instead; twelve ways to open a section without an eyebrow; what a page is built around for each job (book, buy, subscribe, hire...); when a concept may break them; the goal-first brief and direction table, the palette and type library, the registry of Joe's sites, and the pink punk direction for his own sites"
 tags: [design, web, css, frontend, artifacts]
-sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}, {resource: "anthropics/skills frontend-design, adopted by Joe 2026-11-12 (#29-33, plan check, interface text)"}]
+sources: [{resource: "Joe, 2026-11-04: '20 AI Design Slop Indicators' list"}, {resource: "anthropics/skills frontend-design, adopted by Joe 2026-11-12 (#29-33, plan check, interface text)"}, {resource: "nutlope/hallmark v2.0.0, MIT, Copyright (c) 2026 Hallmark contributors; adopted by Joe 2026-11-13 (#34-38, page anatomy by job, opening a section, missing facts)"}]
 generated: {by: claude-code, at: "2026-11-04T21:30:00-06:00"}
 stale_after: "2027-11-04T00:00:00-06:00"
 ---
@@ -42,6 +42,23 @@ The kind of page still matters: a text document reads like a well-set document (
 
 A site can mix, say a clear instrument with one concept touch. Name the direction on the plan right under the brief. Company work follows the company brand.
 
+### What the page is built around: its job
+
+Line 3 of the brief names the action. Build the page from what real sites with that job have (where the action sits, which sections are the category's own, how it ends), never from the default run of hero, three features, a figure row and an email band. Proof comes in the category's own form (the menu, the lineup, the archive), never a generic row of numbers. The nav carries the job's own action word (Book, Tickets, Shop, Listen, Start free). From Hallmark's survey of about fifty independent sites:
+
+| Job | Where the action goes | The category's own sections | How it ends |
+|---|---|---|---|
+| Subscribe (newsletter, podcast) | The hero: name, one line, the email field; a podcast puts the latest episode under it | A sample or the latest issue as it arrives; who writes it; the archive with dates | The archive, or a second field under it. The only job whose close may be an email field |
+| Book (restaurant, class, studio) | A picker or the next free times, in the nav and hero, and again beside the menu or classes | The room or food as a photo; the menu with prices or the timetable; how to find it; hours and address | Hours, address and the booking again |
+| Visit (shop, gallery, venue) | Today's hours and the address in the nav or hero | What's on now as the lead picture; what's coming as dated rows; the shelves; getting there | Visit information, or the list for what's next |
+| Attend (event, festival, talk) | Tickets in the nav from the first screen; the date and place are the headline | The lineup or speakers set large; the schedule; ticket tiers; venue and travel; questions | Tickets again, or the questions |
+| Buy (a product, a small shop) | The product with price and options, often the hero; a buy action after what earns it | The range with prices; the product in use, close; how it's made; delivery and guarantee as plain facts | The offer again or new arrivals; an email field belongs in the footer |
+| Try (app, game, tool) | Store or download buttons right under the headline, one per real platform | Captured screens; features as named moments shown in screens, not icon tiles; a before and after | The download again beside one last screen |
+| Sign up (software, API, dev tool) | Start free in the nav and hero, its terms in one line; the install command can be the action | The product at work; named moments; a code sample; pricing; questions | The hero's action again, or the code sample. Never a newsletter |
+| Hire (studio, freelancer, me) | A plain contact in the nav and once after the work | The work is the page: projects with pictures, one opened as a case; a short list of what's offered | Contact details |
+| Join (club, community) | Join, or "your first visit", in the hero | What a session is like, shown; when and where; membership options; first-visit guidance | The first visit or the membership options |
+| Listen (band, film, publication) | The new release or issue with its listen, watch or order buttons | The record or issue and its contents; dates with ticket links; earlier work; videos | The dates or more of the catalogue |
+
 ### 3. Pick the style inside the direction
 
 - **Palettes and type come from the library,** not from memory: `~/.claude/knowledge/design-library/` holds taste-skill's 64 palettes and 38 type pairings (MIT). Render the board with `python3 ~/.claude/knowledge/design-library/board.py ~/.claude/knowledge/design-library <scratchpad>/board.html`, then show me three palettes and two pairings that fit the direction, numbered, as mockups of the actual first screen. Follow each palette's note: it says how much of the page each color gets. Ignore the library's `tracking` values (ban #4) and its Instrument Serif pairing (ban #3).
@@ -79,7 +96,7 @@ When the kind, the goal or the direction isn't obvious, ask me.
 | 10 | **Verbose, redundant text**: intros restating the heading, subtitles restating the title, summaries of what's on screen | Say it once. Cut every line that repeats another. |
 | 11 | **Code breadcrumbs**: `~/path/like/this`, `// comments`, `$ prompts`, `<tags>` used as decoration | Ordinary navigation and headings. Code formatting only for actual code. |
 | 12 | **Section numbering**: "01 / Features", "§2", "[03]" | Unnumbered headings. |
-| 13 | **Eyebrows**: the small kicker label above a heading | Just the heading. |
+| 13 | **Eyebrows**: the small kicker label above a heading. Test: delete it; if all you lost was a name for what comes next, it was an eyebrow | Just the heading, or another way in (see "Opening a section" below). |
 | 14 | **Dithering**: dithered/halftone images and textures | Real photos or plain images, or none. |
 | 15 | **ASCII images**: ASCII art, box-drawing art, text-mode illustrations | Real images or none. |
 | 16 | *Retired 2026-11-06: rounded corners are fine, any radius.* | |
@@ -99,10 +116,37 @@ When the kind, the goal or the direction isn't obvious, ask me.
 | 31 | **Middle-dot meta strings**: "Nov 12 · 6 min read · Homelab" | Show only the meta the reader uses. Keep a quiet separator between pieces (a thin gray bar on joekarlsson.com, 2026-11-12): bare space made it unclear where pieces start and stop. |
 | 32 | **One acid accent on near-black**: acid green or vermilion on `#0B0B0B`/`#111` (my own voice's hot pink on black is the exception) | A palette from the library; true black when the design wants black. |
 | 33 | **Broadsheet by default**: hairline rules, zero radius and dense newspaper columns with no newspaper reason | Use it only as a named concept (below). |
+| 34 | **Invented facts**: a metric, testimonial, logo wall, customer count, price, date or name nobody gave me | The real one, or a visible blank (see "Missing facts" below), or nothing. |
+| 35 | **The fake send**: a form that says "Thanks", "Sent" or "You're on the list" with no request behind it | Until the endpoint exists the form validates, posts nowhere, and says plainly that nothing was sent. |
+| 36 | **The stock close**: an email sign-up as the last section on a page whose job isn't subscribing | End on what the visitor came to do (see the job table above). |
+| 37 | **A card inside a card** | One containment layer. |
+| 38 | **A built mock of a product that exists**: styled divs or a drawn UI when the app runs and could be screenshotted | Run it, put it in a state that shows its point, and capture it. A mock only for something not built yet, or when a capture would show private data. |
 
 ## Exception: a named concept
 
-A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), scroll animations (#26).
+A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), scroll animations (#26), invented facts (#34), fake sends (#35).
+
+## Opening a section without an eyebrow
+
+Ask what the reader doesn't know yet. If nothing, open with nothing. Ways in, one or two per page, rotated:
+
+1. Nothing: space above, the heading flush. Often best, with the subject in the heading's first two words.
+2. A lead-in inside the first paragraph in a heavier weight, never on its own line.
+3. A drop cap, once a page, first paragraph only.
+4. A change of background: the band's edge is the break.
+5. A big numeral, once a page at most, only when the number is real and the point (an issue, a year, a price that is the offer).
+6. A real `<ol>` when the sequence is genuine.
+7. A caption below the content instead of a label above it.
+8. A note in the outer margin beside the body.
+9. A running head that stays at the page edge, or a heading that stays in view while its section scrolls.
+
+Small type above a heading is fine when it carries a fact the reader lacks: a `<figcaption>`, `<label>`, `<legend>`, a byline or `<time>`, a real filename, a live status.
+
+## Missing facts
+
+- A fact the page needs and I didn't give (a venue, a date, a price) is a visible blank, styled to read as one ("Venue to be announced" in a dashed outline), never an invented value. Two per page at most; list the rest in the handoff. A row or section that would hold nothing but missing facts is cut.
+- A link whose URL I didn't give points at the section of the page that does the most of it, and the handoff names the URL it needs. Never an invented route.
+- A section I named but gave nothing for is its heading, one line on what goes there and one blank, or it merges into a neighbor.
 
 ## My own voice: the pink-and-black punk direction
 
@@ -153,4 +197,4 @@ Interface text:
 
 ## Checking a page
 
-Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`, `#F4F1EA`/`#D97757`, `→`/`&rarr;` at the end of link text, and ` · ` meta strings. Check body text contrast. Check that CSS rules don't cancel each other out: a class selector like `.section` and an element or second class like `.cta` fighting over the same padding or margin is the usual cause of uneven spacing between sections.
+Before calling a page done, scan it against the table: look at the rendered page, and grep the CSS and markup for `letter-spacing: -`, `text-transform: uppercase`, `gradient`, `opacity`, `rgba(`, `border:` on containers, `monospace`/mono families outside `code`/`pre`, `Instrument Serif`, `#6366f1`/`indigo`/`violet`, `backdrop-filter`, `box-shadow`, `background-clip: text`, scroll-triggered animation (`IntersectionObserver`, `data-aos`), emoji in markup, and headings ending in `.`, `#F4F1EA`/`#D97757`, `→`/`&rarr;` at the end of link text, and ` · ` meta strings, success copy in forms (`Thanks`, `Sent`, `on the list`) with no real endpoint, and numbers, quotes or logos I didn't supply. Check body text contrast. Check that CSS rules don't cancel each other out: a class selector like `.section` and an element or second class like `.cta` fighting over the same padding or margin is the usual cause of uneven spacing between sections.
