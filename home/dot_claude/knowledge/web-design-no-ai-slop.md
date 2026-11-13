@@ -96,7 +96,7 @@ When the kind, the goal or the direction isn't obvious, ask me.
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
 | 29 | **Cream and terracotta**: a warm cream ground (near `#F4F1EA`) with a high-contrast serif and a clay accent (near `#D97757`, Claude's own accent) | A palette from the library that fits the direction. |
 | 30 | **Arrows appended to links and buttons**: "Read more →" | The label alone; it already says where it goes. |
-| 31 | **Middle-dot meta strings**: "Nov 12 · 6 min read · Homelab" | Show only the meta the reader uses, in a plain sentence or separate lines. |
+| 31 | **Middle-dot meta strings**: "Nov 12 · 6 min read · Homelab" | Show only the meta the reader uses. Keep a quiet separator between pieces (a thin gray bar on joekarlsson.com, 2026-11-12): bare space made it unclear where pieces start and stop. |
 | 32 | **One acid accent on near-black**: acid green or vermilion on `#0B0B0B`/`#111` (my own voice's hot pink on black is the exception) | A palette from the library; true black when the design wants black. |
 | 33 | **Broadsheet by default**: hairline rules, zero radius and dense newspaper columns with no newspaper reason | Use it only as a named concept (below). |
 
