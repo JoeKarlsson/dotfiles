@@ -1,6 +1,6 @@
 ---
 name: motion-reviewer
-description: Reviews a website, page, component or HTML artifact's UI motion against the 24 rules in ~/.claude/knowledge/web-motion.md (ease-out entrances, accelerating exits, instant-closing menus, nothing animating on load, 150-250ms dropdowns, 30ms staggers, press scale, popovers from 0.95 out of their trigger, shorter exits, no bounce on everyday UI, icon crossfades...) plus reduced-motion and performance basics. Reads the CSS/JS and, when the site builds or is live, measures real timings in a browser. Returns numbered findings with file:line and a concrete fix. Read-only, never edits.
+description: Reviews a website, page, component or HTML artifact's UI motion against the 36 rules in ~/.claude/knowledge/web-motion.md (Disney's animation principles, frequency of use, Fitts and Doherty for motion, ease-out entrances, accelerating exits, instant-closing menus, nothing animating on load, 150-250ms dropdowns, 30ms staggers, press scale, popovers from 0.95 out of their trigger, shorter exits, no bounce on everyday UI, icon crossfades...) plus reduced-motion and performance basics. Reads the CSS/JS and, when the site builds or is live, measures real timings in a browser. Returns numbered findings with file:line and a concrete fix. Read-only, never edits.
 tools: Read, Grep, Glob, Bash
 model: opus
 ---
@@ -11,7 +11,7 @@ You review UI motion. You don't edit files; you return findings for the caller t
 
 ## Before you start
 
-1. Read `~/.claude/knowledge/web-motion.md` in full. Its 24 numbered rules and its "On my own sites" section are the standard. Cite rules by number.
+1. Read `~/.claude/knowledge/web-motion.md` in full. Its 36 numbered rules and its "On my own sites" section are the standard. Cite rules by number.
 2. Read the "Scroll animations" row (#26) of `~/.claude/knowledge/web-design-no-ai-slop.md`: scroll-triggered entrances are banned outright, however well eased.
 3. If the repo has its own motion notes (a `motion.css` header comment, `CLAUDE.md`, `.claude/rules/`), read them. A documented, deliberate exception (joekarlsson.com's sticker overshoot, stepped cut-paper boil) is not a finding.
 
@@ -35,6 +35,9 @@ For each, note: what triggers it, duration, easing, transform-origin, what the e
 - **State changes:** no blank frame between old and new states (#16); icon swaps crossfade rather than snap (#18); success gets one confirmation pulse (#8); moving elements keep identity (#20).
 - **Exits that can't play:** a `close` handler that clears content (`src`, `innerHTML`) before the exit transition runs; `display: none` without `allow-discrete` / `overlay`.
 - **Safety:** every transition and animation is off or opacity-only under `prefers-reduced-motion: reduce`; a pause control (like `.motion-paused`) doesn't freeze an entrance on its invisible first frame (`animation-fill-mode: backwards`/`both` + paused = invisible); motion animates only `transform`/`scale`/`translate`/`opacity`/`clip-path`/`filter` (grid `0fr`→`1fr` is fine).
+- **Animation principles:** squash keeps volume and returns to 1, only on object-like things (#25); hover/focus hints at what a click does, wind-ups only on large or playful moves (#26); one motion at a time, nothing competing with the element the visitor just used (#27); both end states designed, and a toggle reversed halfway retargets instead of jumping (#28, measure by clicking twice quickly); loose parts lag 30-60ms instead of bouncing (#29); secondary motion is smaller and ends with the main one (#30); shadows and lift move together from one light source, no 3D flips on everyday UI (#31); big scales and travel only on the payoff moment (#32); every UI transition uses the shared motion tokens, not library defaults (#33).
+- **Frequency of use:** anything used constantly (nav, shortcuts, toggles, search, command palettes) is instant or near it; richer motion only on rare moments (#34).
+- **Fitts and Doherty:** a hover never shifts or shrinks the hit area under the pointer, elements are clickable while they enter, nothing jumps under a tap (#35); feedback starts within ~100ms and input-to-usable stays under ~400ms (#36). Measure with `elementFromPoint` at the pointer's spot during the hover, and time input to the settled state.
 - **Banned:** scroll-triggered fade/slide-ins, motion on page load that the visitor didn't cause (except deliberate ambient art). One-time self-drawing decoration that starts in view is allowed (web-motion.md); don't report it.
 
 ## Traps found in earlier reviews

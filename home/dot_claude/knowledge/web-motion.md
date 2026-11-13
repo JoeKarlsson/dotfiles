@@ -1,6 +1,6 @@
 ---
 type: Concept
-description: "Read before adding any transition or animation to a website, web app or HTML artifact: 24 timing, easing and choreography rules for UI motion (ease-out entrances, accelerating exits, 150-250ms dropdowns, 30ms staggers, press scale, origin-aware popovers, shorter exits, instant-closing menus and tooltips, nothing animating on page load, no bounce on everyday UI...), reduced motion split by mouse and touch, plus how they bend on Joe's own sites"
+description: "Read before adding any transition or animation to a website, web app or HTML artifact: 36 timing, easing and choreography rules for UI motion, including Disney's animation principles and the motion side of Fitts, Doherty and frequency of use (ease-out entrances, accelerating exits, 150-250ms dropdowns, 30ms staggers, press scale, origin-aware popovers, shorter exits, instant-closing menus and tooltips, nothing animating on page load, no bounce on everyday UI...), reduced motion split by mouse and touch, plus how they bend on Joe's own sites"
 ---
 # Web motion rules
 
@@ -44,6 +44,23 @@ These four come from Meta's Astryx design system (`ui-component-libraries.md`), 
 19. **Rubber band past bounds.** Dragging past the end resists with diminishing movement, then springs back.
 20. **Reuse the same layout ID.** One element moving between two places should be the same element (View Transitions `view-transition-name`, Framer `layoutId`), not a fade-out and fade-in.
 
+## Animation principles and UX laws
+
+These bring Disney's animation principles and the UX laws that bear on motion into the rules, added 2026-11-13. Rules already cover some of them: #5 and #6 are squash & stretch and follow-through for knobs and panels, #1, #9 and #21 are slow in & slow out, #7 is arcs, and #2, #4, #15 and #22 are timing.
+
+25. **Squash and stretch keeps its volume.** When something squashes on one axis it widens on the other (`scale(1.06, 0.88)`, not `scale(1, 0.88)`), and it returns to exactly 1. Use it only on things that feel like objects (buttons, stickers, knobs), never on text blocks, images or layout.
+26. **Anticipate with hover and focus.** Before a click, the hover or focus state hints at what the click will do: a card lifts, an arrow nudges toward where the link goes, a drawer handle shifts the way it opens. A real wind-up (a 2-4% move the opposite way, 60ms or less, before the main move) is only for large or playful moves like a lightbox or something thrown across the screen. Never on menus, presses or forms, where it only adds delay.
+27. **Stage one thing at a time.** When something moves, nothing else on screen competes with it. The thing that moves is the thing the visitor caused or needs to look at next. Two unrelated animations at once, or ambient motion right next to the control the visitor just used, splits their attention.
+28. **Pose to pose: design both ends.** Every animation runs between two designed states that each look right held still (closed and open, before and after), and the browser does the in-betweens. Motion can be interrupted: a transition reversed halfway goes back from where it is, never jumping to an end state first. Prefer CSS transitions (which retarget) over keyframe animations for anything a visitor can toggle quickly.
+29. **Follow through by lagging, not bouncing.** When something stops, its loose parts (shadow, label, contents, badge) settle 30-60ms after the main body, inside the same total duration. On everyday UI that lag is the follow-through; overshoot stays banned (#13).
+30. **Secondary action supports the main one.** A smaller motion can back up the main one: a shadow deepens as a card lifts, an icon nudges as its button presses, a count ticks as an item lands. It's smaller, starts with or after the main motion and ends no later. If you'd notice it on its own, it's competing (#27), not supporting.
+31. **Keep depth consistent.** Things that lift get a bigger, softer shadow and a slight scale up together; things that sink do the reverse. Every shadow falls the same way, from one light source. No 3D flips, rotations or perspective tilts on everyday UI.
+32. **Exaggerate only the payoff.** Big scales, long travel and strong squash belong to the one moment that matters (a success, a reveal, the end of a game). Everyday UI stays small: scales between 0.95 and 1.05, moves of a few pixels.
+33. **Motion has one character.** Every UI transition uses the same motion tokens (see Patterns), so the site moves like one thing. A library default (everything fades up 20px) is a finding on a site with its own look.
+34. **The more often it's used, the less it animates.** Something used constantly (keyboard shortcuts, a command palette, typing, a nav used on every visit, toggles flipped in a row) changes instantly or close to it. Rare moments (a first success, a one-time reveal) can take longer and do more. #2 and #22 are this rule applied to menus and popups.
+35. **Don't move a target while someone aims at it (Fitts).** A hover effect never shifts or shrinks the thing under the pointer: a hover lift keeps the original hit area (animate an inner layer or a pseudo-element, or pad the hit area). Elements can be clicked while they animate in, with no `pointer-events: none` waiting for an entrance to finish. Nothing jumps into the spot a visitor is about to tap.
+36. **Respond inside the Doherty threshold.** Visible feedback starts within ~100ms of a press or keystroke, and no animation holds back the result: from input to usable state stays under ~400ms. Anything slower shows progress right away instead of a long animation covering the wait.
+
 ## Always
 
 - Under `prefers-reduced-motion: reduce`, a mouse gets instant state changes. A finger (`and (pointer: coarse)`) gets an opacity-only fade of 200ms or less for things that appear or go, since a change that just happens under a thumb reads as a glitch: nothing moves, scales or grows, and anything that changes size or place lands while it's transparent. #22 still holds: menus close at once.
@@ -70,6 +87,7 @@ joekarlsson.com and my art sites are cut-paper and stop-motion, not polished app
 - #4 is already done as the sticker squash (`scale(1.06, 0.88)`); don't add a second press effect.
 - One-time draw-ins (margin doodles, a scribble that draws once and stays) may start when scrolled into view, or I miss them. That's the only scroll-triggered motion allowed, and only for decoration that draws itself: never for fading or sliding in content.
 - #5, #7, #14, #19 and #20 only matter where something is dragged or travels, like the drawing board. Skip them on plain pages.
+- #25 is already done as the sticker squash. Wind-ups (#26) and exaggeration (#32) fit the paper kit and the games. The stepped boil and crayon redraws are the site's character (#33), not library defaults; they're ambient, so #27 only asks that they don't sit right next to the control a visitor is using.
 
 ## Review
 
