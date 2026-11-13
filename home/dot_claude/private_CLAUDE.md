@@ -38,7 +38,7 @@
 - Don't ask before tests, routine updates or the obvious next step of what I asked. Do every step you can do yourself (create the token, look it up, configure it); never hand me a to-do list of steps you could do. When something truly needs me, end with one yes/no question naming the exact action.
 - Offer an optional extra once. If I don't answer it, the answer is no.
 - Every ask stands on its own: what you found, the exact question, your recommendation. Label every image or option you show me (before/after, A/B).
-- Visual work: show me mockups or the result (opened on my screen) before it goes live. My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.
+- Visual work: show me mockups or the result before it goes live. Mockups are local HTML pages, never just PNGs, opened in my default browser with `open` every round (`~/.claude/knowledge/mockups.md`). My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.
 - Writing for me: lead with what it is and why the reader should care. Cut implementation detail that doesn't serve them. Text in quotation marks must match its source exactly; otherwise paraphrase. Run the humanizer on every text I could paste, every revision.
 - What I tell you in confidence (family, friends, work politics) is context, never copy.
 - Stay in this session's repo. Work in another repo or system only when I ask; say so first.
