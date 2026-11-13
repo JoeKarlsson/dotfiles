@@ -1,5 +1,6 @@
 import type { On } from 'claude-code'
 
+import { takeFinishNote } from './finish-check'
 import { takeSubagentNote } from './verification'
 
 // Memory `feedback-open-outputs-for-joe`: open any page, image, video or doc made
@@ -57,7 +58,7 @@ export function registerOpenOutputs(on: On) {
   on('classic.Stop', async ($, e, next) => {
     const result = await next(e)
     if (e.stop_hook_active || result.block) return result
-    const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote()].filter(Boolean)
+    const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote(), takeFinishNote()].filter(Boolean)
     pending = []
     return notes.length ? { ...result, block: notes.join('\n\n') } : result
   })

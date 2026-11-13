@@ -4,6 +4,7 @@ import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCommitFormat } from './commit-format'
 import { registerDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
+import { registerFinishCheck, resetFinishCheck } from './finish-check'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerMacScheduler } from './mac-scheduler'
 import { registerMarketing } from './marketing'
@@ -42,6 +43,7 @@ export const register: Register = on => {
   registerOutboundText(on)
   registerDecisions(on)
   registerVerification(on)
+  registerFinishCheck(on)
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
@@ -57,6 +59,7 @@ export const register: Register = on => {
     if (!e.agentId) {
       resetOpenOutputs()
       resetOutboundText()
+      resetFinishCheck()
     }
     return next(e)
   })

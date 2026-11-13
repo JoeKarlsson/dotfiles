@@ -86,7 +86,8 @@ test('opening it clears the stop', async ($, on) => {
   await $.tool.call({ tool: 'Write', file_path: '/Users/j/Downloads/report.html', content: '<p>x</p>' })
   await $.tool.call({ tool: 'Bash', command: 'open /Users/j/Downloads/report.html' })
   const stop = await $.classic.Stop({ stop_hook_active: false })
-  expect(stop.block).toBe(undefined)
+  // the finish check still asks for cleanup after a Write; only the open note must be gone
+  expect(stop.block ?? '').not.toContain('feedback-open-outputs')
 })
 
 test('outbound text: comments and reviews with a body, not reads or marked text', async () => {
@@ -124,4 +125,16 @@ test("a repo's DECISIONS.md is put in context at session start and after compact
     const started = await $.classic.SessionStart({ source })
     expect(started.additionalContext?.join('\n')).toContain('no blue corner bars')
   }
+})
+
+test('finish check: a turn that committed is held once for cleanup, a read-only turn is not', async ($, on) => {
+  sessionBase(on)
+  on('ui.status', async () => ({ value: undefined }) as never)
+  on('tool.call', { tool: 'Bash' }, async () => ({ result: '' }) as never)
+  await $.tool.call({ tool: 'Bash', command: 'git status' })
+  expect((await $.classic.Stop({ stop_hook_active: false })).block).toBe(undefined)
+  await $.tool.call({ tool: 'Bash', command: 'git commit -m "fix: Header lines up with the grid"' })
+  expect((await $.classic.Stop({ stop_hook_active: true })).block).toBe(undefined)
+  expect((await $.classic.Stop({ stop_hook_active: false })).block ?? '').toContain('Anything else?')
+  expect((await $.classic.Stop({ stop_hook_active: false })).block).toBe(undefined)
 })
