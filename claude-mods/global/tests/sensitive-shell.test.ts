@@ -15,7 +15,7 @@ test('a Read of a .env file is refused before it runs', async ($, on) => {
 // The guard asks Joe through the AskUserQuestion dialog before these run. A test
 // stubs the dialog: dismissing it must keep the command from running.
 for (const [cwd, command, asks] of [
-  ['/Users/j/Documents/dev/joe/joekarlsson.com', 'ssh root@192.168.0.216 uptime', true],
+  ['/Users/j/Documents/dev/joe/joekarlsson.com', 'ssh root@192.168.0.216 uptime', false],
   ['/Users/j/Documents/dev/joe/joekarlsson.com', 'tofu -chdir=x apply', true],
   ['/Users/j/Documents/dev/joe/joekarlsson.com', 'cat .env', true],
   ['/Users/j/Documents/dev/joe/joekarlsson.com', 'npm run deploy', false],

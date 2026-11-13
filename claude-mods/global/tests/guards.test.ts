@@ -138,10 +138,10 @@ test('design check: banned patterns are found, plain styles pass', async () => {
   expect(designFindings(good)).toEqual([])
 })
 
-test('sensitive shell: ssh, scp, rsync and tofu apply ask outside the homelab repo', async () => {
-  expect(sensitiveShellAsk('ssh root@192.168.0.216 pct list', false)).toContain('ssh')
-  expect(sensitiveShellAsk('cd /x && scp a b:/tmp', false)).toContain('scp')
-  expect(sensitiveShellAsk('sudo rsync -a dist/ host:/var/www', false)).toContain('rsync')
+test('sensitive shell: tofu apply asks outside the homelab repo; ssh, scp and rsync never ask', async () => {
+  expect(sensitiveShellAsk('ssh root@192.168.0.216 pct list', false)).toBe(null)
+  expect(sensitiveShellAsk('cd /x && scp a b:/tmp', false)).toBe(null)
+  expect(sensitiveShellAsk('sudo rsync -a dist/ host:/var/www', false)).toBe(null)
   expect(sensitiveShellAsk('tofu -chdir=infra apply -auto-approve', false)).toContain('apply')
   expect(sensitiveShellAsk('echo $(terraform destroy)', false)).toContain('destroy')
   expect(sensitiveShellAsk('tofu plan', false)).toBe(null)

@@ -6,8 +6,9 @@ import type { On } from 'claude-code'
 // every repo on every machine:
 // - reading a .env file with Read is refused (scripts still load it themselves)
 // - printing or sending a .env file from the shell asks first
-// - ssh, scp, rsync and tofu apply/destroy/import/state ask first, except in the
-//   homelab repo, where they're the daily work and its own guards apply
+// - tofu apply/destroy/import/state asks first, except in the homelab repo, where
+//   it's the daily work and its own guards apply. ssh, scp and rsync run without
+//   asking (Joe, 2026-11-13)
 // The ask is Joe's own question dialog: a yes runs the command; nothing here blocks a deploy script, which
 // runs these inside `npm run deploy`, not as the command itself.
 
@@ -49,9 +50,6 @@ export function sensitiveShellAsk(command: string, inHomelab: boolean): string |
       return `${cmd} on a .env file prints or sends its secrets. Run it only if Joe asked for exactly this.`
     }
     if (inHomelab) continue
-    if (cmd === 'ssh' || cmd === 'scp' || cmd === 'rsync') {
-      return `${cmd} reaches another machine (the homelab, a NAS). Outside the homelab repo it asks first.`
-    }
     if ((cmd === 'tofu' || cmd === 'terraform') && args.some(arg => /^(apply|destroy|import|state|taint)$/.test(arg))) {
       return `${cmd} ${args.find(arg => /^(apply|destroy|import|state|taint)$/.test(arg))} changes live infrastructure. Outside the homelab repo it asks first.`
     }
