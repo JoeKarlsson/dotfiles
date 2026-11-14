@@ -89,6 +89,13 @@ joekarlsson.com and my art sites are cut-paper and stop-motion, not polished app
 - #5, #7, #14, #19 and #20 only matter where something is dragged or travels, like the drawing board. Skip them on plain pages.
 - #25 is already done as the sticker squash. Wind-ups (#26) and exaggeration (#32) fit the paper kit and the games. The stepped boil and crayon redraws are the site's character (#33), not library defaults; they're ambient, so #27 only asks that they don't sit right next to the control a visitor is using.
 
+## Reference sites
+
+Look here for ideas and implementation detail, then run what you take through the rules above. Saved 2026-11-13.
+
+- **[motion.dev](https://motion.dev/)** (Motion, formerly Framer Motion). The [examples gallery](https://motion.dev/examples) has 500+ effects with source; most of the `js-` ones port to plain CSS and vanilla JS (stagger from edges, grid ripple from a clicked cell, natural typewriter, long press, double tap, drag constraints, clip-path curtains, add-to-basket arcs). Its [performance page](https://motion.dev/docs/performance) backs the "Always" rules and adds two swaps: animate `filter: drop-shadow()` instead of `box-shadow`, and `clip-path: inset(0 round Npx)` instead of `border-radius`. If a page truly needs its springs or gestures, `motion/mini` is ~3.2 kb (`animate` only); a CSS `linear()` easing can usually fake a spring with no dependency. Traps: a spring's default `stiffness` is 1 (very soft, always set it), and `spring()` takes milliseconds where everything else takes seconds.
+- **[bklit.com](https://bklit.com/)** (Bklit UI, React chart components on d3 + Motion). Good for chart and data motion: lines reveal with a left-to-right `clip-path` (not `scaleX`, which grows from the center), hovering one series dims the rest to ~0.4 opacity over 150ms, crosshairs spring to the nearest point (stiffness 300, damping 30), data changes morph the path over 500ms, and staggered rings and bars cascade 50-120ms apart. Source for any component is at `https://bklit.com/r/{name}.json`. Don't copy its timing: its enters run 0.9-1.1s on a strong ease-in-out (`cubic-bezier(0.85, 0, 0.15, 1)`) and play on load, which breaks #1, #23 and #34.
+
 ## Review
 
 The `motion-reviewer` agent (`~/.claude/agents/motion-reviewer.md`) checks a site or page against these rules, measuring real timings in Chromium and WebKit when it can. Run it after adding or changing UI motion.
