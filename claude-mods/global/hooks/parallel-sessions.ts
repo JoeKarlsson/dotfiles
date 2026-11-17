@@ -16,7 +16,9 @@ type Peer = { name: string; cwd: string; pid: number }
 // command makes no path-less commit, or when that directory hides behind a `$var`
 // or backtick and can't be read from the text (fail open).
 export function pathlessCommit(command: string): string | null | undefined {
-  for (const m of command.matchAll(/\bgit\b((?:\s+-C\s+\S+|\s+-c\s+\S+|\s+--?[\w-]+(?:=\S+)?)*)\s+commit\b([^;&|\n]*)/g)) {
+  // separators inside quotes (a commit message's "a; b") don't end the command; same length keeps indices valid
+  const unquoted = command.replace(/"(?:\\.|[^"\\])*"|'[^']*'/g, q => q.replace(/[;&|\n]/g, ' '))
+  for (const m of unquoted.matchAll(/\bgit\b((?:\s+-C\s+\S+|\s+-c\s+\S+|\s+--?[\w-]+(?:=\S+)?)*)\s+commit\b([^;&|\n]*)/g)) {
     if (/(^|\s)--(\s|$)/.test(m[2] ?? '')) continue
     const cd = [...command.slice(0, m.index).matchAll(/(?:^|[;&|(]\s*)cd\s+([^\s;&|)]+)/g)].at(-1)?.[1]
     const c = /-C\s+(\S+)/.exec(m[1] ?? '')?.[1]

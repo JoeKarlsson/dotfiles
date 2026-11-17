@@ -9,6 +9,10 @@ test('path-less commits are caught, commits with -- are not', async () => {
   expect(pathlessCommit('git commit -m "fix: X" -- a.ts b.ts')).toBe(undefined)
   expect(pathlessCommit('git log --grep commit')).toBe(undefined)
   expect(pathlessCommit('git add x && git commit -m y; git push')).toBe(null)
+  // a ; & | inside the quoted message must not hide the -- after it
+  expect(pathlessCommit('git commit -m "fix: a; b & c | d" -- a.ts')).toBe(undefined)
+  expect(pathlessCommit("git commit -m 'a; b' -- a.ts")).toBe(undefined)
+  expect(pathlessCommit('git commit -m "a; b"')).toBe(null)
 })
 
 test('a cd before the commit sets its directory; unreadable paths fail open', async () => {
