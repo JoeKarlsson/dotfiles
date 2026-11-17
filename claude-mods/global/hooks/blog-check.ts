@@ -71,8 +71,8 @@ async function vale($: EngineInterface, path: string): Promise<string[] | null> 
 
 type Tells = { total: number; per_100_words: number; hits: Record<string, string[]> }
 
-// The humanizer skill lives in the homelab repo (~/claude on the Mac,
-// /root/claude-skills-joekarlsson on claude-dev), not in ~/.claude/skills.
+// The humanizer skill lives in the homelab repo (~/claude-skills/.claude/skills/humanizer
+// on the Mac, reached through the ~/claude symlink; /root/claude-skills-joekarlsson on claude-dev).
 const AI_TELLS = '.claude/skills/humanizer/scripts/ai_tells.py'
 
 export async function aiTellsScript($: EngineInterface): Promise<string | null> {

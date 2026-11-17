@@ -3,7 +3,7 @@ import { expect, test } from 'claude-code/testing'
 
 import { plistWrite, schedulerFinding } from '../hooks/mac-scheduler'
 import { isOpenCommand, isViewableOutput } from '../hooks/open-outputs'
-import { postsJoesWords } from '../hooks/outbound-text'
+import { postedBodies, postsJoesWords } from '../hooks/outbound-text'
 import { keychainDenial } from '../hooks/sensitive-shell'
 
 // Split so the text of this file is not itself a launchd plist key.
@@ -100,6 +100,31 @@ test('outbound text: comments and reviews with a body, not reads or marked text'
   expect(postsJoesWords('HUMANIZED=1 gh pr comment 12 --body "x"')).toBe(false)
 })
 
+test('signature: bodies of PR and issue posts are found, commits and reads are not', async () => {
+  expect(postedBodies('gh pr create --title T --body "Adds X"')).toEqual([{ text: 'Adds X' }])
+  expect(postedBodies('gh issue comment 5 -b "thanks"')).toEqual([{ text: 'thanks' }])
+  expect(postedBodies('gh pr review 5 --approve --body=ok')).toEqual([{ text: 'ok' }])
+  expect(postedBodies('gh issue create -t T -F notes.md')).toEqual([{ file: 'notes.md' }])
+  expect(postedBodies('gh pr view 12 --comments')).toEqual([])
+  expect(postedBodies('git commit -m "fix: X" -F msg.txt')).toEqual([])
+})
+
+test('a post without the signature line is refused, a signed one goes out', async ($, on) => {
+  sessionBase(on)
+  let posted = 0
+  on('tool.call', { tool: 'Bash' }, async () => {
+    posted++
+    return { result: '' } as never
+  })
+  on('fs.read', async () => ({ value: 'Body.\n\nDrafted with Claude Code.\n' }) as never)
+  const refused = await $.tool.call({ tool: 'Bash', command: 'gh pr create --title T --body "Adds X"' })
+  expect(posted).toBe(0)
+  expect(JSON.stringify(refused)).toContain('Drafted with Claude Code.')
+  await $.tool.call({ tool: 'Bash', command: 'gh pr create --title T --body "Adds X\n\nDrafted with Claude Code."' })
+  await $.tool.call({ tool: 'Bash', command: 'gh issue create --title T --body-file /tmp/b.md' })
+  expect(posted).toBe(2)
+})
+
 test('a comment is refused until the humanizer runs in the turn', async ($, on) => {
   sessionBase(on)
   let posted = 0
@@ -108,10 +133,11 @@ test('a comment is refused until the humanizer runs in the turn', async ($, on) 
     return { result: '' } as never
   })
   on('tool.call', { tool: 'Skill' }, async () => ({ result: 'loaded' }) as never)
-  await $.tool.call({ tool: 'Bash', command: 'gh pr comment 12 --body "Fixed it"' })
+  const signed = 'gh pr comment 12 --body "Fixed it. Drafted with Claude Code."'
+  await $.tool.call({ tool: 'Bash', command: signed })
   expect(posted).toBe(0)
   await $.tool.call({ tool: 'Skill', skill: 'humanizer' })
-  await $.tool.call({ tool: 'Bash', command: 'gh pr comment 12 --body "Fixed it"' })
+  await $.tool.call({ tool: 'Bash', command: signed })
   expect(posted).toBe(1)
 })
 

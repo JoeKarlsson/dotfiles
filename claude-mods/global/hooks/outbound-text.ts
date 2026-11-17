@@ -25,6 +25,34 @@ export function postsJoesWords(command: string): boolean {
   return false
 }
 
+// Text agents post for other people says so: PR and issue bodies, comments and
+// reviews carry the signature line (Joe, 2026-11-17). Commit messages are not covered.
+export const SIGNATURE = 'Drafted with Claude Code.'
+
+const SIGNED_POSTS = /^(pr (create|comment|review)|issue (create|comment))$/
+
+// Bodies a `gh pr|issue create|comment` or `gh pr review` command posts: inline text, or a file to read.
+export function postedBodies(command: string): ({ text: string } | { file: string })[] {
+  const out: ({ text: string } | { file: string })[] = []
+  for (const segment of segments(command)) {
+    const w = words(segment)
+    while (w.length && /^\w+=/.test(w[0]!)) w.shift()
+    if ((w[0] ?? '').split('/').pop() !== 'gh' || !SIGNED_POSTS.test(`${w[1]} ${w[2]}`)) continue
+    w.forEach((x, i) => {
+      const [flag, inline] = x.startsWith('--') && x.includes('=') ? [x.slice(0, x.indexOf('=')), x.slice(x.indexOf('=') + 1)] : [x, w[i + 1]]
+      if (inline === undefined) return
+      if (flag === '-b' || flag === '--body') out.push({ text: inline })
+      // `--body-file -` reads stdin, a heredoc in the command itself
+      if (flag === '-F' || flag === '--body-file') out.push(inline === '-' ? { text: command } : { file: inline })
+    })
+  }
+  return out
+}
+
+export const SIGN_IT =
+  `Sign it (global mod): text an agent posts for other people ends with the line "${SIGNATURE}". ` +
+  'Add that line at the end of the body, then rerun the command.'
+
 export const HUMANIZE_FIRST =
   "Humanize first (global mod): this posts text in Joe's name. Run the humanizer skill on it (Skill tool, " +
   '"humanizer", its full process), then post. If this exact text already went through the humanizer in an ' +
@@ -40,6 +68,10 @@ export function registerOutboundText(on: On) {
   })
 
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
+    for (const body of postedBodies(e.command)) {
+      const text = 'text' in body ? body.text : await $.fs.read(body.file.startsWith('/') ? body.file : `${await $.session.cwd()}/${body.file}`)
+      if (!text.includes(SIGNATURE)) return { deny: SIGN_IT }
+    }
     if (humanizedThisTurn || !postsJoesWords(e.command)) return next(e)
     return { deny: HUMANIZE_FIRST }
   })
