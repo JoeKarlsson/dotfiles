@@ -138,6 +138,20 @@ test('design check: banned patterns are found, plain styles pass', async () => {
   expect(designFindings(good)).toEqual([])
 })
 
+test('design check: a line cleared with design-ok and a reason, on it or above it, is skipped', async () => {
+  const text = [
+    '/* design-ok: a hard-stop sweep, no visible blend */',
+    'background: linear-gradient(90deg, #ff4fd8 50%, transparent 50%);',
+    '@apply font-mono text-xs; /* design-ok: label on a code block */',
+    'background: linear-gradient(red, blue); /* design-ok: */',
+    'box-shadow: 0 0 4px black;',
+  ].join('\n')
+  const found = designFindings(text)
+  expect(found.length).toBe(2)
+  expect(found[0]).toContain('L4')
+  expect(found[1]).toContain('L5')
+})
+
 test('sensitive shell: tofu apply asks outside the homelab repo; ssh, scp and rsync never ask', async () => {
   expect(sensitiveShellAsk('ssh root@192.168.0.216 pct list', false)).toBe(null)
   expect(sensitiveShellAsk('cd /x && scp a b:/tmp', false)).toBe(null)

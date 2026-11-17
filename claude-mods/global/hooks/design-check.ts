@@ -36,9 +36,17 @@ const CHECKS: [RegExp, string, ((line: string) => boolean)?][] = [
   [/>[^<]*\w \u00b7 \w[^<]*\u00b7 \w/, 'middle-dot meta string (#31)'],
 ]
 
+// A deliberate exception, cleared with its reason on the line itself or in a comment
+// line right above it:
+// `/* design-ok: the reading bar tracks scroll, nothing fades in */`
+const CLEARED = /design-ok:\s*[^\s*][^*]{2,}/
+
 export function designFindings(text: string): string[] {
   const out: string[] = []
-  text.split('\n').forEach((line, i) => {
+  const lines = text.split('\n')
+  lines.forEach((line, i) => {
+    const above = (lines[i - 1] ?? '').trim()
+    if (CLEARED.test(line) || (/^(\/\*|\/\/|<!--|\*|\{\/\*)/.test(above) && CLEARED.test(above))) return
     for (const [re, what, applies] of CHECKS) {
       if (re.test(line) && (!applies || applies(line))) out.push(`L${i + 1} ${what}: ${line.trim().slice(0, 100)}`)
     }
@@ -56,7 +64,7 @@ export function registerDesignCheck(on: On) {
     const more = findings.length - shown.length
     const note = [
       `Design check on ${e.file_path} (global mod). These match banned AI-design patterns in ${RULE}; read it if you haven't.`,
-      'Fix each one, or leave it only if it is a real exception (for example a shadow on a dialog) and say so.',
+      'Fix each one. A real exception (for example a shadow on a dialog) gets a `design-ok: <reason>` comment on the line or the line above, so it is not flagged again.',
       ...shown.map(f => `  ${f}`),
       ...(more ? [`  … ${more} more`] : []),
     ].join('\n')
