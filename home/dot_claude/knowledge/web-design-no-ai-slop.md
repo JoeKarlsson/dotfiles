@@ -16,7 +16,7 @@ The goal is a page with one idea behind it, and the idea comes from what the sit
 
 ## First: the goal, then the direction, then the style
 
-My pink-and-black punk look is reserved for joekarlsson.com alone (2026-11-17). It is not the default, and no other project gets it. By November 2026 joekarlsson.com, Punc and bechdel.io had all drifted into the same pink-and-black look, and I want sites that look made for their own project (2026-11-12). So no color or font gets picked until the site's goal is written down. Before pitching a look, name the default and check it against this registry and your recent work ([creative-defaults.md](/creative-defaults.md)).
+My pink-and-black punk look is reserved for joekarlsson.com alone (2026-11-17). It is not the default, and no new project gets it (bechdel.io already has it and keeps it). By November 2026 joekarlsson.com, Punc and bechdel.io had all drifted into the same pink-and-black look, and I want sites that look made for their own project (2026-11-12). So no color or font gets picked until the site's goal is written down. Before pitching a look, name the default and check it against this registry and your recent work ([creative-defaults.md](/creative-defaults.md)).
 
 ### 1. Write the brief (five lines, on the plan, shown to me with the first mockups)
 
@@ -76,7 +76,7 @@ Update this whenever a site's look changes.
 | joekarlsson.com | My work, writing and newsletter | My own voice | Black, hot pink (~#ff4fd8) | Anton |
 | hello.joekarlsson.io | Link-in-bio | Was my own voice; due a look of its own, since pink and black is joekarlsson.com only (2026-11-17) | Black, hot pink | Anton |
 | Punc | Art project on public-domain books | Concept: punk band posters; due a palette of its own, since pink and black is joekarlsson.com only (2026-11-17) | Pink and black, dithered | Anton, Fraunces |
-| bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site, and the black stays too, an exception to the not-on-black rule (2026-11-12) | Anton, Fraunces |
+| bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site, and the black stays too, an exception to the not-on-black rule (2026-11-12). It was built before the joekarlsson.com-only rule and keeps its look; no restyle planned (2026-11-17) | Anton, Fraunces |
 
 When the kind, the goal or the direction isn't obvious, ask me.
 

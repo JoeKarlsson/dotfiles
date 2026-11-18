@@ -32,7 +32,7 @@ Before showing a new piece, compare its main move against the registry in [web-d
 
 ## 3. A little randomness, tied to the project
 
-I like some chance in where a design starts, so two similar briefs don't land in the same place. When a brief leaves the look open, roll one or two axes (a making method, a color approach, a layout, a type treatment) from a list rather than picking by taste, then keep a roll only if you can tie it to the project in one sentence. Re-roll an axis that can't be tied. Say on the plan what was rolled and how it ties in. The roll is a starting point; the project still decides.
+I like some chance in where a design starts, so two similar briefs don't land in the same place. When a brief leaves the look open, list four to six options for one or two axes (a making method, a color approach, a layout, a type treatment) that each fit the project, then roll with `python3 -c 'import random; print(random.choice([...]))'` rather than picking by taste (a model's own "random" pick lands in the same place every time), then keep a roll only if you can tie it to the project in one sentence. Say on the plan what was rolled and how it ties in. The roll is a starting point; the project still decides.
 
 ## 4. Chaotic hand-drawn marks
 
