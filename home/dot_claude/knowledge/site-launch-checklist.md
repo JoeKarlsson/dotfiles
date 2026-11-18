@@ -168,7 +168,7 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 
 - One `h1` per page that says what the page is; descriptive link text (not "click here")
 - Internal links between related pages; no orphan pages
-- Sitemap submitted in Google Search Console (and Bing Webmaster Tools); check the coverage report a few days after launch
+- Registered in Search Console, Bing and Plausible, with the sitemap submitted: follow "Search, analytics and indexing" below. Check the coverage report a few days after launch
 - Spelling and grammar checked; no placeholder text; copy run through the `humanizer` skill
 - A privacy note if the site collects anything (analytics, uploads, forms)
 
@@ -189,9 +189,29 @@ Automate what can drift, so the checklist stays true after launch. Run them in C
 - **Unit tests** for logic with branches, loops, parsing, math or money, next to the code
 - **Coverage:** measure it (`jest --coverage`, `c8`, or Playwright's JS coverage) and read the report for untested risky code rather than chasing a percentage. Every bug fix leaves a test behind.
 
-## Analytics and monitoring
+## Search, analytics and indexing
 
-- Plausible (self-hosted, `plausible.joekarlsson.io`) with the right `data-domain`, skipped for bots; outbound links, downloads and key buttons tagged as events
+First decide what the host is. Only a **content site** (a project, post or page meant to be found) gets registered.
+
+- **Infrastructure that is public only for technical reasons** (Plausible, Seer, Postiz, listmonk, admin UIs): never add it to Search Console, Bing or Plausible. Send `X-Robots-Tag: noindex, nofollow` on every response. Behind NPM, put `more_set_headers 'X-Robots-Tag: noindex, nofollow';` in the host's advanced config. `add_header` is dropped inside `location /`, because NPM's `proxy.conf` sets its own `add_header`. Check with `curl -sI`. A robots.txt `Disallow` alone doesn't keep a linked URL out of results, and it stops Google from ever seeing the noindex.
+- **Stale demos** still served from archived repos get no property of their own. The Domain property already covers them. Leave them up unless Joe asks.
+- **Never Google Analytics.** Plausible only.
+
+For a content site on a joekarlsson.com subdomain:
+
+1. **Search Console** on Joe's personal Google account (`search.google.com/u/1/`): `sc-domain:joekarlsson.com` is verified by the apex TXT record in Cloudflare, so keep that record. Add the URL-prefix property `https://<sub>.joekarlsson.com/`; it auto-verifies. A new apex domain needs its own Domain property: pick "Any DNS provider" and add the TXT record by hand in the Cloudflare dashboard, rather than letting Google sign in to Cloudflare.
+2. **Sitemap:** submit it in that property.
+3. **Bing Webmaster Tools:** Add a site, Import from Google Search Console (a read-only Google consent), and tick only the new site.
+4. **Plausible tag:** copy `analytics.js` from a recent site (`nothing-but-corners/analytics.js` or `linger/analytics.js`). It skips bots and headless browsers and sends `404` and `JS Error` events. Set `data-domain` to the exact host, load the script on every page including the 404, and allow `https://plausible.joekarlsson.io` in the CSP's `script-src` and `connect-src`. Outbound links, downloads and key buttons get tagged as events.
+5. **Plausible site:** create it in the Plausible UI with the same domain. CE has no Sites API. A tag without a site silently drops every event: six sites lost their data this way until 2026-11-18.
+6. **Link Search Console in Plausible:** Settings, Integrations, Continue with Google, then pick the josephcarlson1 account. The "Google hasn't verified this app" screen is Joe's own OAuth client, so continue. Pick the matching URL-prefix property and Save.
+7. **Copy:** if the site, its README or its works page on joekarlsson.com (`src/data/projects.ts`) says there are no analytics, change that text in the same change.
+8. **Verify:** open the live site in a normal browser and see the visit in Plausible's realtime view. The link shows in Plausible's database: `select s.domain, g.property from sites s left join google_auth g on g.site_id = s.id;` on `plausible-plausible_db-1`.
+
+Explain any OAuth consent screen to Joe before clicking through it. Each one should name exactly what it grants.
+
+## Monitoring
+
 - 404s show up somewhere (a Plausible event on the 404 page)
 - An uptime check on the live URL for anything people rely on
 - JS errors on the live site get noticed (a `window.onerror` event to analytics, or an error tracker)
