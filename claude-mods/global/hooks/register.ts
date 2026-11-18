@@ -1,6 +1,7 @@
 import type { EngineInterface, Register } from 'claude-code'
 
 import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
+import { registerCdataMarkdown } from './cdata-markdown'
 import { registerCommitFormat } from './commit-format'
 import { registerDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
@@ -39,6 +40,7 @@ export const register: Register = on => {
   registerPonytail(on)
   registerMarketing(on)
   registerMacScheduler(on)
+  registerCdataMarkdown(on)
   registerOpenOutputs(on)
   registerOutboundText(on)
   registerDecisions(on)
