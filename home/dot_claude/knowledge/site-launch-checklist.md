@@ -108,10 +108,7 @@ Every domain Joe owns follows one setup (set up 2026-11-18 on joekarlsson.com, j
   - Turn DNSSEC off in Cloudflare and remove the DS before ever moving DNS away again, or the domain stops resolving.
 - **Firewall (Pro zones):** Security → Security rules → Deploy managed ruleset → Cloudflare Managed Ruleset. Set the ruleset action to Log for the first week, check Security → Analytics for false positives, then set it back to Default to block. joekarlsson.com went to Log on 2026-11-18.
 - **Leave off:** Bot Fight Mode, Super Bot Fight Mode and AI Labyrinth. Joe wants search and AI crawlers to read his sites.
-- **Search engines:**
-  - Add the site to Google Search Console under Joe's personal Google account (not CData's) as a URL-prefix property, and submit the sitemap.
-  - Add the site to Bing Webmaster Tools by hand (avoid the "Import from GSC" OAuth grant). Verify with the `msvalidate.01` meta tag or a file, then submit the sitemap.
-  - On a site whose tests treat every `.html` file as a page, exclude Google's `google*.html` verification file (bechdel.io's deploy broke on it).
+- **Search engines and analytics:** follow "Search, analytics and indexing" below. On a site whose tests treat every `.html` file as a page, exclude Google's `google*.html` verification file (bechdel.io's deploy broke on it).
 - **After any change,** open Cloudflare → Security insights and clear or explain what's left.
 - Source audit: before a site's first launch, and again after it gains a backend, form, upload or other visitor input, run the `security-audit` skill ("security audit this repo, quick profile"; "standard" once there's a backend). Reports go to `~/security-audit-skill/<repo>/run-N`, never into the repo, since most of Joe's repos are public. Fix confirmed High/Medium findings before shipping. `/security-review` covers single diffs between audits.
 
@@ -226,18 +223,24 @@ Automate what can drift, so the checklist stays true after launch. Run them in C
 
 ## Search, analytics and indexing
 
-First decide what the host is. Only a **content site** (a project, post or page meant to be found) gets registered.
+Every public host goes in Plausible and Bing. Only content sites go in Search Console (Joe, 2026-11-18):
 
-- **Infrastructure that is public only for technical reasons** (Plausible, Seer, Postiz, listmonk, admin UIs): never add it to Search Console, Bing or Plausible. Send `X-Robots-Tag: noindex, nofollow` on every response. Behind NPM, put `more_set_headers 'X-Robots-Tag: noindex, nofollow';` in the host's advanced config. `add_header` is dropped inside `location /`, because NPM's `proxy.conf` sets its own `add_header`. Check with `curl -sI`. A robots.txt `Disallow` alone doesn't keep a linked URL out of results, and it stops Google from ever seeing the noindex.
+| Host | Plausible | Bing | Search Console |
+|---|---|---|---|
+| **Content site** (a project, post or page meant to be found) | yes | yes | yes |
+| **Public infrastructure** (Plausible, Seer at requests, Postiz, listmonk, link pages, admin UIs) | yes | yes | no |
+| **Redirect-only host** (bechdel.io, joekarlsson.io, joekarlsson.dev apex) | no pages to track | no | no |
+
+- **Public infrastructure** stays out of search results: send `X-Robots-Tag: noindex, nofollow` on every response. Behind NPM, put `more_set_headers 'X-Robots-Tag: noindex, nofollow';` in the host's advanced config. `add_header` is dropped inside `location /`, because NPM's `proxy.conf` sets its own `add_header`. Check with `curl -sI`. A robots.txt `Disallow` alone doesn't keep a linked URL out of results, and it stops Google from ever seeing the noindex.
 - **Stale demos** still served from archived repos get no property of their own. The Domain property already covers them. Leave them up unless Joe asks.
 - **Never Google Analytics.** Plausible only.
 
-For a content site on a joekarlsson.com subdomain:
+For a content site on a joekarlsson.com subdomain (public infrastructure skips steps 1, 2 and 6):
 
 1. **Search Console** on Joe's personal Google account (`search.google.com/u/1/`): `sc-domain:joekarlsson.com` is verified by the apex TXT record in Cloudflare, so keep that record. Add the URL-prefix property `https://<sub>.joekarlsson.com/`; it auto-verifies. A new apex domain needs its own Domain property: pick "Any DNS provider" and add the TXT record by hand in the Cloudflare dashboard, rather than letting Google sign in to Cloudflare.
 2. **Sitemap:** submit it in that property.
-3. **Bing Webmaster Tools:** Add a site, Import from Google Search Console (a read-only Google consent), and tick only the new site.
-4. **Plausible tag:** copy `analytics.js` from a recent site (`nothing-but-corners/analytics.js` or `linger/analytics.js`). It skips bots and headless browsers and sends `404` and `JS Error` events. Set `data-domain` to the exact host, load the script on every page including the 404, and allow `https://plausible.joekarlsson.io` in the CSP's `script-src` and `connect-src`. Outbound links, downloads and key buttons get tagged as events.
+3. **Bing Webmaster Tools** (same Microsoft login as the other sites): a content site comes in through Add a site, Import from Google Search Console (a read-only Google consent; tick only the new site). It needs no tag and Bing picks up the sitemap from Search Console. Public infrastructure isn't in Search Console, so add it by hand and verify it with Bing's CNAME record in Cloudflare DNS, which needs no change to the app. Submit the sitemap if the host has one.
+4. **Plausible tag:** copy `analytics.js` from a recent site (`nothing-but-corners/analytics.js` or `linger/analytics.js`). It skips bots and headless browsers and sends `404` and `JS Error` events. Set `data-domain` to the exact host, load the script on every page including the 404, and allow `https://plausible.joekarlsson.io` in the CSP's `script-src` and `connect-src`. Outbound links, downloads and key buttons get tagged as events. An infrastructure app Joe doesn't build gets the tag through its own custom-script setting where it has one (listmonk's `appearance.public.custom_js`). Check the app doesn't already send to Plausible before adding another tracker: a second one double-counts (listmonk, 2026-11-12).
 5. **Plausible site:** create it in the Plausible UI with the same domain. CE has no Sites API. A tag without a site silently drops every event: six sites lost their data this way until 2026-11-18.
 6. **Link Search Console in Plausible:** Settings, Integrations, Continue with Google, then pick the josephcarlson1 account. The "Google hasn't verified this app" screen is Joe's own OAuth client, so continue. Pick the matching URL-prefix property and Save.
 7. **Copy:** if the site, its README or its works page on joekarlsson.com (`src/data/projects.ts`) says there are no analytics, change that text in the same change.
