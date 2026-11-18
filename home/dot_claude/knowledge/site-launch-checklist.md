@@ -250,6 +250,7 @@ Explain any OAuth consent screen to Joe before clicking through it. Each one sho
 - 404s show up somewhere (a Plausible event on the 404 page)
 - An uptime check on the live URL for anything people rely on
 - JS errors on the live site get noticed (a `window.onerror` event to analytics, or an error tracker)
+- Tracking stays alive: `npm run analytics:sites` in the joekarlsson.com repo (Phase 0 of its `/analytics`) checks every Plausible site for the tag, a pageview in the last 14 days and its Search Console link
 
 ## After launch
 
