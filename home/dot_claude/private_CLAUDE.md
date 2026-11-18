@@ -42,7 +42,6 @@
 - Visual work: show me mockups or the result before it goes live. Mockups are local HTML pages, never just PNGs, opened in my default browser with `open` every round (`~/.claude/knowledge/mockups.md`). My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.
 - Writing for me: lead with what it is and why the reader should care. Cut implementation detail that doesn't serve them. Text in quotation marks must match its source exactly; otherwise paraphrase. Run the humanizer on every text I could paste, every revision.
 - What I tell you in confidence (family, friends, work politics) is context, never copy.
-- Stay in this session's repo. Work in another repo or system only when I ask; say so first.
 
 ## Git
 
