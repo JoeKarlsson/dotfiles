@@ -16,7 +16,7 @@ The goal is a page with one idea behind it, and the idea comes from what the sit
 
 ## First: the goal, then the direction, then the style
 
-My pink-and-black punk look is one direction, for things that are plainly me. It is not the default. By November 2026 joekarlsson.com, Punc and bechdel.io had all drifted into the same pink-and-black look, and I want sites that look made for their own job (2026-11-12). So no color or font gets picked until the site's goal is written down.
+My pink-and-black punk look is reserved for joekarlsson.com alone (2026-11-17). It is not the default, and no other project gets it. By November 2026 joekarlsson.com, Punc and bechdel.io had all drifted into the same pink-and-black look, and I want sites that look made for their own project (2026-11-12). So no color or font gets picked until the site's goal is written down. Before pitching a look, name the default and check it against this registry and your recent work ([creative-defaults.md](/creative-defaults.md)).
 
 ### 1. Write the brief (five lines, on the plan, shown to me with the first mockups)
 
@@ -38,7 +38,7 @@ The kind of page still matters: a text document reads like a well-set document (
 | A tool or data product: a checker, a tracker, a calculator, a dashboard | **Clear instrument.** Neutral ground, one accent that means "act" or marks data; real charts | Neutral plus one accent; Light and plain; Dark grounds | A sober grotesk with good figures |
 | Professional profile, talks, anything an employer or client reads | **Clean site** (references below). One big confident face, white space, real photos | Light and plain; Neutral plus one accent | One grotesk, two weights |
 | An art project, a community or an event | **Concept from the subject** (gig flyer, record sleeve, zine, field guide), with the concept exception | Flat and loud; One big color field; Two colors only | A poster or display face plus a readable text face |
-| Things that are plainly me: joekarlsson.com, hello.joekarlsson.io, my homelab pages | **My own voice:** the pink-and-black punk below | Black and hot pink only | Anton plus the site's text face |
+| joekarlsson.com only (2026-11-17) | **My own voice:** the pink-and-black punk below | Black and hot pink only | Anton plus the site's text face |
 
 A site can mix, say a clear instrument with one concept touch. Name the direction on the plan right under the brief. Company work follows the company brand.
 
@@ -62,7 +62,7 @@ Line 3 of the brief names the action. Build the page from what real sites with t
 ### 3. Pick the style inside the direction
 
 - **Palettes and type come from the library,** not from memory: `~/.claude/knowledge/design-library/` holds taste-skill's 64 palettes and 38 type pairings (MIT). Render the board with `python3 ~/.claude/knowledge/design-library/board.py ~/.claude/knowledge/design-library <scratchpad>/board.html`, then show me three palettes and two pairings that fit the direction, numbered, as mockups of the actual first screen. Follow each palette's note: it says how much of the page each color gets. Ignore the library's `tracking` values (ban #4) and its Instrument Serif pairing (ban #3).
-- **Pink is reserved for my own voice.** Another site gets pink only when its subject calls for it, and then not on black.
+- **Pink and black is reserved for joekarlsson.com** (2026-11-17). Another site gets pink only when its subject calls for it, and then not on black.
 - **Differ from the neighbors:** a new site uses a palette family and a display face that no site in the registry uses, unless it is part of joekarlsson.com.
 - **Check the plan against the brief before building.** Ask whether a similar brief would have produced the same palette, type and layout. If it would, that part is a default, not a choice: revise it and say what changed and why.
 - **A palette or face I reject gets cut from the library** and noted here, so it isn't offered again.
@@ -74,8 +74,8 @@ Update this whenever a site's look changes.
 | Site | Goal | Direction | Palette | Display face |
 |---|---|---|---|---|
 | joekarlsson.com | My work, writing and newsletter | My own voice | Black, hot pink (~#ff4fd8) | Anton |
-| hello.joekarlsson.io | Link-in-bio | My own voice | Black, hot pink | Anton |
-| Punc | Art project on public-domain books | Concept: punk band posters | Pink and black, dithered | Anton, Fraunces |
+| hello.joekarlsson.io | Link-in-bio | Was my own voice; due a look of its own, since pink and black is joekarlsson.com only (2026-11-17) | Black, hot pink | Anton |
+| Punc | Art project on public-domain books | Concept: punk band posters; due a palette of its own, since pink and black is joekarlsson.com only (2026-11-17) | Pink and black, dithered | Anton, Fraunces |
 | bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site, and the black stays too, an exception to the not-on-black rule (2026-11-12) | Anton, Fraunces |
 
 When the kind, the goal or the direction isn't obvious, ask me.
@@ -150,7 +150,7 @@ Small type above a heading is fine when it carries a fact the reader lacks: a `<
 
 ## My own voice: the pink-and-black punk direction
 
-For sites that are plainly me (joekarlsson.com, hello.joekarlsson.io, homelab pages), plus the verdicts I've given on my sites so far. Other sites pick their direction from their goal (above). From this list they keep only what holds everywhere: a concept from the subject, real photos and type over commissioned-looking illustration, handmade over slick, no tidy template grids. Work sites follow the company brand instead.
+For joekarlsson.com only (2026-11-17), plus the verdicts I've given on my sites so far. Other sites pick their direction from their goal (above). From this list they keep only what holds everywhere: a concept from the subject, real photos and type over commissioned-looking illustration, handmade over slick, no tidy template grids. Work sites follow the company brand instead.
 
 Keep this section current: whenever I react to a design, reference site or mockup (like it, dislike it, or a specific part), record it here with the date in the same session, and commit it.
 
