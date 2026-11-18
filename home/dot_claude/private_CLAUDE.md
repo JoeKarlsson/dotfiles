@@ -25,7 +25,7 @@
 - Every changed line traces to the request. Unrelated problems you notice get mentioned, not fixed.
 - Before writing new code, reuse in this order: what the codebase already has, the standard library or a platform feature, an installed dependency. Never add a dependency for a few lines.
 - Bug fix: find every caller of the function you touch, then fix the root cause once in the shared code.
-- Two failed fixes for the same problem: stop and write down what you tried and why each failed before a third. If the third would be a guess, ask me.
+- Two failed fixes for the same problem: stop and write down what you tried, why each failed, and the one assumption both shared. Test that assumption directly before a third fix. If the third would be a guess, ask me.
 - Don't hide failures: no swallowed errors or silent fallbacks.
 - Extract a helper at the third copy, not before.
 - Delete what your change made dead, in the same change.
