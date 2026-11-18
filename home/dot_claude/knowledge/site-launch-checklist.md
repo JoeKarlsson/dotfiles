@@ -1,7 +1,7 @@
 ---
 type: Rule
 title: "Website launch checklist"
-description: "Run before calling any new site or page ready to ship, and again before a redesign ships: head metadata, social cards, dark mode, security, consistency (spacing, headers, type), phones, big screens (centered column, capped grids), accessibility, performance, SEO, tests (e2e, visual, axe, coverage), analytics. Check each item on the built site, not from memory."
+description: "Run before calling any new site or page ready to ship, and again before a redesign ships: head metadata, social cards, dark mode, security, consistency (spacing, headers, type), phones, big screens (centered column, capped grids), accessibility, performance, SEO, tests (e2e, visual, axe, coverage), analytics, and the domain/DNS/email setup in Cloudflare (TLS 1.2, HSTS, Email Routing, DMARC, DNSSEC, redirect rules, managed WAF, Search Console and Bing). Check each item on the built site, not from memory."
 tags: [web, launch, seo, metadata, mobile, security, accessibility, testing, checklist]
 sources:
   - {resource: "Joe, 2026-11-06: Punc review, 'you've been missing some basic stuff for getting a site ready'"}
@@ -11,6 +11,7 @@ sources:
   - {resource: "https://scotthelme.co.uk/launching-report-uri-js/ (CSP on GitHub Pages)"}
   - {resource: "https://www.w3.org/TR/WCAG22/"}
   - {resource: "nutlope/hallmark v2.0.0 gates 34, 50, 62 (MIT), adopted by Joe 2026-11-13"}
+  - {resource: "Joe, 2026-11-18: domain cleanup, 'make sure notes about how to set these up in Cloudflare are captured for our web standards so that we do this automatically moving forward for any new site'"}
 generated: {by: claude-code, at: "2026-11-06T08:30:00-06:00"}
 stale_after: "2027-11-06T00:00:00-06:00"
 ---
@@ -78,6 +79,40 @@ Static sites have a small attack surface, but these are cheap:
 - `npm audit --omit=dev` clean for what ships; Dependabot (or Renovate) on. Open `.github/dependabot.yml` and check it names a real `package-ecosystem`: GitHub's starter template leaves it `''`, which looks like it's on and updates nothing.
 - User input (search, uploads, forms, URL params) is never written into the page as HTML without escaping. Uploaded files are parsed as data and never executed. Forms post over HTTPS and are validated on the server.
 - Scan the live site: Mozilla HTTP Observatory and securityheaders.com. Explain any grade that a static host keeps from being better.
+
+## Domain, DNS and email (Cloudflare)
+
+Every domain Joe owns follows one setup (set up 2026-11-18 on joekarlsson.com, joekarlsson.io, joekarlsson.dev, bechdel.io). A new domain or subdomain gets all of this before launch. Registration stays at Namecheap; DNS lives in Joe's one Cloudflare account. Test against Cloudflare's own nameservers (`dig … @ollie.ns.cloudflare.com`), since a laptop's resolver caches old answers for up to a day after a move.
+
+- **DNS host.** Add the domain to the Cloudflare account on the Free plan, then set Namecheap → Domain → Nameservers → Custom DNS to `ollie.ns.cloudflare.com` and `seamus.ns.cloudflare.com`. Before switching, check Namecheap's Domain tab for "Redirect Email" forwards and recreate them first (moving the nameservers silently turns Namecheap's forwarding off). Delete what Cloudflare's import scan copies over: wildcard `*` records, Namecheap `eforward*` MX, the `spf.efwd.registrar-servers.com` SPF, and any NS records for `registrar-servers.com` inside the zone.
+- **Subdomain on GitHub Pages:** a DNS-only (grey cloud) CNAME to `joekarlsson.github.io`, with the domain verified in GitHub (`_github-pages-challenge-joekarlsson` TXT) so nobody else can claim it. Cloudflare's Security Insights flags these as "Unproxied CNAME"; archive those warnings, because proxying breaks GitHub's certificate.
+- **Redirect-only domain:** keep proxied A records for `@` and `www` (any address), then Rules → Redirect Rules → "Redirect to a different domain" template, All incoming requests, 301. Use Dynamic `concat("https://target", http.request.uri.path)` when old paths exist on the target, or Static `https://target/` when they don't (a Dynamic expression won't accept a plain string). Namecheap's own URL redirect can't do HTTPS, so don't use it.
+- **When a host is retired** (Heroku, Rebrandly, an old VPS), delete its CNAME and A records the same day. A dangling CNAME to a service where the app name can be re-registered lets someone take over the subdomain (bechdel.io had three to Heroku).
+- **SSL/TLS → Edge Certificates:**
+  - Minimum TLS Version 1.2.
+  - Always Use HTTPS on.
+  - HSTS on: 12 months, No-Sniff on, Preload off.
+  - Include subdomains only when every subdomain serves HTTPS. joekarlsson.com has it; joekarlsson.io doesn't, because of its homelab names.
+  - Check with `curl -sI https://domain | grep -i strict` and `curl --tls-max 1.1` (it must fail).
+- **Email:** every domain gets Email Routing with a catch-all to joekarlsson1@gmail.com.
+  - Order matters: delete the old MX records first. Onboarding refuses to activate while foreign MX records exist.
+  - After activation, check the SPF. It must read `v=spf1 include:_spf.mx.cloudflare.net ~all`, because onboarding left bechdel.io's old Namecheap SPF in place.
+  - Then edit the catch-all to "Send to an email" and toggle it Active (it starts as Drop / Disabled).
+- **DMARC** (`_dmarc` TXT):
+  - **Domains that never send mail:** `v=DMARC1; p=reject; adkim=s; aspf=s`.
+  - **Domains that send** (the newsletter through Brevo): `v=DMARC1; p=quarantine; rua=mailto:rua@dmarc.brevo.com`, plus Brevo's two `brevoN._domainkey` CNAMEs and the `brevo-code` TXT.
+- **DNSSEC:**
+  - Cloudflare → DNS → Settings → Enable DNSSEC, then open "DS Record".
+  - In Namecheap → Advanced DNS → DNSSEC, turn it on and add the key tag (2371 so far), algorithm "13 ECDSA/SHA-256", digest type "2 SHA-256" and the digest.
+  - Check that the registry publishes it: `dig +short DS domain @$(dig +short NS tld. | head -1)`. .com publishes within a minute; .io and .dev take longer.
+  - Turn DNSSEC off in Cloudflare and remove the DS before ever moving DNS away again, or the domain stops resolving.
+- **Firewall (Pro zones):** Security → Security rules → Deploy managed ruleset → Cloudflare Managed Ruleset. Set the ruleset action to Log for the first week, check Security → Analytics for false positives, then set it back to Default to block. joekarlsson.com went to Log on 2026-11-18.
+- **Leave off:** Bot Fight Mode, Super Bot Fight Mode and AI Labyrinth. Joe wants search and AI crawlers to read his sites.
+- **Search engines:**
+  - Add the site to Google Search Console under Joe's personal Google account (not CData's) as a URL-prefix property, and submit the sitemap.
+  - Add the site to Bing Webmaster Tools by hand (avoid the "Import from GSC" OAuth grant). Verify with the `msvalidate.01` meta tag or a file, then submit the sitemap.
+  - On a site whose tests treat every `.html` file as a page, exclude Google's `google*.html` verification file (bechdel.io's deploy broke on it).
+- **After any change,** open Cloudflare → Security insights and clear or explain what's left.
 - Source audit: before a site's first launch, and again after it gains a backend, form, upload or other visitor input, run the `security-audit` skill ("security audit this repo, quick profile"; "standard" once there's a backend). Reports go to `~/security-audit-skill/<repo>/run-N`, never into the repo, since most of Joe's repos are public. Fix confirmed High/Medium findings before shipping. `/security-review` covers single diffs between audits.
 
 ## Consistency
