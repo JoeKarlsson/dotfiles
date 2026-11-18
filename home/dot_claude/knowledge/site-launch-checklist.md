@@ -126,6 +126,8 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 
 - Run the `web-standards-reviewer` agent in full mode on the built site: it checks HTML, CSS, accessibility, performance, security, forms and every hand-built widget against Google's Modern Web Guidance ([modern-web-guidance](modern-web-guidance.md)) and flags JS the platform now does natively. Fix its High and Medium findings and turn the testable ones into tests.
 
+- Run the `agent-readiness-reviewer` agent on the live site: it checks whether AI crawlers, AI search and browser agents can reach, read and use the site, against the evidence-graded standard in [agent-readiness](agent-readiness.md). Fix its High and Medium findings; Tier 3 items (WebMCP, AI preference signals) stay optional.
+
 ## Accessibility
 
 - Automated: axe (`@axe-core/playwright`, tags `wcag2a`, `wcag2aa`, `wcag21aa`, `wcag22aa`) on every page type, in the e2e suite, with zero violations. Pin the axe version. It catches only about a third of problems, so the manual pass still matters.
