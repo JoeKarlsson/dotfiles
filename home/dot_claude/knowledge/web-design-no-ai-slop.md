@@ -77,6 +77,7 @@ Update this whenever a site's look changes.
 | hello.joekarlsson.io | Link-in-bio | Was my own voice; due a look of its own, since pink and black is joekarlsson.com only (2026-11-17) | Black, hot pink | Anton |
 | Punc | Art project on public-domain books | Concept: punk band posters; due a palette of its own, since pink and black is joekarlsson.com only (2026-11-17) | Pink and black, dithered | Anton, Fraunces |
 | bechdel.io | Check whether a film passes the Bechdel test | Leaving the video store; due a direction from its goal (a clear instrument with real charts fits) | Pink and black. Pink stays: it suits a feminist site, and the black stays too, an exception to the not-on-black rule (2026-11-12). It was built before the joekarlsson.com-only rule and keeps its look; no restyle planned (2026-11-17) | Anton, Fraunces |
+| PixelPane (LED board control UI) | Control a 32x32 LED board at home: see what's on, put something on it | Clear instrument with one concept, "lit pixels": the page is the panel (picked 2026-11-17 over a plain instrument, a gallery wall label, a TV channel guide and a season field; replaced the old terminal-window look) | True black; the only color is the color the board is showing right now, with black text on it | Mona Sans; titles as 5x7 LED dots |
 
 When the kind, the goal or the direction isn't obvious, ask me.
 
