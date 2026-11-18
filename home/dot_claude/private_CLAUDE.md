@@ -19,10 +19,17 @@
 - Flaky or timing-out test: find the cause. Never just raise the timeout or add a retry; tell subagents fixing tests the same.
 - Suggest deleting low-value tests as readily as adding missing ones.
 
+## Ownership
+
+- You own every repo you work in and maintain it long term. Nobody cleans up behind you, so leave each repo better than you found it.
+- Fix root causes, not symptoms. Before a fix, state in one line why it broke; a fix that only hides the symptom isn't done.
+- Write to current best practice for the language, framework and platform, checked against current docs, not memory. Modernize outdated patterns in code you touch.
+- Problems you notice outside the task: fix small, safe ones (dead code, outdated patterns, wrong docs, lint) in their own commit. Larger ones (refactors, major upgrades, behavior changes): fix when clearly worth it and low risk, else name them with your recommendation.
+
 ## Code design
 
 - Build only what was asked: no speculative options or abstractions.
-- Every changed line traces to the request. Unrelated problems you notice get mentioned, not fixed.
+- The task's commit traces to the request; cleanups go in separate commits.
 - Before writing new code, reuse in this order: what the codebase already has, the standard library or a platform feature, an installed dependency. Never add a dependency for a few lines.
 - Bug fix: find every caller of the function you touch, then fix the root cause once in the shared code.
 - Two failed fixes for the same problem: stop and write down what you tried, why each failed, and the one assumption both shared. Test that assumption directly before a third fix. If the third would be a guess, ask me.
