@@ -27,9 +27,6 @@
 {{- end }}
 Library
 .local/share/obsbot-autotrack
-# /social drafts Vale config: Mac-only (Vale is a Brewfile app; its global
-# folder is under Library, already ignored above)
-social-drafts
 {{- end }}
 {{- if eq .chezmoi.os "windows" }}
 # Windows: the docker modify script is bash + Homebrew jq, Raycast is Mac-only.

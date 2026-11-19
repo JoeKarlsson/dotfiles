@@ -14,7 +14,7 @@
 # @raycast.author Joe Karlsson
 
 RUN="$HOME/claude-skills/domains/proxmox/scripts/health-checks/run-all.sh"
-OUT="$HOME/.health-reports"
+OUT="$HOME/.local/state/health-check/reports"
 LOCK="$OUT/.raycast-run.lock"
 
 [ -x "$RUN" ] || { echo "Health check not found at $RUN"; exit 1; }
@@ -31,7 +31,7 @@ import json, sys
 try:
     d = json.load(open(sys.argv[1]))
 except Exception as e:
-    print("Health check failed: no report, see ~/.health-reports/raycast-latest.err"); print(0); sys.exit()
+    print("Health check failed: no report, see ~/.local/state/health-check/reports/raycast-latest.err"); print(0); sys.exit()
 s = d["summary"]
 # Checks in planned downtime or suppressed by an upstream outage still carry their raw status; skip them like the summary does.
 bad = [c for c in d["checks"].values() if c.get("status") not in ("ok", "pass", "suppressed", "skipped")

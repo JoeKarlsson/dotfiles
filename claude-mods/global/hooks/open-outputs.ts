@@ -15,14 +15,14 @@ const MEDIA = /\.(png|jpe?g|gif|webp|svg|mp4|mov|webm|m4a|mp3|wav)$/i
 // Source trees: a page or asset written there is code, seen through a dev server or deploy.
 const SOURCE = /\/(node_modules|dist|build|src|public|components|assets|static|tests?|fixtures|\.claude|\.git)\//
 // Places files go for Joe to look at.
-const HANDOFF = /\/(Downloads|Desktop|Movies|social-drafts|newsletter-drafts|drafts)\/|^\/(private\/)?tmp\//
+const HANDOFF = /\/(Downloads|Desktop|Movies|drafts)\/|^\/(private\/)?tmp\//
 const SCRATCH_SKIP = /\/(tool-results|memory)\//
 
 export function isViewableOutput(path: string): boolean {
   if (SCRATCH_SKIP.test(path)) return false
   if (DOCS.test(path)) return !SOURCE.test(path) || HANDOFF.test(path)
   if (MEDIA.test(path)) return HANDOFF.test(path)
-  if (/\.md$/i.test(path)) return /\/(Downloads|Desktop|social-drafts|newsletter-drafts)\//.test(path)
+  if (/\.md$/i.test(path)) return /\/(Downloads|Desktop|drafts\/social|drafts\/newsletter)\//.test(path)
   return false
 }
 

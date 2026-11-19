@@ -2,14 +2,14 @@ import type { EngineInterface, On } from 'claude-code'
 
 // Joe's writing: joekarlsson.com posts and newsletter issues, CData drafts
 // (worktrees included), and the /social and newsletter skill drafts in
-// ~/social-drafts and ~/newsletter-drafts (added 2026-11-10: those were linted
+// ~/claude-skills/drafts/social and ~/claude-skills/drafts/newsletter (added 2026-11-10: those were linted
 // only when the skill remembered to). After each write the model gets what the
 // linters found; /blog-check runs them all and starts the full review.
 
 const SITE = /\/joekarlsson\.com\/(?:.+\/)?src\/content\/(?:blog|newsletter)\/.+\.mdx?$/
 const CDATA = /\/cdata\/skills[^/]*\/(?:.+\/)?drafts\/.+\.mdx?$/
-const SOCIAL = /\/social-drafts\/(?!backups\/).+\.md$/
-const NEWSLETTER = /\/newsletter-drafts\/(?!backups\/).+\.md$/
+const SOCIAL = /\/drafts\/social\/(?!backups\/).+\.md$/
+const NEWSLETTER = /\/drafts\/newsletter\/(?!backups\/).+\.md$/
 
 export const isPost = (path: string) => SITE.test(path) || CDATA.test(path) || SOCIAL.test(path) || NEWSLETTER.test(path)
 

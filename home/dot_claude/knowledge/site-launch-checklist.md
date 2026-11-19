@@ -110,7 +110,7 @@ Every domain Joe owns follows one setup (set up 2026-11-18 on joekarlsson.com, j
 - **Leave off:** Bot Fight Mode, Super Bot Fight Mode and AI Labyrinth. Joe wants search and AI crawlers to read his sites.
 - **Search engines and analytics:** follow "Search, analytics and indexing" below. On a site whose tests treat every `.html` file as a page, exclude Google's `google*.html` verification file (bechdel.io's deploy broke on it).
 - **After any change,** open Cloudflare → Security insights and clear or explain what's left.
-- Source audit: before a site's first launch, and again after it gains a backend, form, upload or other visitor input, run the `security-audit` skill ("security audit this repo, quick profile"; "standard" once there's a backend). Reports go to `~/security-audit-skill/<repo>/run-N`, never into the repo, since most of Joe's repos are public. Fix confirmed High/Medium findings before shipping. `/security-review` covers single diffs between audits.
+- Source audit: before a site's first launch, and again after it gains a backend, form, upload or other visitor input, run the `security-audit` skill ("security audit this repo, quick profile"; "standard" once there's a backend). Reports go to `~/.local/state/security-audit/<repo>/run-N`, never into the repo, since most of Joe's repos are public. Fix confirmed High/Medium findings before shipping. `/security-review` covers single diffs between audits.
 
 ## Consistency
 

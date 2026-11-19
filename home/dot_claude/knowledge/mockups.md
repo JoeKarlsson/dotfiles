@@ -14,7 +14,7 @@ Joe, 2026-11-13: "I want you to make HTML pages showing mock-ups, not just PNGs.
 
 ## Build
 
-- **One local HTML page per round**, at `~/mockups/<project>-<topic>/index.html`. Inline CSS, the real fonts, images and copy, no lorem ipsum.
+- **One local HTML page per round**, in the repo the design belongs to: `<main checkout>/.mockups/<topic>/index.html` (`.mockups/` is in the global gitignore). Use the main checkout, found with `git rev-parse --path-format=absolute --git-common-dir` (its parent), never a worktree, since worktree cleanup deletes the folder. With no repo, use `~/.local/share/claude/mockups/<project>-<topic>/index.html`. Never a new folder in `~` (Joe, 2026-11-19). Inline CSS, the real fonts, images and copy, no lorem ipsum.
 - **Each option is real HTML and CSS**, so hover, focus, motion and phone-width reflow are part of what Joe judges. A PNG goes on the page only for what HTML can't show (a photo of the device, a screenshot of the live site).
 - **Not a web thing? Still HTML.** A TV launcher theme, an email, an e-ink or MagicMirror screen is drawn at its real pixel size inside a frame, scaled to fit.
 - **The page itself is plain**: a short title, then the options. Design rules for the mockup's content are in [web-design-no-ai-slop.md](/web-design-no-ai-slop.md).
@@ -28,6 +28,6 @@ Joe, 2026-11-13: "I want you to make HTML pages showing mock-ups, not just PNGs.
 
 ## Show it
 
-- **`open ~/mockups/<project>-<topic>/index.html`** as the last step of every round, before asking for a verdict. That opens his default browser. Not a published Artifact, not only a screenshot in the chat, not the Chrome automation tab.
+- **`open` the page** as the last step of every round, before asking for a verdict. That opens his default browser. Not a published Artifact, not only a screenshot in the chat, not the Chrome automation tab.
 - Screenshot it yourself first and fix what's off; Joe is not the QA step.
 - Ask for the verdict by label ("A, B or C?"). Record each verdict in the repo's `DECISIONS.md` the moment he gives it.
