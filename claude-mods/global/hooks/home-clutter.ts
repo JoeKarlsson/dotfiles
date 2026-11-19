@@ -35,7 +35,9 @@ export function homeEntry(path: string, home: string): string | null {
   return `${home}/${path.slice(home.length + 1).split('/')[0]}`
 }
 
-const positionals = (w: string[]) => w.filter(a => !a.startsWith('-'))
+// Flags of mkdir, git clone and git worktree add whose next word is their value, not a path.
+const VALUE_FLAGS = new Set(['-b', '-B', '--reason', '--depth', '--branch', '-o', '--origin', '-m', '--mode', '-c', '--config', '--reference', '--template'])
+const positionals = (w: string[]) => w.filter((a, i) => !a.startsWith('-') && !VALUE_FLAGS.has(w[i - 1] ?? ''))
 
 // Paths a shell line would create: mkdir targets, git clone destinations, git worktree add paths.
 export function createdPaths(command: string, cwd: string, home: string): string[] {
