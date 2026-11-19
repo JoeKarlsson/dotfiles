@@ -1,4 +1,13 @@
 {
+  "env": {
+{{- if eq .machine "claude-dev" }}
+    "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.workingTree }}/claude-mods/global:/root/claude-skills-joekarlsson/.claude/mods/homelab"
+{{- else if eq .machine "work" }}
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude-skills/.claude/mods/homelab"
+{{- else }}
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude/.claude/mods/homelab"
+{{- end }}
+  },
   "attribution": {
     "sessionUrl": false
   },
@@ -100,22 +109,14 @@
       "Bash(git push --force*)",
       "Bash(git push -f *)"
     ],
+{{- if eq .machine "work" }}
+    "defaultMode": "auto",
+{{- end }}
     "additionalDirectories": [
       "~"
-    ]{{- if eq .machine "work" }},
-    "defaultMode": "auto"
-{{- end }}
+    ]
   },
   "model": "opus[1m]",
-  "env": {
-{{- if eq .machine "claude-dev" }}
-    "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.workingTree }}/claude-mods/global:/root/claude-skills-joekarlsson/.claude/mods/homelab"
-{{- else if eq .machine "work" }}
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude-skills/.claude/mods/homelab"
-{{- else }}
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/dotfiles/claude-mods/global:~/claude/.claude/mods/homelab"
-{{- end }}
-  },
   "skillOverrides": {
     "anthropic-skills:humanizer": "off",
     "anthropic-skills:mktg-brand-voice": "off",
@@ -166,7 +167,8 @@
   "enabledPlugins": {
 {{- if eq .machine "work" }}
     "swift-lsp@claude-plugins-official": true,
-    "cowork-plugin-management@synced": false
+    "cowork-plugin-management@synced": false,
+    "vercel@claude-plugins-official": true
 {{- else if eq .machine "claude-dev" }}
 {{- else }}
     "ai-commit-gen@claude-code-plugins-plus": true,
@@ -195,6 +197,7 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "preferredNotifChannel": "notifications_disabled",
+  "switchModelsOnFlag": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
@@ -218,6 +221,5 @@
       "Joe's self-hosted services are also reached by name: *.home.joekarlsson.io and *.home.arpa (LAN) and public subdomains of joekarlsson.com and joekarlsson.io that his homelab serves (for example newsletter.joekarlsson.com is his listmonk, plausible.joekarlsson.io his Plausible). These are his own systems, like the 192.168.x.x hosts."
     ]
   },
-  "voiceEnabled": true,
-  "switchModelsOnFlag": true
+  "voiceEnabled": true
 }
