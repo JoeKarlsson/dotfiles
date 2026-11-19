@@ -14,7 +14,7 @@ export const REASON = (entry: string) =>
   'Put it where it belongs: in the repo it is for (gitignored; drafts in ~/claude-skills/drafts/, mockups in ' +
   "<repo>/.mockups/), a tool's state in ~/.local/state/<tool>/, other Claude output in ~/.local/share/claude/, " +
   'scratch files in the session scratchpad, worktrees in <repo>/.claude/worktrees/ (EnterWorktree), clones of ' +
-  'third-party tools in the scratchpad or ~/Documents/dev/. If Joe named this exact folder, ask him first.'
+  'third-party tools in the scratchpad or ~/Documents/dev/. If Joe asked for this exact folder, it is his to create: ask him to run `! mkdir <path>`.'
 
 // Lexical absolute path: ~ and $HOME expanded, relative paths joined to cwd, . and .. folded.
 export function resolvePath(path: string, cwd: string, home: string): string {
