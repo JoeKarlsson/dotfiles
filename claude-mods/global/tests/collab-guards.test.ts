@@ -51,7 +51,7 @@ test('viewable outputs: deliverables yes, source and scratch no', async () => {
   expect(isViewableOutput('/private/tmp/claude-502/x/scratchpad/report.html')).toBe(true)
   expect(isViewableOutput('/Users/j/Downloads/proposal.docx')).toBe(true)
   expect(isViewableOutput('/Users/j/Desktop/thumb.png')).toBe(true)
-  expect(isViewableOutput('/Users/j/social-drafts/doom.md')).toBe(true)
+  expect(isViewableOutput('/Users/j/claude-skills/drafts/social/doom.md')).toBe(true)
   expect(isViewableOutput('/Users/j/site/public/og.png')).toBe(false)
   expect(isViewableOutput('/Users/j/site/src/pages/index.html')).toBe(false)
   expect(isViewableOutput('/Users/j/claude/knowledge/x.md')).toBe(false)
@@ -64,7 +64,8 @@ test('viewable outputs: deliverables yes, source and scratch no', async () => {
 // What a session answers for the mod's other hooks (cwd, file checks, the Stop event).
 const sessionBase = (on: On) => {
   on('session.cwd', async () => ({ value: '/Users/j/Documents/dev/joe/site' }) as never)
-  on('fs.exists', async () => ({ value: false }) as never)
+  // Home's top-level folders exist (home-clutter guard); nothing else does.
+  on('fs.exists', async (_$, e) => ({ value: /^\/Users\/j\/[^/]+$/.test((e as { path: string }).path) }) as never)
   on('classic.Stop', async () => ({}) as never)
   on('process.run', async () => ({ value: { exitCode: 1, stdout: '', stderr: '' } }) as never)
 }

@@ -6,6 +6,7 @@ import { registerCommitFormat } from './commit-format'
 import { registerDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
 import { registerFinishCheck, resetFinishCheck } from './finish-check'
+import { registerHomeClutter } from './home-clutter'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerMacScheduler } from './mac-scheduler'
 import { registerMarketing } from './marketing'
@@ -40,6 +41,7 @@ export const register: Register = on => {
   registerPonytail(on)
   registerMarketing(on)
   registerMacScheduler(on)
+  registerHomeClutter(on)
   registerCdataMarkdown(on)
   registerOpenOutputs(on)
   registerOutboundText(on)
