@@ -4,7 +4,8 @@
 # cliPluginsExtraDirs: lets `docker compose` / `docker buildx` find brew's plugins.
 set -euo pipefail
 DIRS='["/opt/homebrew/lib/docker/cli-plugins"]'
-in=$(cat); [ -n "$in" ] || in='{}'
+# $(cat) drops trailing newlines; the x sentinel keeps the file byte for byte.
+in=$(cat; printf x); in=${in%x}; [ -n "$in" ] || in='{}'
 # Already set: pass the file through byte for byte, so docker's own formatting
 # doesn't show up as drift in `chezmoi status`.
 if printf '%s' "$in" | /opt/homebrew/bin/jq -e --argjson d "$DIRS" '.cliPluginsExtraDirs == $d' >/dev/null; then
