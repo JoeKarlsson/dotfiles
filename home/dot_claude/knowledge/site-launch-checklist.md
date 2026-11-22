@@ -156,7 +156,7 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 
 ## Platform standards
 
-- Run the `web-standards-reviewer` agent in full mode on the built site: it checks HTML, CSS, accessibility, performance, security, forms and every hand-built widget against Google's Modern Web Guidance ([modern-web-guidance](modern-web-guidance.md)) and flags JS the platform now does natively. Fix its High and Medium findings and turn the testable ones into tests.
+- Run the `web-standards-reviewer` agent in full mode on the built site: it checks HTML, CSS, accessibility, security, forms and every hand-built widget against Google's Modern Web Guidance ([modern-web-guidance](modern-web-guidance.md)) and flags JS the platform now does natively. Fix its High and Medium findings and turn the testable ones into tests.
 
 - Run the `agent-readiness-reviewer` agent on the live site: it checks whether AI crawlers, AI search and browser agents can reach, read and use the site, against the evidence-graded standard in [agent-readiness](agent-readiness.md). Fix its High and Medium findings; Tier 3 items (WebMCP, AI preference signals) stay optional.
 
@@ -178,23 +178,13 @@ Joe works on a 4K ultra-wide. A layout that only looked right at 1280px fails th
 
 ## Performance
 
-- Core Web Vitals, good at the 75th percentile of real visits: LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1. All three must pass.
-- Lighthouse mobile run on each page type: performance, accessibility, best practices and SEO all above 90, or a reason why not. Lighthouse is a lab test (it uses Total Blocking Time instead of INP), so treat it as a regression guard; Lighthouse CI with budgets keeps it from slipping. Run it against the live URL too, not only `staticDistDir`: the CDN, compression and cache headers only show up there.
-- Desktop scores hide phone problems. joekarlsson.com scored 99 on desktop and 82 on mobile with a 4.6s LCP on the same page. Always read the mobile run.
-- Read the LCP phase breakdown, not just the number. A long **render delay** with no load delay means the LCP element was downloaded but something (usually JS) kept it from painting.
-- Never gate the LCP element on JS. Hiding an image or video poster (`opacity: 0`) until a script, canvas or WebGL effect redraws it pushes LCP to after the script runs, which on a phone is seconds. Paint the plain or pre-rendered version first and let the effect replace it.
-- Preload the LCP image (`<link rel="preload" as="image" fetchpriority="high">`). A video poster or CSS background isn't found by the preload scanner, so it needs this most.
-- Fonts: `preconnect`, `display=swap`, only the families and weights used. Preload only the files the first screen renders: for an English site that's the `latin` subset, never `latin-ext`. A family used on one page type (a serif for blog prose) loads on that page type only; a cross-origin font stylesheet in a shared `<head>` is render-blocking on every page, used or not.
-- Images: sized for the slot, modern formats (AVIF/WebP) with `srcset`, `loading="lazy"` and `decoding="async"` below the fold, `width`/`height` or `aspect-ratio` set so nothing jumps. Files in `public/` skip the framework's image pipeline, so card thumbnails and video posters there ship at full size to a 390px phone; generate widths for them or move them into the pipeline. Lighthouse's "properly size images" list is the check.
-- Video: autoplay loops get a phone-sized encode (`<source media="(max-width: 767px)">`), `preload="none"` below the fold, and play only while on screen. Add up the video bytes a phone pulls scrolling the page once.
-- JS: only what the page needs, split per page, nothing render-blocking in `<head>` except tiny inline scripts; a size budget for the bundle. Small isn't cheap: check **execution time** in Lighthouse's "JavaScript execution time", since a 12KB script that processes every image burned 800ms of main thread on a phone.
-- Scripts that touch every image or video on load (effects, measuring, canvases) work only on what's near the screen (IntersectionObserver), and batch layout reads instead of calling `getComputedStyle`/`offsetWidth` per element in a loop.
-- Video posters download at page load, whatever `preload` says, even on a `display: none` video. A clip hidden on phones or far down the page keeps its still in `data-poster` and gets `poster` set by an IntersectionObserver as it nears the screen.
-- Check srcset choices in a real browser at phone size and DPR 3 (Playwright `deviceScaleFactor: 3`, read `img.currentSrc`), against the built site: a dev server skips build-time image steps.
-- Heavy work (big canvases, parsing) doesn't freeze taps; check INP by clicking around on a mid-range phone
-- HTML weight: check the raw and gzipped size of the biggest list page. Decoration repeated per item (an inline SVG on every card) multiplies; define it once (`<symbol>` + `<use>`, or CSS) and skip hover-only decoration on touch screens (`@media (hover: hover)`), where it never shows.
-- Animated SVG filters (`feTurbulence`, `feDisplacementMap`) repaint on the CPU every frame. Keep them off looping animations, or pause the loop when offscreen and under reduced motion.
-- Hashed build assets (`/_astro/`, `/assets/`) get `Cache-Control: public, max-age=31536000, immutable`; HTML gets a short cache or revalidation.
+The standard, with sources, is [web-performance](web-performance.md); the `performance-reviewer` agent applies it. Before launch:
+
+- Run the `performance-reviewer` agent in full mode on the live site plus the repo. Fix its High and Medium findings, turn each measurable one into a gate (a Lighthouse CI metric assertion, an e2e check, a WebKit smoke page), and bring Joe its re-architecture recommendations to decide on.
+- Core Web Vitals good at the 75th percentile, phone and desktop separately: LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1. New sites have no field data yet, so the lab runs stand in until CrUX does.
+- Always read the mobile run, never only desktop: joekarlsson.com scored 99 on desktop and 82 on mobile with a 4.6s LCP on the same page.
+- Lighthouse mobile run on each page type: performance, accessibility, best practices and SEO all above 90, or a reason why not, against the live URL as well as the build (the CDN, compression and cache headers only show up live).
+- Lighthouse CI asserts the metrics (LCP, CLS, TBT) next to the category scores, from measured medians; a WebKit smoke run loads the heaviest pages as an iPhone, since Lighthouse can't see iPhone crashes.
 
 ## SEO and content
 

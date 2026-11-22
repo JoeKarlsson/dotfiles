@@ -41,7 +41,7 @@ A repo can override this in its `CLAUDE.md`.
 
 ## Reviews
 
-The `web-standards-reviewer` agent (`~/.claude/agents/web-standards-reviewer.md`) checks a diff or a whole site against these guides and returns numbered findings with evidence. It complements the other two reviewers rather than repeating them: `design-reviewer` covers UX laws, slop and layout; `motion-reviewer` covers motion timing.
+The `web-standards-reviewer` agent (`~/.claude/agents/web-standards-reviewer.md`) checks a diff or a whole site against these guides and returns numbered findings with evidence. It complements the other reviewers rather than repeating them: `design-reviewer` covers UX laws, slop and layout; `motion-reviewer` covers motion timing; `performance-reviewer` measures speed (Core Web Vitals, page weight, iPhone crashes) against [web-performance](/web-performance.md), while this reviewer checks that each perf feature is built the native way.
 
 - **Before shipping a UI code change** (a layout, component, script, style, form, nav or new page): run it in diff mode, alongside `design-reviewer`. Fix its High and Medium findings. Plain content changes (posts, newsletter text) skip it.
 - **Before a new site launches, and after each guide refresh:** run it in full mode on the built site.

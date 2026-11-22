@@ -51,7 +51,8 @@ Run all of them on the built site (and on the live URL once deployed, for the on
 |---|---|
 | `design-reviewer` agent | UX laws, the banned slop patterns, phone, 320px, 2560px |
 | `motion-reviewer` agent | the 36 motion rules, reduced motion (skip if the site has no motion) |
-| `web-standards-reviewer` agent, full mode | HTML, CSS, accessibility, performance, security headers, native widgets |
+| `web-standards-reviewer` agent, full mode | HTML, CSS, accessibility, security headers, native widgets |
+| `performance-reviewer` agent, full mode | Core Web Vitals on phone and desktop, WebKit crash run, page weight, caching; re-architecture calls (live URL + repo) |
 | `security-reviewer` agent | secrets, XSS, headers, exposed files; the `security-audit` skill (quick profile) before first launch or once it has a backend |
 | `agent-readiness-reviewer` agent | AI crawlers, AI search and browser agents (live URL) |
 | `seo-audit` skill | technical and on-page SEO |
