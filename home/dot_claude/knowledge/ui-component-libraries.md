@@ -1,11 +1,13 @@
 ---
 type: Concept
 title: "UI component libraries"
-description: "Read before hand-building an interactive widget (dialog, drawer, menu, combobox, date input, data table, command palette, toast, chat UI) or starting a React app or tool: which library to reach for (Astryx, Meta's MIT React 19 + StyleX design system), when it fits, when it doesn't (Joe's static cut-paper sites), and how to borrow its behavior without its look"
+description: "Read when brainstorming a page layout, flow or section (Mobbin: screenshots of how real apps and sites solve it) or before hand-building an interactive widget (dialog, drawer, menu, combobox, date input, data table, command palette, toast, chat UI) or starting a React app or tool: which library to reach for (Astryx, Meta's MIT React 19 + StyleX design system), when it fits, when it doesn't (Joe's static cut-paper sites), and how to borrow its behavior without its look"
 tags: [web, react, components, design-system, accessibility, frontend]
 sources:
   - {resource: "https://astryx.atmeta.com/ (read 2026-11-11: beta, @astryxdesign/core v0.7.0)"}
   - {resource: "https://github.com/meta/astryx (MIT, checked via GitHub API 2026-11-11)"}
+  - {resource: "https://mobbin.com/ (read 2026-11-22; pricing page refused automated fetches)"}
+  - {resource: "Joe, 2026-11-22: add Mobbin to the site-builder ideas for components to pull from when brainstorming"}
   - {resource: "Joe, 2026-11-11: 'add these into the site building checklist ... as like a library we could use'"}
 generated: {by: claude-code, at: "2026-11-11T00:00:00-06:00"}
 stale_after: "2027-05-11T00:00:00-06:00"
@@ -34,6 +36,15 @@ Hard widgets (combobox, date picker, data table, nested menu, focus-trapped dial
 | Overlays | `Dialog`, `AlertDialog`, `Drawer`, `BottomSheet` (snap points), `CommandPalette`, `Popover`, `HoverCard`, `Lightbox` |
 | App frame | `AppShell`, `SideNav`, `TopNav`, `MobileNav`, `Toast` |
 | Gestures | `usePanGesture`, `useDragToSnapPoints`, `createReorderable`, `useLongPress`, `useHotkeys`, `useFocusTrap` |
+
+## Reference galleries (brainstorming, not code)
+
+### Mobbin (mobbin.com)
+
+- **What:** a searchable library of screenshots from real mobile apps, web apps and websites: single screens, end-to-end flows, UI patterns and elements, and website sections. Search covers app names, screen text, patterns and elements; browse at mobbin.com/explore.
+- **Use it for:** the brainstorming step of a new project or page. Before designing an onboarding flow, pricing section, settings screen, empty state or checkout, look at how 5-10 shipped products did it, then pick the pattern that fits and build it in the project's own style.
+- **Plans:** Free has limited library access. Pro adds the full library and an MCP server; Team adds a REST API; copy-to-Figma on eligible plans. Joe has no paid plan on record, so assume Free and ask before relying on the MCP.
+- **Don't** copy a screen's look one-to-one onto Joe's sites: take the structure and behavior, keep the visual identity [the slop rules](/web-design-no-ai-slop.md) set.
 
 ## When it fits
 
