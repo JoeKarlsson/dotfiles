@@ -8,7 +8,7 @@ export const CHROME_STREAK = 3
 export function chromeStopNote(errorText: string): string {
   const why = /permission denied/i.test(errorText)
     ? 'The extension has no permission on this site. Retrying cannot fix it: ask Joe to allow the domain in the Claude in Chrome extension, or do it another way.'
-    : /not in claude's tab group|couldn't determine which page|tab \d+ is not|no tab/i.test(errorText)
+    : /not in claude's tab group|couldn't determine which page|tab \d+ is not|no tab\b/i.test(errorText)
       ? 'The tab is gone or outside your group: call tabs_context_mcp once and use a tab it lists, or open a new one.'
       : /timed out|frozen|unresponsive|detached/i.test(errorText)
         ? 'The page is frozen or detached: open the URL in a new tab once; if that fails too, stop.'

@@ -9,6 +9,7 @@ test('chrome stop note names the cause', async () => {
   expect(chromeStopNote("Couldn't determine which page this action targets.")).toContain('tabs_context_mcp')
   expect(chromeStopNote('CDP sendCommand "Runtime.evaluate" timed out after 30000ms on tab 5. The renderer may be frozen')).toContain('new tab')
   expect(chromeStopNote('TypeError: x is undefined')).toContain('do not repeat the same call')
+  expect(chromeStopNote('Error: there is no table named sites')).toContain('do not repeat the same call')
 })
 
 // Session c2eb5438 retried browser_batch 20 times; now the 3rd failure in a row says stop.
