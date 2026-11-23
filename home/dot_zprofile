@@ -8,3 +8,9 @@ fpath[1,0]="/opt/homebrew/share/zsh/site-functions"
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
 [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+
+# Node ships its own CA list, so it rejects https://*.home.arpa that curl and the browsers accept
+# (the homelab mkcert root is in the System keychain). Add just that root. --use-system-ca isn't
+# enough: Node 26 still rejected the homelab cert with it.
+[ -f "$HOME/claude/domains/network/certs/mkcert/rootCA.pem" ] &&
+  export NODE_EXTRA_CA_CERTS="$HOME/claude/domains/network/certs/mkcert/rootCA.pem"
