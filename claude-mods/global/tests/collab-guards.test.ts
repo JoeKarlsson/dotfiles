@@ -28,8 +28,13 @@ test('scheduler: plist writes', async () => {
   expect(plistWrite('/r/hooks/mac-scheduler.ts', START_INTERVAL)).toBe(false)
 })
 
-for (const [cwd, denied] of [['/Users/j/Documents/dev/cdata/skills', true], ['/root/claude-skills-joekarlsson', false]] as const) {
-  test(`scheduler guard ${denied ? 'refuses on a Mac' : 'lets a CT schedule'} (${cwd})`, async ($, on) => {
+for (const [cwd, denied] of [
+  ['/Users/j/Documents/dev/joe/site', true],
+  ['/Users/j/Documents/dev/cdata/skills-old', true],
+  ['/Users/j/Documents/dev/cdata/skills', false],
+  ['/root/claude-skills-joekarlsson', false],
+] as const) {
+  test(`scheduler guard ${denied ? 'refuses on a Mac' : 'allows'} (${cwd})`, async ($, on) => {
     on('session.cwd', async () => ({ value: cwd }) as never)
     let ran = false
     on('tool.call', { tool: 'Bash' }, async () => {

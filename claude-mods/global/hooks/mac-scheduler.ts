@@ -9,6 +9,9 @@ import { segments, words } from './shell'
 // where that guard never ran. It is global now and reads command words only, quote
 // aware: the Python one refused a read-only `grep` whose pattern named crontab.
 // Only on a Mac (cwd under /Users); claude-dev and the CTs schedule for real.
+// Exception: Joe approved the CData report jobs on his work laptop on 2026-11-23
+// ("Why can't we run on this computer?"). They run from cdata-skills' ops/ through
+// launchd, catch up hourly once the Mac wakes, and publish through his claude.ai login.
 
 export const REASON =
   "Mac scheduler guard (global mod): no scheduled or background jobs on Joe's Macs. They shut off at night " +
@@ -50,8 +53,11 @@ export function plistWrite(path: string, text: string): boolean {
   return LAUNCH_DIR.test(path) || (/\.plist$/i.test(path) && PLIST_KEYS.test(text))
 }
 
+const MAC_JOBS_APPROVED = /^\/Users\/[^/]+\/Documents\/dev\/cdata\/skills(\/|$)/
+
 async function onMac($: EngineInterface) {
-  return (await $.session.cwd()).startsWith('/Users/')
+  const cwd = await $.session.cwd()
+  return cwd.startsWith('/Users/') && !MAC_JOBS_APPROVED.test(cwd)
 }
 
 export function registerMacScheduler(on: On) {
