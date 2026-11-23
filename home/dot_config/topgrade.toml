@@ -34,7 +34,8 @@
 # uv: removed 2026-09-29. poetry: topgrade runs its env probe through /bin/sh and
 # fails; brew upgrades poetry anyway. pnpm: no pnpm globals, and its global bin
 # dir isn't on PATH, so `pnpm update -g` always fails. mas: `mas upgrade` needs sudo and topgrade has no TTY for it, so App Store updates run in Terminal (mac-health skill).
-disable = ["system", "git_repos", "containers", "colima", "uv", "poetry", "pnpm", "mas"]
+# tailscale: the standalone app updates itself through Sparkle; its CLI fails to start while that runs.
+disable = ["system", "git_repos", "containers", "colima", "uv", "poetry", "pnpm", "mas", "tailscale"]
 
 # Run these steps before all others
 # first = ["chezmoi"]
