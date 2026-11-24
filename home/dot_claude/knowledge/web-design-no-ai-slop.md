@@ -187,6 +187,17 @@ Not every page needs a concept. For the clean site direction (professional pages
 
 What carries over: generous white space, one big confident grotesque typeface, small playful details (inline images or icons in a headline, a serif/sans mix inside one headline, a now-playing widget), and real photos instead of illustration.
 
+## Indie press, zine and flyer references
+
+Sites I like (2026-11-24) from small publishers, art spaces and flyer archives. They sit between the clean site and the punk: mostly plain pages where the printed objects (covers, posters, riso prints) carry the color. Good for anything with a catalogue, an archive or an agenda: Punc, bechdel.io, reviews, an events page.
+
+- [syntaxmag.online](https://syntaxmag.online/): a web magazine where each issue is a theme and each article gets its own look. The cover is just the issue title in a huge serif on white with a tiny pixel-font wordmark. The issue's contents are full-width color bands, one per article, each in its own pair of colors. An article page goes all in: a pixel display face, one hue, and the photos dithered into that hue. Take the per-piece art direction inside a quiet frame, and the dithered one-color photos (same move as my pink dithering).
+- [onomatopee.net](https://www.onomatopee.net/): an Eindhoven gallery, publisher and riso studio. One red does everything (headlines, links, rules) on white, set in a condensed poster face over a small monospace text face. Thick red lines cut across the page at an angle as section breaks. The agenda is the category's own proof: date, type and place in mono, the title big and red, the poster under it. Take the tilted rules, the one-color-everything and the agenda columns. Skip the promo bar and the slider dots.
+- [inventorypress.com](https://www.inventorypress.com/): a book publisher whose home page is just the books. Typewriter caps nav with a dashed line over each item, then a loose three-column grid of covers and objects at their own sizes and shapes, staggered, with plain title and author underneath. Lots of white. Take the uneven grid where each cover keeps its real proportions (the opposite of a tidy card grid) and the dashed-overline nav.
+- [abstract.jp/flyer](https://abstract.jp/flyer/): Today's Flyer, an archive of gig posters and flyers, Japanese and Western, tagged by color and mood (#pink, #retro, #portrait). The page is a wall of real posters, which is the inspiration itself. Use it as an idea bank for poster concepts and loud two-color type, the way motion.dev is for motion. Its own frame (blue bar, pink pill tags, boxed cards) isn't the part to copy.
+
+What carries over: the work is the color and the page around it stays quiet; one loud hue per piece; dithered one-color photos; covers at their real shapes in an uneven grid; agendas with dates and places as the headline content; a slanted rule as a handmade section break.
+
 ## Page copy
 
 The same rules apply to the words. Run all page copy (headings, buttons, body) through the `humanizer` skill, and avoid the phrases in my banned-phrases list (`~/.claude/projects/-Users-joekarlsson-claude-skills/memory/feedback-banned-phrases.md`).
