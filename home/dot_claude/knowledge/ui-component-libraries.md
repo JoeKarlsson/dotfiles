@@ -46,6 +46,12 @@ Hard widgets (combobox, date picker, data table, nested menu, focus-trapped dial
 - **Plans:** Free has limited library access. Pro adds the full library and an MCP server; Team adds a REST API; copy-to-Figma on eligible plans. Joe has no paid plan on record, so assume Free and ask before relying on the MCP.
 - **Don't** copy a screen's look one-to-one onto Joe's sites: take the structure and behavior, keep the visual identity [the slop rules](/web-design-no-ai-slop.md) set.
 
+### Siteinspire (siteinspire.com)
+
+- **What:** a hand-picked gallery of real websites, mostly studios, portfolios, publishers, shops and cultural spaces, browsable by style, type and subject. Joe saved it as website inspiration on 2026-11-24 while hunting ideas for playful, editorial header videos.
+- **Use it for:** the research step of a new site or page: whole-site direction, editorial layouts, and how real sites in a category open their home page. Each entry links to the live site, so open it and watch the motion there, since the gallery shows stills.
+- **Don't** copy a site's look onto Joe's sites: take the idea, keep the visual identity [the slop rules](/web-design-no-ai-slop.md) set. It blocks scripted fetches (Vercel bot checkpoint), so browse it in Chrome.
+
 ## When it fits
 
 - A React app or tool: an internal dashboard, a demo app for a talk or CData post, a chat front end for an agent, a homelab admin page.
