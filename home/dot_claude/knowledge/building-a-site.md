@@ -23,8 +23,8 @@ Ask Joe for the real content with the brief, in one list: the copy he has, photo
 Look for ideas before drawing anything, and keep only what fits the brief:
 
 - **Sites with the same job:** 3 to 5 real independent sites that do what this one does (book, subscribe, attend...). Note where the action sits, the category's own sections and how the page ends.
-- **Joe's references:** the clean-site references and the punk references in [web-design-no-ai-slop.md](/web-design-no-ai-slop.md), and the registry of his sites, so the new one looks different from its neighbors.
-- **Idea banks:** palettes and type pairings in `design-library/`; motion and hero effects from motion.dev and brik.space ([web-motion.md](/web-motion.md), "Reference sites"); charts from bklit.com ([chart-ideas.md](/chart-ideas.md)); widgets from [ui-component-libraries.md](/ui-component-libraries.md); how real apps and sites lay out a screen, flow or section from mobbin.com (same file, "Reference galleries").
+- **Joe's references:** the clean-site, punk and indie-press/zine references in [web-design-no-ai-slop.md](/web-design-no-ai-slop.md), and the registry of his sites, so the new one looks different from its neighbors.
+- **Idea banks:** palettes and type pairings in `design-library/`; motion and hero effects from motion.dev and brik.space ([web-motion.md](/web-motion.md), "Reference sites"); poster and flyer concepts from abstract.jp/flyer ([web-design-no-ai-slop.md](/web-design-no-ai-slop.md)); charts from bklit.com ([chart-ideas.md](/chart-ideas.md)); widgets from [ui-component-libraries.md](/ui-component-libraries.md); how real apps and sites lay out a screen, flow or section from mobbin.com (same file, "Reference galleries").
 - **The subject itself:** its history, its objects and its words, if the brief names a concept.
 
 The result is a short list of ideas, each with its source and one line on why it fits this brief. It goes on the first mockup page, not in the chat.
