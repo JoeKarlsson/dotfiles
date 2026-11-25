@@ -58,9 +58,6 @@
     },
     "openrouter": {
       "models": {
-        "qwen/qwen3.8-27b:free": {
-          "name": "Qwen 3.8 27B (FREE)"
-        },
         "qwen/qwen3.8-27b": {
           "name": "Qwen 3.8 27B"
         },
