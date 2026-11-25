@@ -4,13 +4,13 @@
   "provider": {
     "mac-local": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "This Mac (llama-server :8099)",
+      "name": "This Mac (run oc-local, not opencode)",
       "options": {
         "baseURL": "http://127.0.0.1:8099/v1"
       },
       "models": {
         "qwen3.8-27b": {
-          "name": "Qwen 3.8 27B Q4 (local, 64K ctx)",
+          "name": "Qwen 3.8 27B Q4 (local, 64K ctx; start OpenCode with oc-local)",
           "reasoning": true,
           "tool_call": true,
           "limit": {
