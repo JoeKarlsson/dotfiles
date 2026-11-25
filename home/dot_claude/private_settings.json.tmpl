@@ -143,6 +143,11 @@
             "type": "command",
             "command": "bash ~/.claude/worktree-hygiene.sh",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/skills/continuous-learning-v2/hooks/inject-instincts.py",
+            "timeout": 15
           }
         ]
       }
@@ -165,6 +170,30 @@
           {
             "type": "command",
             "command": "python3 ~/.claude/worktree-cd-guard.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre",
+            "async": true,
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/skills/continuous-learning-v2/hooks/observe.sh post",
+            "async": true,
             "timeout": 10
           }
         ]
