@@ -1,7 +1,8 @@
 import type { On } from 'claude-code'
 
 // Joe (2026-11-13): when a task is finished, clean up everything (worktrees, temp files,
-// tabs, background jobs), then ask "Anything else?" with recommendations, including the
+// tabs, background jobs), then ask "Anything else?" with recommendations (or the open yes/no question
+// when something needs him, 2026-11-25), including the
 // follow-ups he didn't think to ask for. So a main-loop turn that changed something gets
 // one follow-up prompt with this checklist when its turn ends (open-outputs' turn.complete).
 
@@ -15,7 +16,8 @@ export const finishNote =
   '(git worktree list), browser tabs you opened, background jobs still running, test data. Delete throwaway things; ' +
   'real data needs a backup or Joe\'s OK. ' +
   '2) Make sure the change is deployed, committed and pushed, and anything you restarted is back up. ' +
-  '3) End your reply with "Anything else?" and your recommendations: follow-ups Joe may not think to ask for ' +
+  '3) End your reply with the open yes/no question if something needs Joe; otherwise with "Anything else?" and your ' +
+  'recommendations: follow-ups Joe may not think to ask for ' +
   '(the same bug elsewhere, a test, monitoring, docs or knowledge to update, a risk). Do the ones that are clearly ' +
   'part of the task; offer the rest once. If none, say so in one line. ' +
   'If this reply already did all of this, just stop.'

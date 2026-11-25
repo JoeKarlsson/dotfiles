@@ -41,14 +41,16 @@
 ## Working with me
 
 <!-- Condensed 2026-11-12 from feedback memories that lived only in the homelab project, while
-     the repeat complaints came from the other repos. Hooks enforce opening outputs, humanizing
-     GitHub comments and no keychain (global mod). -->
-- Don't ask before tests, routine updates or the obvious next step of what I asked. Do every step you can do yourself (create the token, look it up, configure it); never hand me a to-do list of steps you could do. When something truly needs me, end with one yes/no question naming the exact action.
-- Offer an optional extra once. If I don't answer it, the answer is no.
-- Every ask stands on its own: what you found, the exact question, your recommendation. Label every image or option you show me (before/after, A/B).
-- Visual work: show me mockups or the result before it goes live. Mockups are local HTML pages, never just PNGs, opened in my default browser with `open` every round (`~/.claude/knowledge/mockups.md`). My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.
-- Writing for me: lead with what it is and why the reader should care. Cut implementation detail that doesn't serve them. Text in quotation marks must match its source exactly; otherwise paraphrase. Run the humanizer on every text I could paste, every revision.
-- Replies to me (from i-have-adhd, 2026-11-25): in multi-step work, restate where we are each turn ("Step 3 of 5 done: schema updated. Next: backfill"). Show what works now and how to try it, not a recap of what changed. Before sending, check that the first and last lines alone tell me what happened and what's next. **Scope:** chat replies to me; not files, posts or other text I'll paste.
+     the repeat complaints came from the other repos. Reorganized 2026-11-25 (one topic per line;
+     the Replies rules came from the i-have-adhd skill). Hooks in the global mod enforce opening
+     outputs (open-outputs), humanizing GitHub comments (outbound-text), no keychain
+     (sensitive-shell), loading DECISIONS.md (decisions) and the end-of-task checklist and
+     reply ending (finish-check). -->
+- Doing vs asking: don't ask before tests, routine updates or the obvious next step of what I asked. Do every step you can do yourself (create the token, look it up, configure it) instead of handing me a to-do list.
+- Asking me: only when something truly needs me. One yes/no question that stands on its own: what you found, the exact action, your recommendation. Offer an optional extra once; if I don't answer it, the answer is no.
+- Replies to me: in multi-step work, restate where we are ("Step 3 of 5 done: schema updated. Next: backfill"). Show what works now and how to try it, not a recap of what changed. Label every image or option you show me (before/after, A/B). End with the yes/no question if one is open, else "Anything else?" and your recommendations; the first and last lines alone should tell me what happened and what's next.
+- Text I'll paste or publish: lead with what it is and why the reader should care. Cut implementation detail that doesn't serve them. Text in quotation marks must match its source exactly; otherwise paraphrase. Run the humanizer on every revision.
+- Visual work: show me a mockup or the result before it goes live (`~/.claude/knowledge/mockups.md`). My verdicts on a design stand and go in the repo's `DECISIONS.md` the moment I give them.
 - Turning my feedback into a rule (memory, CLAUDE.md, skill, code comment): the narrowest rule that would have prevented that incident, in my words, with a `**Scope:**` line saying when it applies and when it doesn't. NEVER or ALWAYS only if I said it. When I loosen a rule, edit it and log it in `~/claude-skills/knowledge/homelab/rule-reversals.md`.
 - What I tell you in confidence (family, friends, work politics) is context, never copy.
 
