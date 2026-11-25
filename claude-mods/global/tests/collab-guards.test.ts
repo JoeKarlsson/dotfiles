@@ -1,50 +1,9 @@
 import type { On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
-import { plistWrite, schedulerFinding } from '../hooks/mac-scheduler'
 import { isOpenCommand, isViewableOutput } from '../hooks/open-outputs'
 import { postsJoesWords } from '../hooks/outbound-text'
 import { keychainDenial } from '../hooks/sensitive-shell'
-
-// Split so the text of this file is not itself a launchd plist key.
-const START_INTERVAL = '<key>Start' + 'Interval</key>'
-
-test('scheduler: real scheduling is caught, reads and remote commands are not', async () => {
-  expect(schedulerFinding('launchctl load ~/Library/LaunchAgents/x.plist')).toEqual({ deny: true })
-  expect(schedulerFinding('sudo brew services start redis')).toEqual({ deny: true })
-  expect(schedulerFinding('brew services restart ollama')).toEqual({ brewRestart: 'ollama' })
-  expect(schedulerFinding('(crontab -l; echo "0 3 * * * x") | crontab -')).toEqual({ deny: true })
-  expect(schedulerFinding('cp x.plist ~/Library/LaunchAgents/')).toEqual({ deny: true })
-  expect(schedulerFinding('crontab -l')).toBe(null)
-  expect(schedulerFinding('launchctl list | grep x')).toBe(null)
-  expect(schedulerFinding('grep -rl "launchctl\\|crontab" hooks/')).toBe(null)
-  expect(schedulerFinding('ssh root@192.168.0.224 "crontab -e"')).toBe(null)
-  expect(schedulerFinding('ls ~/Library/LaunchAgents/')).toBe(null)
-})
-
-test('scheduler: plist writes', async () => {
-  expect(plistWrite('/Users/j/Library/LaunchAgents/com.x.plist', '')).toBe(true)
-  expect(plistWrite('/r/x.plist', `${START_INTERVAL}<integer>60</integer>`)).toBe(true)
-  expect(plistWrite('/r/hooks/mac-scheduler.ts', START_INTERVAL)).toBe(false)
-})
-
-for (const [cwd, denied] of [
-  ['/Users/j/Documents/dev/joe/site', true],
-  ['/Users/j/Documents/dev/cdata/skills-old', true],
-  ['/Users/j/Documents/dev/cdata/skills', false],
-  ['/root/claude-skills-joekarlsson', false],
-] as const) {
-  test(`scheduler guard ${denied ? 'refuses on a Mac' : 'allows'} (${cwd})`, async ($, on) => {
-    on('session.cwd', async () => ({ value: cwd }) as never)
-    let ran = false
-    on('tool.call', { tool: 'Bash' }, async () => {
-      ran = true
-      return { result: '' } as never
-    })
-    await $.tool.call({ tool: 'Bash', command: 'crontab /tmp/jobs' })
-    expect(ran).toBe(!denied)
-  })
-}
 
 test('keychain writes are refused, reads pass', async () => {
   expect(keychainDenial('security add-generic-password -s x -a y -w z')).toContain('1Password')

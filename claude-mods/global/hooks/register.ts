@@ -8,8 +8,8 @@ import { registerDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
 import { registerFinishCheck, resetFinishCheck } from './finish-check'
 import { registerHomeClutter } from './home-clutter'
+import { registerLintConfig } from './lint-config'
 import { registerKeystrokeGuard } from './keystroke-guard'
-import { registerMacScheduler } from './mac-scheduler'
 import { registerMarketing } from './marketing'
 import { registerOpenOutputs, resetOpenOutputs } from './open-outputs'
 import { registerOutboundText, resetOutboundText } from './outbound-text'
@@ -41,7 +41,7 @@ export const register: Register = on => {
   registerDesignCheck(on)
   registerPonytail(on)
   registerMarketing(on)
-  registerMacScheduler(on)
+  registerLintConfig(on)
   registerHomeClutter(on)
   registerCdataMarkdown(on)
   registerChromeErrors(on)
