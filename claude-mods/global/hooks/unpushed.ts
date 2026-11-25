@@ -1,4 +1,4 @@
-import type { EngineInterface, On } from 'claude-code'
+import type { EngineInterface, TurnCompleteResult } from 'claude-code'
 
 import { checkout, git, inMain } from './git'
 
@@ -44,14 +44,10 @@ export async function unpushedLabel($: EngineInterface, cwd: string): Promise<st
   return s ? unpushedText(s) : null
 }
 
-export function registerUnpushed(on: On) {
-  // Under each answer that leaves commits behind.
-  on('turn.complete', async ($, e, next) => {
-    const answer = await next(e)
-    if (e.agentId !== undefined || e.reason !== 'answer') return answer
-    const s = await repoState($, await $.session.cwd())
-    return s?.ahead ? { ...answer, text: `⚠ ${unpushedText(s)}` } : answer
-  })
+// Called from register.ts's one turn.complete hook: a line under each answer that leaves commits behind.
+export async function unpushedUnderAnswer($: EngineInterface, answer: TurnCompleteResult): Promise<TurnCompleteResult> {
+  const s = await repoState($, await $.session.cwd())
+  return s?.ahead ? { ...answer, text: `⚠ ${unpushedText(s)}` } : answer
 }
 
 // Called from register.ts's one session.end hook.

@@ -4,20 +4,20 @@ import { BLOG_COMMAND, registerBlogCheck } from './blog-check'
 import { registerCdataMarkdown } from './cdata-markdown'
 import { registerChromeErrors } from './chrome-errors'
 import { registerCommitFormat } from './commit-format'
-import { registerDecisions } from './decisions'
+import { registerDecisions, resendDecisions } from './decisions'
 import { registerDesignCheck } from './design-check'
 import { registerFinishCheck, resetFinishCheck } from './finish-check'
 import { registerHomeClutter } from './home-clutter'
 import { registerLintConfig } from './lint-config'
 import { registerKeystrokeGuard } from './keystroke-guard'
 import { registerMarketing } from './marketing'
-import { registerOpenOutputs, resetOpenOutputs } from './open-outputs'
+import { followUpAtTurnEnd, registerOpenOutputs, resetOpenOutputs } from './open-outputs'
 import { registerOutboundText, resetOutboundText } from './outbound-text'
 import { registerParallelSessions, sharedLabel } from './parallel-sessions'
 import { registerPonytail } from './ponytail'
 import { startPrivateSync, toastLastSyncFailure } from './private-sync'
 import { registerSensitiveShell } from './sensitive-shell'
-import { notifyUnpushedAtEnd, registerUnpushed, unpushedLabel } from './unpushed'
+import { notifyUnpushedAtEnd, unpushedLabel, unpushedUnderAnswer } from './unpushed'
 import { registerVerification } from './verification'
 import { registerWordGuard } from './word-guard'
 
@@ -36,7 +36,6 @@ export const register: Register = on => {
   registerKeystrokeGuard(on)
   registerWordGuard(on)
   registerSensitiveShell(on)
-  registerUnpushed(on)
   registerBlogCheck(on)
   registerDesignCheck(on)
   registerPonytail(on)
@@ -70,8 +69,17 @@ export const register: Register = on => {
     return next(e)
   })
 
+  // The one turn.complete hook: features export what they do when a main-loop turn ends.
+  on('turn.complete', async ($, e, next) => {
+    const answer = await next(e)
+    if (e.agentId !== undefined) return answer
+    await followUpAtTurnEnd($, e.reason)
+    return e.reason === 'answer' ? unpushedUnderAnswer($, answer) : answer
+  })
+
   // The one session.end hook: features export what they do at the end.
   on('session.end', async ($, e, next) => {
+    if (e.reason === 'clear') resendDecisions()
     await Promise.all([notifyUnpushedAtEnd($), startPrivateSync($)])
     return next(e)
   })

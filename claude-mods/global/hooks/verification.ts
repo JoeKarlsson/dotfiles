@@ -3,7 +3,7 @@ import type { On } from 'claude-code'
 // Two Testing rules from the global CLAUDE.md (2026-11-12) that a model forgets
 // mid-task, so they get a nudge at the moment they apply:
 // - A subagent's "done" is a claim: when a subagent edited files, the main loop's
-//   stop is blocked once (through open-outputs' Stop hook) until it has looked at
+//   stop is blocked once (through open-outputs' turn.complete follow-up) until it has looked at
 //   them (a git diff/show/log -p, or a Read of one of the files).
 // - A flaky or slow test gets its cause fixed: an edit to a test file that raises a
 //   timeout or adds a retry gets a note.
@@ -45,7 +45,7 @@ export const subagentNote = (paths: string[]) =>
 
 let unchecked: string[] = []
 
-// The one classic.Stop hook lives in open-outputs.ts (a module may register it once); it asks this.
+// The one turn.complete hook lives in open-outputs.ts (a module may register it once); it asks this.
 export function takeSubagentNote(): string | undefined {
   if (!unchecked.length) return undefined
   const note = subagentNote(unchecked)

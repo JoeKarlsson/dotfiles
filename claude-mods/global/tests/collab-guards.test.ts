@@ -25,34 +25,47 @@ test('viewable outputs: deliverables yes, source and scratch no', async () => {
   expect(isOpenCommand('git show HEAD --stat')).toBe(false)
 })
 
-// What a session answers for the mod's other hooks (cwd, file checks, the Stop event).
+// The follow-up prompts the turn.complete hook submitted.
+let followUps: string[] = []
+// Ends a main-loop turn the way the engine does; returns the follow-up it caused, if any.
+const endTurn = async ($: { turn: { complete: (e: never) => Promise<unknown> } }) => {
+  const before = followUps.length
+  await $.turn.complete({ answer: 'done', durationMs: 1, isAborted: false, turnId: 't', reason: 'answer' } as never)
+  return followUps.length > before ? followUps.at(-1) : undefined
+}
+
+// What a session answers for the mod's other hooks (cwd, file checks, turn ends, prompts).
 const sessionBase = (on: On) => {
+  followUps = []
   on('session.cwd', async () => ({ value: '/Users/j/Documents/dev/joe/site' }) as never)
   // Home's top-level folders exist (home-clutter guard); nothing else does.
   on('fs.exists', async (_$, e) => ({ value: /^\/Users\/j\/[^/]+$/.test((e as { path: string }).path) }) as never)
-  on('classic.Stop', async () => ({}) as never)
+  on('fs.read', async () => ({ value: '' }) as never)
+  on('turn.complete', async (_$, e) => ({ text: (e as { answer: string }).answer }) as never)
+  on('prompt.submit', async (_$, e) => {
+    followUps.push((e as { text: string }).text)
+    return { text: (e as { text: string }).text } as never
+  })
   on('process.run', async () => ({ value: { exitCode: 1, stdout: '', stderr: '' } }) as never)
 }
 
-test('a turn that wrote a page and never opened it is blocked once at stop', async ($, on) => {
+test('a turn that wrote a page and never opened it gets one follow-up naming it', async ($, on) => {
   sessionBase(on)
   on('tool.call', { tool: 'Write' }, async () => ({ result: 'ok' }) as never)
   await $.tool.call({ tool: 'Write', file_path: '/Users/j/Downloads/report.html', content: '<p>x</p>' })
-  const first = await $.classic.Stop({ stop_hook_active: false })
-  expect(first.block).toContain('/Users/j/Downloads/report.html')
-  const again = await $.classic.Stop({ stop_hook_active: false })
-  expect(again.block).toBe(undefined)
+  expect(await endTurn($)).toContain('/Users/j/Downloads/report.html')
+  expect(await endTurn($)).toBe(undefined) // the follow-up's own turn
+  expect(await endTurn($)).toBe(undefined)
 })
 
-test('opening it clears the stop', async ($, on) => {
+test('opening it clears the follow-up', async ($, on) => {
   sessionBase(on)
   on('tool.call', { tool: 'Write' }, async () => ({ result: 'ok' }) as never)
   on('tool.call', { tool: 'Bash' }, async () => ({ result: '' }) as never)
   await $.tool.call({ tool: 'Write', file_path: '/Users/j/Downloads/report.html', content: '<p>x</p>' })
   await $.tool.call({ tool: 'Bash', command: 'open /Users/j/Downloads/report.html' })
-  const stop = await $.classic.Stop({ stop_hook_active: false })
   // the finish check still asks for cleanup after a Write; only the open note must be gone
-  expect(stop.block ?? '').not.toContain('feedback-open-outputs')
+  expect((await endTurn($)) ?? '').not.toContain('feedback-open-outputs')
 })
 
 test('outbound text: comments and reviews with a body, not reads or marked text', async () => {
@@ -80,26 +93,33 @@ test('a comment is refused until the humanizer runs in the turn', async ($, on) 
   expect(posted).toBe(1)
 })
 
-test("a repo's DECISIONS.md is put in context at session start and after compaction", async ($, on) => {
+test("a repo's DECISIONS.md rides the first prompt and the first after a compaction", async ($, on) => {
   on('session.cwd', async () => ({ value: '/Users/j/Documents/dev/joe/site' }) as never)
   on('process.run', async () => ({ value: { exitCode: 0, stdout: '/Users/j/Documents/dev/joe/site\n', stderr: '' } }) as never)
   on('fs.exists', async () => ({ value: true }) as never)
   on('fs.read', async () => ({ value: '- 2026-11-04: no blue corner bars' }) as never)
-  on('classic.SessionStart', async () => ({}) as never)
-  for (const source of ['startup', 'compact'] as const) {
-    const started = await $.classic.SessionStart({ source })
-    expect(started.additionalContext?.join('\n')).toContain('no blue corner bars')
-  }
+  const seen: string[] = []
+  on('prompt.submit', async (_$, e) => {
+    seen.push(((e as { context?: string[] }).context ?? []).join('\n'))
+    return { text: (e as { text: string }).text } as never
+  })
+  const summary = [{ role: 'user', text: 'summary', toolUses: [] }]
+  on('session.compact', async () => ({ messages: summary }) as never)
+  await $.prompt.submit({ text: 'fix the header' })
+  await $.prompt.submit({ text: 'now the footer' })
+  await $.session.compact({ trigger: 'auto', messages: summary } as never)
+  await $.prompt.submit({ text: 'and the nav' })
+  expect(seen.map(c => c.includes('no blue corner bars'))).toEqual([true, false, true])
 })
 
-test('finish check: a turn that committed is held once for cleanup, a read-only turn is not', async ($, on) => {
+test('finish check: a turn that committed gets one cleanup follow-up, a read-only turn does not', async ($, on) => {
   sessionBase(on)
   on('ui.status', async () => ({ value: undefined }) as never)
   on('tool.call', { tool: 'Bash' }, async () => ({ result: '' }) as never)
   await $.tool.call({ tool: 'Bash', command: 'git status' })
-  expect((await $.classic.Stop({ stop_hook_active: false })).block).toBe(undefined)
+  expect(await endTurn($)).toBe(undefined)
   await $.tool.call({ tool: 'Bash', command: 'git commit -m "fix: Header lines up with the grid"' })
-  expect((await $.classic.Stop({ stop_hook_active: true })).block).toBe(undefined)
-  expect((await $.classic.Stop({ stop_hook_active: false })).block ?? '').toContain('Anything else?')
-  expect((await $.classic.Stop({ stop_hook_active: false })).block).toBe(undefined)
+  expect(await endTurn($)).toContain('Anything else?')
+  expect(await endTurn($)).toBe(undefined) // the follow-up's own turn
+  expect(await endTurn($)).toBe(undefined)
 })

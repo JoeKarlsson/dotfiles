@@ -1,5 +1,6 @@
 import type { On } from 'claude-code'
 
+import { decisionsForPrompt } from './decisions'
 import { videoNote, videoTopicsFor } from './video'
 
 // personal-marketing (~/.claude/skills/personal-marketing) merges six personal-brand
@@ -79,6 +80,8 @@ export function registerMarketing(on: On) {
   on('prompt.submit', async ($, e, next) => {
     if (e.command || e.isMeta || isAgentOutput(e.text)) return next(e)
     const notes: string[] = []
+    const decisions = await decisionsForPrompt($)
+    if (decisions) notes.push(decisions)
     const video = videoTopicsFor(e.text).filter(t => !sent.has(t.key))
     if (video.length) notes.push(videoNote(video))
     const cdata = isCdata(await $.session.cwd())

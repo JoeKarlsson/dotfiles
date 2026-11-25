@@ -3,7 +3,7 @@ import type { On } from 'claude-code'
 // Joe (2026-11-13): when a task is finished, clean up everything (worktrees, temp files,
 // tabs, background jobs), then ask "Anything else?" with recommendations, including the
 // follow-ups he didn't think to ask for. So a main-loop turn that changed something gets
-// its stop blocked once with this checklist (through open-outputs' Stop hook).
+// its stop blocked once with this checklist (through open-outputs' turn.complete follow-up).
 
 // A Bash command that changes things, beyond reading: commits, pushes, deploys, file surgery.
 export const isChangeCommand = (command: string) =>
@@ -23,7 +23,7 @@ export const finishNote =
 let changed = false
 export const resetFinishCheck = () => { changed = false }
 
-// The one classic.Stop hook lives in open-outputs.ts; it asks this.
+// The one turn.complete hook lives in open-outputs.ts; it asks this.
 export function takeFinishNote(): string | undefined {
   if (!changed) return undefined
   changed = false

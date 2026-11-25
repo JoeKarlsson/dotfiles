@@ -1,4 +1,4 @@
-import type { On } from 'claude-code'
+import type { EngineInterface, On } from 'claude-code'
 
 import { takeFinishNote } from './finish-check'
 import { takeSubagentNote } from './verification'
@@ -7,8 +7,8 @@ import { takeSubagentNote } from './verification'
 // for Joe before calling it done. It lived only in the homelab project's memory, and
 // "open it again" / "you didn't open it" came up 41 times in a month of sessions
 // (2026-10-13 to 2026-11-12), most in other repos. So: when the main loop wrote or
-// edited such a file and the turn ends without opening anything, the stop is
-// blocked once with the paths to open.
+// edited such a file and the turn ends without opening anything, a follow-up
+// prompt names the paths to open.
 
 const DOCS = /\.(html?|pdf|docx|xlsx|pptx)$/i
 const MEDIA = /\.(png|jpe?g|gif|webp|svg|mp4|mov|webm|m4a|mp3|wav)$/i
@@ -54,12 +54,21 @@ export function registerOpenOutputs(on: On) {
     if (OPENING_TOOLS.test(e.tool) || (e.tool === 'Bash' && isOpenCommand((e as { command: string }).command))) pending = []
     return ran
   })
+}
 
-  on('classic.Stop', async ($, e, next) => {
-    const result = await next(e)
-    if (e.stop_hook_active || result.block) return result
-    const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote(), takeFinishNote()].filter(Boolean)
-    pending = []
-    return notes.length ? { ...result, block: notes.join('\n\n') } : result
-  })
+// turn.complete + a follow-up prompt, not classic.Stop: Claude Code's built-in security
+// plugin answers Stop first and skipped the old Stop hook in every session until 2026-11-24.
+let followingUp = false
+
+// Called from register.ts's one turn.complete hook, for each main-loop turn's end.
+export async function followUpAtTurnEnd($: EngineInterface, reason: string) {
+  const wasFollowUp = followingUp
+  followingUp = false
+  // The follow-up's own turn ends without another one, as stop_hook_active did.
+  if (wasFollowUp || reason !== 'answer') return
+  const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote(), takeFinishNote()].filter(Boolean)
+  pending = []
+  if (!notes.length) return
+  followingUp = true
+  await $.prompt.submit({ text: notes.join('\n\n') })
 }
