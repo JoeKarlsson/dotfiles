@@ -10,6 +10,7 @@
 ## Testing
 
 - Run the change once and confirm it works before calling it done. Don't ask me to check what you can check.
+- Never say "fixed" until the exact flow I reported passes in the client I named (my browser, device, URL). A config value, API response or curl check is evidence, not a fix. If you can't run my client, say what you tested, where, and what's still untested. **Scope:** anything I reported as broken; not changes I didn't report a failure for.
 - Scale testing to risk: the changed area's tests, not the whole suite.
 - Check once; don't confirm the same thing several ways.
 - Report briefly what you ran. Text-only edits need no test run.
