@@ -1,0 +1,9 @@
+{{- /* The base config is .chezmoitemplates/opencode.json. MCP servers that only one machine
+       should have (work connectors, internal hostnames) live in that machine's private
+       ~/.config/opencode/secrets/mcp-servers.json, which is merged in here and never committed. */ -}}
+{{- $config := includeTemplate "opencode.json" . | fromJson -}}
+{{- $localServers := joinPath .chezmoi.homeDir ".config/opencode/secrets/mcp-servers.json" -}}
+{{- if stat $localServers -}}
+{{-   $_ := set $config.mcp "servers" (merge (include $localServers | fromJson) $config.mcp.servers) -}}
+{{- end -}}
+{{ toPrettyJson $config }}
