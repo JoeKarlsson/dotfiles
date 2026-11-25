@@ -4,7 +4,7 @@ description: "Read before adding any transition or animation to a website, web a
 ---
 # Web motion rules
 
-UI motion should explain a change the visitor caused, then get out of the way. These apply to every site and artifact I build. They sit under [the AI-slop rules](/web-design-no-ai-slop.md): scroll-triggered entrances stay banned (#26) no matter how good the easing is.
+UI motion should explain a change the visitor caused, then get out of the way. These apply to every site and artifact I build. They sit under [the AI-slop rules](/web-design-no-ai-slop.md): scroll-triggered entrances stay banned (#26) no matter how good the easing is. Concept sites may use scroll-driven motion where scrolling is the interaction (that rule's exception section, 2026-11-24).
 
 ## Timing and easing
 

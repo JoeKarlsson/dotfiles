@@ -75,4 +75,4 @@ Footers (from footer.design): [What Matters Agency](https://www.footer.design/si
 
 ## Where this pulls against the rules
 
-Several favorites use things [the web design rules](/web-design-no-ai-slop.md) ban: scroll-driven motion (Fácil, the horizontal scroll on Rhythm Dialogues), mono text everywhere (Bastarda, Virgil Abloh, Oh Ira), gradients (Kaskad) and pill buttons. Joe praised Fácil's scroll motion and Rhythm Dialogues' sideways scroll by name (2026-11-24), so don't strip those ideas from a pitch on the rules alone; offer them and flag the rule they bend.
+Several favorites use things [the web design rules](/web-design-no-ai-slop.md) ban: scroll-driven motion (Fácil, the horizontal scroll on Rhythm Dialogues), mono text everywhere (Bastarda, Virgil Abloh, Oh Ira), gradients (Kaskad) and pill buttons. Scroll-driven motion like Fácil's and Rhythm Dialogues' is now allowed on concept sites (Joe, 2026-11-24; the rules' exception section says how). For the rest, offer the idea and flag the rule it bends.

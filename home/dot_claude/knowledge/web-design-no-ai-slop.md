@@ -110,7 +110,7 @@ When the kind, the goal or the direction isn't obvious, ask me.
 | 23 | **Glows and shadows everywhere**: shadows on every card, glowing borders, hover lift | No shadows by default; at most one subtle shadow for things that truly float (menus, dialogs). |
 | 24 | **Gradient text**: gradient-filled headlines (`background-clip: text`) | Solid text color. |
 | 25 | **Decorative emoji and sparkle icons**: ✨🚀 in headings, bullets, buttons | No emoji in UI chrome. Icons only where they aid recognition. |
-| 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. |
+| 26 | **Scroll animations**: fade-in or slide-up on every section | Content is just there. Motion only for state changes the user caused. Concept sites may use scroll-driven motion (see the exception below). |
 | 28 | **Low-contrast gray text**: light gray body copy | Body text meets WCAG AA (4.5:1) at minimum; aim for near-black on light, near-white on dark. |
 | 29 | **Cream and terracotta**: a warm cream ground (near `#F4F1EA`) with a high-contrast serif and a clay accent (near `#D97757`, Claude's own accent) | A palette from the library that fits the direction. |
 | 30 | **Arrows appended to links and buttons**: "Read more →" | The label alone; it already says where it goes. |
@@ -125,7 +125,9 @@ When the kind, the goal or the direction isn't obvious, ask me.
 
 ## Exception: a named concept
 
-A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), scroll animations (#26), invented facts (#34), fake sends (#35).
+A page built around one clear concept that comes from its subject may use a banned pattern when the concept calls for it. Example: a music-scene site styled as a photocopied gig flyer can use halftone photos (#14), ALL CAPS poster type (#18) and rules between listings (#6). Name the concept and the patterns it unlocks before designing, and tell me. Decoration with no concept behind it is still slop. Never unlocked: gradients (#19, #24), glassmorphism (#22), glows (#23), indigo/violet (#21), decorative emoji (#25), fade-in or slide-up entrances (#26), invented facts (#34), fake sends (#35).
+
+Scroll-driven motion where scrolling is the interaction may be unlocked on a concept site (Joe, 2026-11-24): media sliding over and behind giant type as you scroll (facilagencia.com), a section that scrolls sideways (rhythmdialogues.ca's about page), a scroll-scrubbed diagram. It has to belong to the concept, keep the content readable at every scroll position, and fall back to a still layout under `prefers-reduced-motion`. Sections fading or sliding in as they arrive stay banned everywhere. joekarlsson.com keeps its own rule in [web motion](/web-motion.md).
 
 ## Opening a section without an eyebrow
 
