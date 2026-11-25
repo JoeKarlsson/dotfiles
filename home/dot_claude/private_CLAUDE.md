@@ -48,6 +48,7 @@
 - Every ask stands on its own: what you found, the exact question, your recommendation. Label every image or option you show me (before/after, A/B).
 - Visual work: show me mockups or the result before it goes live. Mockups are local HTML pages, never just PNGs, opened in my default browser with `open` every round (`~/.claude/knowledge/mockups.md`). My verdicts on a design stand: when a repo has a `DECISIONS.md`, read it first and add each new verdict the moment I give it.
 - Writing for me: lead with what it is and why the reader should care. Cut implementation detail that doesn't serve them. Text in quotation marks must match its source exactly; otherwise paraphrase. Run the humanizer on every text I could paste, every revision.
+- Turning my feedback into a rule (memory, CLAUDE.md, skill, code comment): the narrowest rule that would have prevented that incident, in my words, with a `**Scope:**` line saying when it applies and when it doesn't. NEVER or ALWAYS only if I said it. When I loosen a rule, edit it and log it in `~/claude-skills/knowledge/homelab/rule-reversals.md`.
 - What I tell you in confidence (family, friends, work politics) is context, never copy.
 
 ## Git
