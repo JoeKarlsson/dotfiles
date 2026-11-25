@@ -106,7 +106,7 @@ Every domain Joe owns follows one setup (set up 2026-11-18 on joekarlsson.com, j
   - In Namecheap → Advanced DNS → DNSSEC, turn it on and add the key tag (2371 so far), algorithm "13 ECDSA/SHA-256", digest type "2 SHA-256" and the digest.
   - Check that the registry publishes it: `dig +short DS domain @$(dig +short NS tld. | head -1)`. .com publishes within a minute; .io and .dev take longer.
   - Turn DNSSEC off in Cloudflare and remove the DS before ever moving DNS away again, or the domain stops resolving.
-- **Firewall (Pro zones):** Security → Security rules → Deploy managed ruleset → Cloudflare Managed Ruleset. Set the ruleset action to Log for the first week, check Security → Analytics for false positives, then set it back to Default to block. joekarlsson.com went to Log on 2026-11-18.
+- **Firewall (Pro zones):** Security → Security rules → Deploy managed ruleset → Cloudflare Managed Ruleset. Set the ruleset action to Log for the first week, check Security → Analytics for false positives, then set it back to Default to block. joekarlsson.com went to Log on 2026-11-18 and back to Default on 2026-11-25 (a week of logs was all scanners: /.env, /.git, wp-config backups).
 - **Leave off:** Bot Fight Mode, Super Bot Fight Mode and AI Labyrinth. Joe wants search and AI crawlers to read his sites.
 - **Search engines and analytics:** follow "Search, analytics and indexing" below. On a site whose tests treat every `.html` file as a page, exclude Google's `google*.html` verification file (bechdel.io's deploy broke on it).
 - **After any change,** open Cloudflare → Security insights and clear or explain what's left.
