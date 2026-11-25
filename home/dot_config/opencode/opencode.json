@@ -215,5 +215,13 @@
   "small_model": "litellm/cloud-fast",
   "plugins": [
     "@bybrawe/opencode-goal@1.3.47"
-  ]
+  ],
+  "mcp": {
+    "servers": {
+      "vercel": {
+        "type": "remote",
+        "url": "https://mcp.vercel.com"
+      }
+    }
+  }
 }
