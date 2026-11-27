@@ -1,0 +1,11 @@
+{
+  "name": "claude-mod-global",
+  "private": true,
+  "description": "Dev tooling for the global Claude Code mod: the pre-commit hook type-checks it with this TypeScript.",
+  "scripts": {
+    "typecheck": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

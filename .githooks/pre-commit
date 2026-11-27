@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# pre-commit: run a Claude Code mod's tests (claude-mods/<name>/) when its files
-# are staged. Needs the claude CLI; skipped where it isn't installed.
+# pre-commit: run a Claude Code mod's tests (claude-mods/<name>/) and, where it has a
+# package.json, its type check, when its files are staged. Needs the claude CLI; skipped where it isn't installed.
 # Activated by chezmoi (run_once_after_dotfiles-githooks). Bypass: git commit --no-verify
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel)" || exit 0
@@ -12,6 +12,18 @@ while read -r mod; do
         echo "$out" | tail -20
         echo "[pre-commit] ${mod} tests failed, commit blocked (override with: git commit --no-verify)"
         exit 1
+    fi
+    # Type check: the tests run without it, so type errors piled up unseen until 2026-11-27.
+    if [[ -f "$mod/package.json" ]]; then
+        if [[ ! -x "$mod/node_modules/.bin/tsc" ]]; then
+            echo "[pre-commit] ${mod} type check SKIPPED: TypeScript not installed (run: npm --prefix $mod install)"
+        elif [[ ! -d "$mod/.claude-plugin/types" ]]; then
+            echo "[pre-commit] ${mod} type check SKIPPED: engine types missing (they appear once Claude Code loads the mod here)"
+        elif ! out=$(npm --prefix "$mod" run -s typecheck 2>&1); then
+            echo "$out" | tail -20
+            echo "[pre-commit] ${mod} type errors, commit blocked (override with: git commit --no-verify)"
+            exit 1
+        fi
     fi
 done < <(git diff --cached --name-only | sed -n 's#^\(claude-mods/[^/]*\)/.*#\1#p' | sort -u)
 exit 0
