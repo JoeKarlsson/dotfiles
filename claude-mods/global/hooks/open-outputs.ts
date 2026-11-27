@@ -1,4 +1,4 @@
-import type { EngineInterface, On } from 'claude-code'
+import type { EngineInterface, On, PromptSubmitInput } from 'claude-code'
 
 import { takeFinishNote } from './finish-check'
 import { takeSubagentNote } from './verification'
@@ -59,6 +59,18 @@ export function registerOpenOutputs(on: On) {
 // turn.complete + a follow-up prompt, not classic.Stop: Claude Code's built-in security
 // plugin answers Stop first and skipped the old Stop hook in every session until 2026-11-24.
 let followingUp = false
+let followUpNotes: string[] = []
+// All Joe sees of the follow-up: the checklist itself filled his screen after every turn (2026-11-27).
+export const followUpLabel = 'Finish check (global mod)'
+
+// The follow-up's checklist rides as context: the model reads it, the chat shows one line.
+// Called from the mod's one prompt.submit hook (marketing.ts).
+export function takeFollowUpContext(e: PromptSubmitInput): string[] {
+  if (!followUpNotes.length || e.origin?.kind !== 'plugin') return []
+  const notes = followUpNotes
+  followUpNotes = []
+  return notes
+}
 
 // Called from register.ts's one turn.complete hook, for each main-loop turn's end.
 export async function followUpAtTurnEnd($: EngineInterface, reason: string) {
@@ -66,9 +78,10 @@ export async function followUpAtTurnEnd($: EngineInterface, reason: string) {
   followingUp = false
   // The follow-up's own turn ends without another one, as stop_hook_active did.
   if (wasFollowUp || reason !== 'answer') return
-  const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote(), takeFinishNote()].filter(Boolean)
+  const notes = [pending.length ? openNote(pending) : undefined, takeSubagentNote(), takeFinishNote()].filter((n): n is string => !!n)
   pending = []
   if (!notes.length) return
   followingUp = true
-  await $.prompt.submit({ text: notes.join('\n\n') })
+  followUpNotes = notes
+  await $.prompt.submit({ text: followUpLabel })
 }

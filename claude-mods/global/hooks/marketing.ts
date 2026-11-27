@@ -1,6 +1,7 @@
 import type { On } from 'claude-code'
 
 import { decisionsForPrompt } from './decisions'
+import { takeFollowUpContext } from './open-outputs'
 import { videoNote, videoTopicsFor } from './video'
 
 // personal-marketing (~/.claude/skills/personal-marketing) merges six personal-brand
@@ -78,6 +79,8 @@ export const grillNote =
 export function registerMarketing(on: On) {
   const sent = new Set<string>()
   on('prompt.submit', async ($, e, next) => {
+    const followUp = takeFollowUpContext(e)
+    if (followUp.length) return next({ ...e, context: [...(e.context ?? []), ...followUp] })
     if (e.command || e.isMeta || isAgentOutput(e.text)) return next(e)
     const notes: string[] = []
     const decisions = await decisionsForPrompt($)

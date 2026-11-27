@@ -1,7 +1,7 @@
 import type { On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
-import { isOpenCommand, isViewableOutput } from '../hooks/open-outputs'
+import { followUpLabel, isOpenCommand, isViewableOutput } from '../hooks/open-outputs'
 import { postsJoesWords } from '../hooks/outbound-text'
 import { keychainDenial } from '../hooks/sensitive-shell'
 
@@ -27,6 +27,8 @@ test('viewable outputs: deliverables yes, source and scratch no', async () => {
 
 // The follow-up prompts the turn.complete hook submitted.
 let followUps: string[] = []
+// What the chat shows of each follow-up: its text alone, without the context.
+let visible: string[] = []
 // Ends a main-loop turn the way the engine does; returns the follow-up it caused, if any.
 const endTurn = async ($: { turn: { complete: (e: never) => Promise<unknown> } }) => {
   const before = followUps.length
@@ -37,14 +39,17 @@ const endTurn = async ($: { turn: { complete: (e: never) => Promise<unknown> } }
 // What a session answers for the mod's other hooks (cwd, file checks, turn ends, prompts).
 const sessionBase = (on: On) => {
   followUps = []
+  visible = []
   on('session.cwd', async () => ({ value: '/Users/j/Documents/dev/joe/site' }) as never)
   // Home's top-level folders exist (home-clutter guard); nothing else does.
   on('fs.exists', async (_$, e) => ({ value: /^\/Users\/j\/[^/]+$/.test((e as { path: string }).path) }) as never)
   on('fs.read', async () => ({ value: '' }) as never)
   on('turn.complete', async (_$, e) => ({ text: (e as { answer: string }).answer }) as never)
   on('prompt.submit', async (_$, e) => {
-    followUps.push((e as { text: string }).text)
-    return { text: (e as { text: string }).text } as never
+    const { text, context = [] } = e as { text: string; context?: string[] }
+    visible.push(text)
+    followUps.push([text, ...context].join('\n\n'))
+    return { text } as never
   })
   on('process.run', async () => ({ value: { exitCode: 1, stdout: '', stderr: '' } }) as never)
 }
@@ -120,6 +125,7 @@ test('finish check: a turn that committed gets one cleanup follow-up, a read-onl
   expect(await endTurn($)).toBe(undefined)
   await $.tool.call({ tool: 'Bash', command: 'git commit -m "fix: Header lines up with the grid"' })
   expect(await endTurn($)).toContain('Anything else?')
+  expect(visible.at(-1)).toBe(followUpLabel) // the checklist stays out of the chat
   expect(await endTurn($)).toBe(undefined) // the follow-up's own turn
   expect(await endTurn($)).toBe(undefined)
 })
