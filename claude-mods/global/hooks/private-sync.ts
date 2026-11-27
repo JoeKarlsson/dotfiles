@@ -14,6 +14,8 @@ const STATUS = '.git/claude-sync-status'
 export const SYNC_SCRIPT = `
 cd "$1" || exit 0
 log() { printf '%s %s\\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$1" > ${STATUS}; }
+# A git killed mid-write leaves index.lock behind and every later sync fails (2026-11-27, 14:56 to 17:30).
+/usr/bin/find .git -maxdepth 1 -name index.lock -mmin +10 -delete
 if [ -x fix-skill-links.sh ]; then ./fix-skill-links.sh >/dev/null || { log "failed: fix-skill-links.sh"; exit 1; }; fi
 git add -A || { log "failed: git add"; exit 1; }
 if ! git diff --cached --quiet; then
