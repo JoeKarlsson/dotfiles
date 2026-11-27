@@ -17,8 +17,10 @@ export const REASON = (entry: string) =>
   'third-party tools in the scratchpad or ~/Documents/dev/. If Joe asked for this exact folder, it is his to create: ask him to run `! mkdir <path>`.'
 
 // Lexical absolute path: ~ and $HOME expanded, relative paths joined to cwd, . and .. folded.
+// '' when unknown: another shell variable ($S/clips), or relative to an unknown cwd (after `cd "$D"`).
 export function resolvePath(path: string, cwd: string, home: string): string {
   let p = path.replace(/^(~|\$HOME|\$\{HOME\})(?=\/|$)/, home)
+  if (/[$`]/.test(p) || (!p.startsWith('/') && !cwd)) return ''
   if (!p.startsWith('/')) p = `${cwd}/${p}`
   const parts: string[] = []
   for (const part of p.split('/')) {
@@ -68,7 +70,7 @@ export function createdPaths(command: string, cwd: string, home: string): string
       if (path) out.push(resolvePath(path, gitDir, home))
     }
   }
-  return out
+  return out.filter(Boolean)
 }
 
 // Matched on the path, like sensitive-shell: most test engines do not answer env.get.
