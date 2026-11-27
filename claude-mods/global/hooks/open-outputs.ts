@@ -60,11 +60,10 @@ export function registerOpenOutputs(on: On) {
 // plugin answers Stop first and skipped the old Stop hook in every session until 2026-11-24.
 let followingUp = false
 let followUpNotes: string[] = []
-// All Joe sees of the follow-up: the checklist itself filled his screen after every turn (2026-11-27).
 export const followUpLabel = 'Finish check (global mod)'
 
-// The follow-up's checklist rides as context: the model reads it, the chat shows one line.
-// Called from the mod's one prompt.submit hook (marketing.ts).
+// All Joe sees of the follow-up: the checklist itself filled his screen after every turn (2026-11-27).
+// The checklist rides as context, read by the mod's one prompt.submit hook (marketing.ts).
 export function takeFollowUpContext(e: PromptSubmitInput): string[] {
   if (!followUpNotes.length || e.origin?.kind !== 'plugin') return []
   const notes = followUpNotes

@@ -189,7 +189,12 @@ export function registerBlogCheck(on: On) {
     if (!(await $.fs.exists(path))) return { text: `No file at ${path}` }
     const report = await checkPost($, path, { vale: true })
     const findings = report.sections.join('\n\n') || 'No findings.'
-    void $.prompt.submit({ text: `${reviewSteps(path, await repoTop($, path), await aiTellsScript($))}\n\nFindings:\n\n${findings}` })
-    return { text: `${report.count} findings in ${path.split('/').pop()}. Starting the full review.\n\n${findings}` }
+    const name = path.split('/').pop()
+    const steps = reviewSteps(path, await repoTop($, path), await aiTellsScript($))
+    // The steps ride as hidden context and the chat shows the findings once. A command.run hook
+    // can't submit (the engine refuses: it would wait on the run it holds), so the review's turn
+    // starts once the command returns; until 2026-11-27 it never started.
+    $.clock.after(1, () => void $.prompt.submit({ text: `Review ${name} (/blog-check)` }))
+    return { text: `${report.count} findings in ${name}. Starting the full review.\n\n${findings}`, context: [steps] }
   })
 }

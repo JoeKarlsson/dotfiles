@@ -1,5 +1,5 @@
 import type { On } from 'claude-code'
-import { expect, test } from 'claude-code/testing'
+import { expect, mock, test } from 'claude-code/testing'
 
 import { followUpLabel, isOpenCommand, isViewableOutput } from '../hooks/open-outputs'
 import { postsJoesWords } from '../hooks/outbound-text'
@@ -128,4 +128,24 @@ test('finish check: a turn that committed gets one cleanup follow-up, a read-onl
   expect(visible.at(-1)).toBe(followUpLabel) // the checklist stays out of the chat
   expect(await endTurn($)).toBe(undefined) // the follow-up's own turn
   expect(await endTurn($)).toBe(undefined)
+})
+
+test('/blog-check shows its findings once, sends the steps hidden, and starts the review', async ($, on) => {
+  const shown: string[] = []
+  on('session.cwd', async () => ({ value: '/Users/j' }) as never)
+  on('fs.exists', async () => ({ value: true }) as never)
+  on('fs.read', async () => ({ value: '# Post\n\nIt is worth noting that this works.\n' }) as never)
+  on('process.run', async () => ({ value: { exitCode: 1, stdout: '', stderr: '' } }) as never)
+  on('command.run', async () => ({ text: '' }) as never)
+  mock.env(on, {})
+  const clock = mock.clock(on)
+  on('prompt.submit', async (_$, e) => {
+    shown.push((e as { text: string }).text)
+    return { text: (e as { text: string }).text } as never
+  })
+  const ran = await $.command.run({ command: 'blog-check', args: '/Users/j/Documents/dev/joe/joekarlsson.com/src/content/blog/post.md' })
+  expect(ran.context?.join('')).toContain('post.md')
+  expect(shown).toEqual([]) // a command.run hook can't submit; the review starts after it returns
+  await clock.advance(1)
+  expect(shown).toEqual(['Review post.md (/blog-check)'])
 })
