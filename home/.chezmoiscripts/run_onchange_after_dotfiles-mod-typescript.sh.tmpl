@@ -1,0 +1,14 @@
+{{ if ne .chezmoi.os "windows" -}}
+#!/bin/sh
+# Install the global Claude mod's TypeScript, which .githooks/pre-commit uses to type-check
+# it; without it the hook prints "type check SKIPPED". Reruns when the lockfile changes:
+# lock {{ include "../claude-mods/global/package-lock.json" | sha256sum }}
+# Owner only, as in run_once_after_dotfiles-githooks: only the owner commits there.
+repo="{{ .chezmoi.sourceDir }}/.."
+[ -O "$repo/.git/config" ] || exit 0
+if ! command -v npm >/dev/null 2>&1; then
+    echo "dotfiles-mod-typescript: npm not found; the pre-commit type check will be skipped" >&2
+    exit 0
+fi
+npm --prefix "$repo/claude-mods/global" ci --no-audit --no-fund
+{{ end -}}
