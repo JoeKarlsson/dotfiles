@@ -25,4 +25,5 @@ test('home clutter: what a shell line would create', async () => {
   // Shell variables are unknown here: sessions ebdf2699, 50be0e1c and 442ca009 were blocked on /Users/<me>/$S
   expect(createdPaths('S=/private/tmp/x; mkdir -p $S/clips; cd ~ && python3 - "$S"', H, H)).toEqual([])
   expect(createdPaths('cd "$D" && mkdir out', H, H)).toEqual([])
+  expect(createdPaths('mkdir ~/$NAME', '/x', H)).toEqual(['/Users/j/$NAME'])
 })
