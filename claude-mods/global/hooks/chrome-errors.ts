@@ -17,8 +17,7 @@ export function chromeStopNote(errorText: string): string {
 }
 
 // Every Chrome tool that acts on a page (a matcher is required: one matcher-less tool.call hook per mod).
-const CHROME_PAGE_TOOLS = ['browser_batch', 'computer', 'find', 'form_input', 'get_page_text', 'javascript_tool',
-  'navigate', 'read_page', 'file_upload', 'upload_image'].map(t => `mcp__claude-in-chrome__${t}`)
+const CHROME_PAGE_TOOLS = /^mcp__claude-in-chrome__(browser_batch|computer|find|form_input|get_page_text|javascript_tool|navigate|read_page|file_upload|upload_image)$/
 
 const streaks = new Map<string, number>()
 

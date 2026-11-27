@@ -25,6 +25,9 @@ test('viewable outputs: deliverables yes, source and scratch no', async () => {
   expect(isOpenCommand('git show HEAD --stat')).toBe(false)
 })
 
+// A prompt as Joe types it, the way the engine raises it.
+const typed = (text: string) => ({ text, wait: false, origin: { kind: 'composer' as const } })
+
 // The follow-up prompts the turn.complete hook submitted.
 let followUps: string[] = []
 // What the chat shows of each follow-up: its text alone, without the context.
@@ -110,10 +113,10 @@ test("a repo's DECISIONS.md rides the first prompt and the first after a compact
   })
   const summary = [{ role: 'user', text: 'summary', toolUses: [] }]
   on('session.compact', async () => ({ messages: summary }) as never)
-  await $.prompt.submit({ text: 'fix the header' })
-  await $.prompt.submit({ text: 'now the footer' })
+  await $.prompt.submit(typed('fix the header'))
+  await $.prompt.submit(typed('now the footer'))
   await $.session.compact({ trigger: 'auto', messages: summary } as never)
-  await $.prompt.submit({ text: 'and the nav' })
+  await $.prompt.submit(typed('and the nav'))
   expect(seen.map(c => c.includes('no blue corner bars'))).toEqual([true, false, true])
 })
 
@@ -143,7 +146,12 @@ test('/blog-check shows its findings once, sends the steps hidden, and starts th
     shown.push((e as { text: string }).text)
     return { text: (e as { text: string }).text } as never
   })
-  const ran = await $.command.run({ command: 'blog-check', args: '/Users/j/Documents/dev/joe/joekarlsson.com/src/content/blog/post.md' })
+  const ran = await $.command.run({
+    command: 'blog-check',
+    args: '/Users/j/Documents/dev/joe/joekarlsson.com/src/content/blog/post.md',
+    origin: { kind: 'composer' },
+    presentation: { isFullscreen: false, columns: 120 },
+  })
   expect(ran.context?.join('')).toContain('post.md')
   expect(shown).toEqual([]) // a command.run hook can't submit; the review starts after it returns
   await clock.advance(1)

@@ -16,9 +16,9 @@ const KNOB = /\b(\w*timeout\w*|retries|retry|reruns|max_?attempts|attempts)\b["'
 
 function knobs(text: string): Map<string, number> {
   const out = new Map<string, number>()
-  for (const m of text.matchAll(KNOB)) {
-    const key = m[1].toLowerCase()
-    out.set(key, Math.max(out.get(key) ?? 0, Number(m[2].replace(/_/g, ''))))
+  for (const [, name = '', value = '0'] of text.matchAll(KNOB)) {
+    const key = name.toLowerCase()
+    out.set(key, Math.max(out.get(key) ?? 0, Number(value.replace(/_/g, ''))))
   }
   return out
 }

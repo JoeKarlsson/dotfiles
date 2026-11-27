@@ -20,8 +20,8 @@ export function firstLines(text: string): string[] {
   let platform: string | null = null
   let inFirst = false
   for (const line of text.split('\n')) {
-    const h2 = line.match(/^## (.+)/)
-    if (h2) { platform = h2[1].trim(); inFirst = false; continue }
+    const h2 = line.match(/^## (.+)/)?.[1]
+    if (h2 !== undefined) { platform = h2.trim(); inFirst = false; continue }
     if (/^### /.test(line)) { inFirst = platform !== null && /^### 1\s*$/.test(line); continue }
     if (inFirst && line.trim()) {
       // LinkedIn mention markup shows as @Name, so count what readers see.

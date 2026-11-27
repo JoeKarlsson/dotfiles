@@ -38,7 +38,7 @@ function segments(command: string): { cmd: string, args: string[] }[] {
     .split(/\|\||&&|[;&|\n()]|\$\(|`/)
     .map(segment => segment.trim().split(/\s+/).filter(Boolean))
     .map(words => {
-      while (words.length && (/^\w+=/.test(words[0]) || WRAPPERS.has(words[0]))) words.shift()
+      while (words[0] !== undefined && (/^\w+=/.test(words[0]) || WRAPPERS.has(words[0]))) words.shift()
       return { cmd: (words[0] ?? '').split('/').pop() ?? '', args: words.slice(1) }
     })
     .filter(({ cmd }) => cmd)
