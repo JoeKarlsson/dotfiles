@@ -105,7 +105,35 @@ mas "Xnip", id: 1221250572
 {{- if eq .machine "work" }}
 
 # Work Mac only (CData)
-brew "azure-cli"             # az, for CData Azure DevOps
+cask "azure-cli"             # az, for CData Azure DevOps (a cask since 2026; the formula is gone)
+cask "gcloud-cli"            # gcloud
+tap "cisco-ai-defense/skill-scanner"
+brew "cisco-ai-defense/skill-scanner/skill-scanner"
+tap "cloudquery/tap"
+brew "cloudquery/tap/cloudquery"
+# Build tools, media and ESP32 work installed on this Mac (added 2026-11-27 from `brew bundle cleanup`)
+brew "automake"
+brew "cmake"
+brew "dfu-util"
+brew "e2fsprogs"
+brew "emscripten"
+brew "esphome"
+brew "flac"
+brew "gifsicle"
+brew "git-filter-repo"
+brew "hf"
+brew "libtool"
+brew "ninja"
+brew "openjdk@21"
+brew "pkgconf"
+brew "pngquant"
+brew "powerlevel10k"
+brew "sdl12-compat"
+brew "swiftlint"
+brew "tectonic"
+brew "tesseract"
+brew "uv"
+brew "vhs"
 cask "android-platform-tools" # adb/fastboot
 cask "android-commandlinetools" # sdkmanager/avdmanager
 cask "dbeaver-community"
