@@ -17,9 +17,10 @@ export const finishNote =
   '(git worktree list), browser tabs you opened, background jobs still running, test data. Delete throwaway things; ' +
   'real data needs a backup or Joe\'s OK. ' +
   '2) Make sure the change is deployed, committed and pushed, and anything you restarted is back up. ' +
-  '3) End your reply with the open yes/no question if something needs Joe; otherwise with an "Anything else:" line ' +
-  'that TELLS Joe what else is worth doing (never ask him "Anything else?"): follow-ups he may not think to ask for ' +
-  '(the same bug elsewhere, a test, monitoring, docs or knowledge to update, a risk). Do the ones that are clearly ' +
+  '3) End your reply with the open yes/no question if something needs Joe; otherwise with an "Anything else:" section ' +
+  'that TELLS Joe what else we should do (never ask him "Anything else?"): skill, hook or process improvements from ' +
+  'this session\'s struggles; extensions nobody discussed; things he missed or still pending; follow-ups; best practices ' +
+  'worth looking into (the same bug elsewhere, a test, monitoring, docs or knowledge to update, a risk). Do the ones that are clearly ' +
   'part of the task; offer the rest once. If none, write "Anything else: nothing from me." ' +
   'If this reply already did all of this, just stop.'
 
