@@ -127,7 +127,7 @@ test('finish check: a turn that committed gets one cleanup follow-up, a read-onl
   await $.tool.call({ tool: 'Bash', command: 'git status' })
   expect(await endTurn($)).toBe(undefined)
   await $.tool.call({ tool: 'Bash', command: 'git commit -m "fix: Header lines up with the grid"' })
-  expect(await endTurn($)).toContain('Anything else?')
+  expect(await endTurn($)).toContain('Anything else:')
   expect(visible.at(-1)).toBe(followUpLabel) // the checklist stays out of the chat
   expect(await endTurn($)).toBe(undefined) // the follow-up's own turn
   expect(await endTurn($)).toBe(undefined)
