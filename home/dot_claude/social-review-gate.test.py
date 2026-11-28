@@ -34,6 +34,10 @@ class Gate(unittest.TestCase):
                                           call('Bash', command=f'python3 scripts/social/postiz-schedule.py {DRAFT} 2026-12-14 --dry-run'),
                                           call('Bash', command='python3 scripts/approval_lock.py approve ' + DRAFT)]))
 
+    def test_listing_drafts_by_glob_in_a_command_that_writes_elsewhere_is_not_a_draft_write(self):
+        # Context audit 2026-11-27: write_text on a test file plus `ls drafts/social/*.md` blocked the stop
+        self.assertFalse(gate.unreviewed([call('Bash', command="python3 - <<'EOF'\np.write_text(s)\nEOF\nls drafts/social/*.md | head -1")]))
+
     def test_other_files_and_other_agents_are_ignored(self):
         self.assertFalse(gate.unreviewed([call('Write', file_path='/Users/joekarlsson/notes.md'),
                                           call('Agent', subagent_type='Explore', prompt='p')]))

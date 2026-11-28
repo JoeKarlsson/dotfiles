@@ -11,7 +11,7 @@ import json
 import re
 import sys
 
-DRAFT = re.compile(r'drafts/social/(?:work/)?[^/\s"\']+\.md\b(?!\.approved)')
+DRAFT = re.compile(r'drafts/social/(?:work/)?[^/\s"\'*]+\.md\b(?!\.approved)')
 SHELL_WRITE = re.compile(r'sed -i|>\s*\S*drafts/social/|\bmv\b|\bcp\b|\btee\b|write_text')
 
 
