@@ -20,6 +20,7 @@ import { registerSensitiveShell } from './sensitive-shell'
 import { notifyUnpushedAtEnd, unpushedLabel, unpushedUnderAnswer } from './unpushed'
 import { registerVerification } from './verification'
 import { registerWordGuard } from './word-guard'
+import { registerWorktreeRefusal } from './worktree-refusal'
 
 // Guards fail open on purpose: a hook that throws is skipped, so a bug here lets
 // a call through instead of blocking every call.
@@ -44,6 +45,7 @@ export const register: Register = on => {
   registerHomeClutter(on)
   registerCdataMarkdown(on)
   registerChromeErrors(on)
+  registerWorktreeRefusal(on)
   registerOpenOutputs(on)
   registerOutboundText(on)
   registerDecisions(on)
